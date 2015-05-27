@@ -35,7 +35,11 @@ import astroML.stats as aml
 import astropy
 from astropy import coordinates as coord
 from astropy import units as u
-from astropy.coordinates import ICRSCoordinates
+
+#from astropy.coordinates import ICRSCoordinates
+# converting from pre0.4 to 1.0
+from astropy.coordinates import SkyCoord
+
 from astropy.io import ascii
 
 #import pyfits as pyfits
