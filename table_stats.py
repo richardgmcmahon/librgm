@@ -45,7 +45,7 @@ def table_stats(data, ext=1, verbose=True, debug=False):
 
   print 'Executing: ',sys.argv[0], __version__
 
-  help(data)
+  if debug: help(data)
 
   #data, hdr = pyfits.getdata(infile, ext, header=True)
 
