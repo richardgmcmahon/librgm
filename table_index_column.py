@@ -1,10 +1,10 @@
-def table_index_column(table=None, colname=None, casesensitive=False):
+def table_index_column(table=None, colname=None, casesensitive=False, debug=False):
   """
 
   astropy table function; could be modified to also support pyfits and
   Erin Sheldons fitsio
  
-  includes caseinsensive option
+  includes non case sensitive option
 
   see also astropy.Table.index_column
   
@@ -13,11 +13,18 @@ def table_index_column(table=None, colname=None, casesensitive=False):
 
   """
 
+  if debug:
+    print(table.colnames)
+
   if casesensitive:
-    icol=table.colnames.index('colname')
+    icol=table.colnames.index(colname)
 
   if not casesensitive:
-    icol=map(str.lower,table.colnames).index('colname')
+    icol=map(str.lower,table.colnames).index(colname)
+
+  if debug:
+    print('column name: ', colname)
+    print('column number: ', icol)
 
   if icol < 0: print('Column {0} does not exist'.format(colname))
 
