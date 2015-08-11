@@ -1,8 +1,12 @@
 from __future__ import print_function, division
 
-def tablemetadata(table=None, test=False):
+def table_metadata(table=None, test=False):
   """
   add provenance metadata keywords to table
+
+  uses some of keywords defined in the standard
+
+  DATE: date of file creation
 
   At this time, the meta attribute of the Table class is simply an ordered 
   dictionary and does not fully represent the structure of a FITS header 
@@ -45,6 +49,7 @@ def tablemetadata(table=None, test=False):
     table.meta['CWD']= CWD
     #table.meta['ABSPATH']= ABSPATH
     table.meta['TIME']= timestamp
+    table.meta['DATE']= timestamp
  
   if test:
 
