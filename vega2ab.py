@@ -4,6 +4,8 @@ from __future__ import division, print_function
 """
 TODO: implement reverse operation: i.e. AB -> Vega
 
+Also need to add explicit add VISTA, VHS, DES
+
 """
 
 """
@@ -79,13 +81,47 @@ import traceback
 
 import numpy as np
 
-def convert2def(mag=0.0, waveband='i', system='sdss', AB=False,
-  test=False, jy=False, nuFnu=False, 
+def convert(mag, waveband, wavebands, AB_offset, nu_filter,
+  AB=False, test=False, jy=False, nuFnu=False, 
   cgs=False, siflux=False, debug=False, verbose=False):
 
-  result=0
+
+  for (iband, waveband_test) in enumerate(wavebands):
+
+      if waveband.upper() == waveband_test.upper():
+
+        if debug: print('waveband_test: ', waveband_test)
+        if debug: print('waveband: ', waveband.upper())
+        if debug or verbose: 
+          print('Computing for waveband: ', waveband, waveband_test)
+
+        # default is to convert to AB
+        if not jy: 
+          if not AB:
+            result= mag + AB_offset[iband]
+          if AB:
+            result= mag 
+          if verbose: print('Result: ', mag, ' >> ', result)
+
+        if jy or nuFnu:
+          # compute the AB magnitude
+          if AB: abmag = mag
+          if not AB: abmag = (mag+AB_offset[iband])
+
+          # compute the SI flux in  W Hz-1 m-2
+          siflux=10**(-0.4*abmag)*(3631.0*1e-26)
+
+        if jy: result=10**(-0.4*abmag)*(3631.0) # Jy
+        if siflux: result = siflux
+        if nuFnu: result  = siflux * nu_filter[iband]
+
+        if cgs:
+          result=-99.9 
+          print('cgs not implemented yet')
 
   return result
+
+
 
 def sdss(mag=0.0, waveband='i', AB=False,
   test=False, jy=False, nuFnu=False, 
@@ -232,46 +268,6 @@ def wise(mag=0.0, waveband='W1', AB_Tokunaga_2005=False,
 # do the conversion
   if not test:
     result=convert(mag, waveband, wavebands, AB_offset, nu_filter, AB=AB)
-
-  return result
-
-def convert(mag, waveband, wavebands, AB_offset, nu_filter,
-  AB=False, test=False, jy=False, nuFnu=False, 
-  cgs=False, siflux=False, debug=False, verbose=False):
-
-
-  for (iband, waveband_test) in enumerate(wavebands):
-
-      if waveband.upper() == waveband_test.upper():
-
-        if debug: print('waveband_test: ', waveband_test)
-        if debug: print('waveband: ', waveband.upper())
-        if debug or verbose: 
-          print('Computing for waveband: ', waveband, waveband_test)
-
-        # default is to convert to AB
-        if not jy: 
-          if not AB:
-            result= mag + AB_offset[iband]
-          if AB:
-            result= mag 
-          if verbose: print('Result: ', mag, ' >> ', result)
-
-        if jy or nuFnu:
-          # compute the AB magnitude
-          if AB: abmag = mag
-          if not AB: abmag = (mag+AB_offset[iband])
-
-          # compute the SI flux in  W Hz-1 m-2
-          siflux=10**(-0.4*abmag)*(3631.0*1e-26)
-
-        if jy: result=10**(-0.4*abmag)*(3631.0) # Jy
-        if siflux: result = siflux
-        if nuFnu: result  = siflux * nu_filter[iband]
-
-        if cgs:
-          result=-99.9 
-          print('cgs not implemented yet')
 
   return result
 
