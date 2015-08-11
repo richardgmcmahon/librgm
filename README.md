@@ -1,1 +1,3 @@
 # librgm
+
+Mainly utility functions
