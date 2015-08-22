@@ -29,7 +29,7 @@ def table_stats(data, ext=1, verbose=True, debug=False):
   CVS revision number:                     $Revision: 1.1 $ 
   """
 
-  __version__ = "$Revision: 1.1 $"
+  __version__ = "$Revision: 1.2 $"
   __date__ = "$Date: 2009/08/18 11:09:42 $"
 
   import sys
@@ -94,7 +94,7 @@ def table_stats(data, ext=1, verbose=True, debug=False):
         print i, j, data.columns[i].name, data.columns[i].format, \
          data.columns[i].dim, data.field(i).shape, len(data.field(i).shape), \
          len(data.field(i)), \
-         ': ',min(data.field(i)), ' : ',max(data.field(i)) 
+         ': ',np.min(data.field(i)), ' : ',np.max(data.field(i)) 
       # process the columns that are 2D vectors (i,j)
       if len(data.field(i).shape) == 2:
         for j in xrange(data.field(i).shape[1]):
@@ -102,6 +102,6 @@ def table_stats(data, ext=1, verbose=True, debug=False):
            columns[i].dim, data.field(i).shape, \
            len(data.field(i).shape), \
            len(data.field(i)), \
-           ': ',min(data.field(i)[j]),' : ',max(data.field(i)[j])
+           ': ',np.min(data.field(i)[j]),' : ',np.max(data.field(i)[j])
 
   return
