@@ -91,10 +91,15 @@ def table_stats(data, ext=1, verbose=True, debug=False):
       j=0
       # process the columns that are 1D vectors
       if len(data.field(i).shape) == 1:
-        print i, j, data.columns[i].name, data.columns[i].format, \
-         data.columns[i].dim, data.field(i).shape, len(data.field(i).shape), \
-         len(data.field(i)), \
-         ': ',np.min(data.field(i)), ' : ',np.max(data.field(i)) 
+        try:
+          print i, j, data.columns[i].name, data.columns[i].format, \
+           data.columns[i].dim, data.field(i).shape, len(data.field(i).shape), \
+           len(data.field(i)), \
+           ': ',np.min(data.field(i)), ' : ',np.max(data.field(i)) 
+        except:
+          print i, j, data.columns[i].name, 'problem with column'
+          pass
+
       # process the columns that are 2D vectors (i,j)
       if len(data.field(i).shape) == 2:
         for j in xrange(data.field(i).shape[1]):
