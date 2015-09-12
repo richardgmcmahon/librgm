@@ -2,6 +2,8 @@
 from matplotlib import pyplot as plt
 from librgm.plotid import plotid
 
+import numpy as np
+
 def plot_radec(ra, dec, title=None, xlabel=None, ylabel=None,
   plotstyle=None, linestyle=None, markersize=None,
   rarange=None, decrange=None, showplots=False, figfile=None,
@@ -11,7 +13,6 @@ def plot_radec(ra, dec, title=None, xlabel=None, ylabel=None,
   #plt.setp(lines, edgecolors='None')
 
   if figfile == None: figfile='radec.png'
-
   if not overplot: plt.figure(num=None, figsize=figsize)
 
   plt.xlabel('RA')
@@ -20,21 +21,17 @@ def plot_radec(ra, dec, title=None, xlabel=None, ylabel=None,
   if ylabel != None: plt.ylabel(ylabel)
   if title != None: plt.title(title)
 
-  ms=1.0
-
   xdata=ra
   ydata=dec
 
-
-  print('RA range: ', min(xdata), max(xdata))
-  print('Dec range: ', min(ydata), max(ydata))
+  print('RA range: ', np.min(xdata), np.max(xdata))
+  print('Dec range: ', np.min(ydata), np.max(ydata))
   print('units: ', units)
 
   if rarange is None:
     plt.xlim([0,24.0])
   if rarange is not None:
     plt.xlim(rarange)
-
 
   if decrange is None:    
     plt.ylim([-90,30])
