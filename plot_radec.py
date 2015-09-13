@@ -8,6 +8,7 @@ def plot_radec(ra, dec, title=None, xlabel=None, ylabel=None,
   plotstyle=None, linestyle=None, markersize=None,
   rarange=None, decrange=None, showplots=False, figfile=None,
   figsize=(10.0,10.0), units=None, aspect=None, noplotid=False,
+  nolegend=False,
   plotdir='./', savefig=True, overplot=False):
 
   #plt.setp(lines, edgecolors='None')
@@ -55,9 +56,9 @@ def plot_radec(ra, dec, title=None, xlabel=None, ylabel=None,
 
   ndata=len(xdata)
   print 'Number of data points plotted: ', ndata
-  plt.legend([
-   'n: '+ str(ndata)])
-  plotid(progname=True)
+  if not nolegend: plt.legend(['n: '+ str(ndata)])
+
+  if not noplotid: plotid(progname=True)
 
   if aspect == 'equal':
     plt.axes().set_aspect('equal')
