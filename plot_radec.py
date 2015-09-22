@@ -8,7 +8,7 @@ def plot_radec(ra, dec, title=None, xlabel=None, ylabel=None,
   plotstyle=None, linestyle=None, markersize=None,
   rarange=None, decrange=None, showplots=False, figfile=None,
   figsize=(10.0,10.0), units=None, aspect=None, noplotid=False,
-  nolegend=False,
+  nolegend=False, verbose=False,
   plotdir='./', savefig=True, overplot=False):
 
   #plt.setp(lines, edgecolors='None')
@@ -25,9 +25,9 @@ def plot_radec(ra, dec, title=None, xlabel=None, ylabel=None,
   xdata=ra
   ydata=dec
 
-  print('RA range: ', np.min(xdata), np.max(xdata))
-  print('Dec range: ', np.min(ydata), np.max(ydata))
-  print('units: ', units)
+  if verbose: print('RA range: ', np.min(xdata), np.max(xdata))
+  if verbose: print('Dec range: ', np.min(ydata), np.max(ydata))
+  if verbose: print('units: ', units)
 
   if rarange is None:
     plt.xlim([0,24.0])
@@ -40,7 +40,7 @@ def plot_radec(ra, dec, title=None, xlabel=None, ylabel=None,
     plt.ylim(decrange)
 
   if units == 'Degrees':
-    print('units: ', units)
+    if verbose: print('units: ', units)
     plt.xlim([min(xdata),max(xdata)])
     plt.ylim([min(ydata),max(ydata)])
 
@@ -49,13 +49,13 @@ def plot_radec(ra, dec, title=None, xlabel=None, ylabel=None,
     plt.plot(xdata, ydata, 'ob', markeredgecolor='b', markersize=markersize)
 
   if plotstyle is not None:
-    print('plotstyle: ', plotstyle)
+    if verbose: print('plotstyle: ', plotstyle)
     plt.plot(xdata, ydata, plotstyle, 
      markeredgecolor=None, markersize=markersize)
   #plotid.plotid()
 
   ndata=len(xdata)
-  print 'Number of data points plotted: ', ndata
+  if verbose: print 'Number of data points plotted: ', ndata
   if not nolegend: plt.legend(['n: '+ str(ndata)])
 
   if not noplotid: plotid(progname=True)
