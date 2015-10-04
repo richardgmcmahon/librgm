@@ -86,6 +86,14 @@ def plotid(timestamp=True, user=True, hostname=False, progname=False,
 
   if debug or verbose: print('text: ', text)
 
+  # cf plt.text
+  # see http://matplotlib.org/users/text_props.html 
+
+  # http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.figtext
+  # http://matplotlib.org/examples/pylab_examples/alignment_test.html
+  # http://matplotlib.org/users/transforms_tutorial.html
+  # explore difference between text and figtext
+
   # get current axis (gca)
   #ax=plt.gca()
   transform = plt.gca().transAxes
@@ -96,13 +104,27 @@ def plotid(timestamp=True, user=True, hostname=False, progname=False,
   #plt.setp(plt.gca(), xticks=(), yticks=())#, frame_on=False
 
   color='k'
-  plt.figtext(0.97, 0.5, 
+  figtext=True
+  if figtext: plt.figtext(0.97, 0.5, 
     text,
     transform=transform,
     rotation=90, 
     size='small', color=color,
-    weight='ultralight',
+    backgroundcolor='w',
+    weight='ultralight', 
     horizontalalignment='left', verticalalignment='center')
+
+  if not figtext: 
+    plt.text(0.97, 0.5, 
+    text,
+    transform=transform,
+    rotation=90, 
+    size='small', color=color,
+    backgroundcolor='w',
+    weight='ultralight', 
+    horizontalalignment='left', verticalalignment='center')
+
+
 
   return text
 
