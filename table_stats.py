@@ -97,7 +97,13 @@ def table_stats(data, ext=1, verbose=True, debug=False):
            len(data.field(i)), \
            ': ',np.min(data.field(i)), ' : ',np.max(data.field(i)) 
         except:
+          # try min, max rather than np.min, np.max
           print i, j, data.columns[i].name, 'problem with column'
+          print i, j, data.columns[i].name, data.columns[i].format, \
+           data.columns[i].dim, data.field(i).shape, len(data.field(i).shape), \
+           len(data.field(i)), \
+           ': ', min(data.field(i)), ' : ', max(data.field(i)) 
+
           pass
 
       # process the columns that are 2D vectors (i,j)
