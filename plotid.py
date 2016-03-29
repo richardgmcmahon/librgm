@@ -1,139 +1,143 @@
 from __future__ import print_function, division
 
-def plotid(timestamp=True, user=True, hostname=False, progname=False,
- label=None, 
- top=False, right=False, verbose=False, debug=False):
-  """ 
-  Adds timestamp and other provenance information to a plot.
 
-  Options:
-  include date, username, hostname, program filename 
-  
-  could even geotag it?
-  could add provenance to the png file
-  
-  Considerations: 
+def plotid(timestamp=True, user=True, hostname=False,
+           progname=False, label=None,
+           top=False, right=False, verbose=False,
+           debug=False):
+    """
+    Adds timestamp and other provenance information to a plot.
 
-  should the text location be in units of the current figure (gcf)
-  or the current axis (gca)
+    Options:
+    include date, username, hostname, program filename
 
-  see also https://github.com/matplotlib/matplotlib/issues/289
+    could even geotag it?
+    could add provenance to the png file
 
-  options are not implemented yet
-  text is placed on middle right in axis cords. 
+    Considerations:
 
-  """
+    should the text location be in units of the current figure (gcf)
+    or the current axis (gca)
 
+    see also https://github.com/matplotlib/matplotlib/issues/289
 
+    options are not implemented yet
+    text is placed on middle right in axis cords.
 
-  import os
-  import time
-  import datetime
-  import traceback
+    """
 
-  import getpass
-  import socket
+    import os
+    import time
+    import datetime
+    import traceback
 
-  import matplotlib.pyplot as plt
+    import getpass
+    import socket
 
-  hostname_str=''
-  if hostname: hostname_str = socket.gethostname()
+    import matplotlib.pyplot as plt
 
-  now = time.localtime(time.time())
-  timestamp = time.strftime("%Y-%m-%dT%H:%M:%S",now)
-  
+    hostname_str = ''
+    if hostname:
+        hostname_str = socket.gethostname()
 
-  #print os.path.basename(trace[0]), ' line :', str(trace[1])
-  #progname=os.path.basename(__file__)
+    now = time.localtime(time.time())
+    timestamp = time.strftime("%Y-%m-%dT%H:%M:%S", now)
 
-  if debug:
-    trace=traceback.print_exc()
-    #help(trace)
-    #print('len(trace): ', len(trace))
-    trace = traceback.extract_stack()
-    #help(trace)
-    print('len(trace): ', len(trace))
-    for each in trace:
-      print(each)
+    # print os.path.basename(trace[0]), ' line :', str(trace[1])
+    # progname=os.path.basename(__file__)
 
-  progname_str=''
-  progline=''
-  if progname:
-    trace = traceback.extract_stack()[0]
-    progname_str=os.path.basename(trace[0])
-    progline=str(trace[1])
-    progline='({})'.format(progline)
-    
-  if debug:
-    print('progname: ', progname)
-    print('progname_str: ', progname_str)
-    print('progline: ', progline)
+    if debug:
+        trace = traceback.print_exc()
+        # help(trace)
+        # print('len(trace): ', len(trace))
+        trace = traceback.extract_stack()
+        # help(trace)
+        print('len(trace):', len(trace))
+        for each in trace:
+            print(each)
 
-  #username=os.environ['USER'] 
-  username = getpass.getuser()
+    progname_str = ''
+    progline = ''
+    if progname:
+        trace = traceback.extract_stack()[0]
+        progname_str = os.path.basename(trace[0])
+        progline = str(trace[1])
+        progline = '({})'.format(progline)
 
-  now = time.localtime(time.time())
-  timestamp = time.strftime("%Y-%m-%dT%H:%M:%S",now)
-  if debug or verbose: print('timestamp: ', timestamp)
+    if debug:
+        print('progname:', progname)
+        print('progname_str:', progname_str)
+        print('progline:', progline)
 
-  if label == None: label=''
-  text = '{} {}{} {} {} {}'.format(label, 
-   progname_str, progline,
-   username, timestamp, hostname_str)
+    # username=os.environ['USER']
+    username = getpass.getuser()
 
-  #text = label+ ':  ' +timestamp+ ' ' +username
-  #if host: text = text + '@'+hostname+']'
+    now = time.localtime(time.time())
+    timestamp = time.strftime("%Y-%m-%dT%H:%M:%S", now)
+    if debug or verbose:
+        print('timestamp:', timestamp)
 
-  if debug or verbose: print('text: ', text)
+    if label is None:
+        label = ''
+    text = '{} {}{} {} {} {}'.format(label,
+                                     progname_str, progline,
+                                     username, timestamp, hostname_str)
 
-  # cf plt.text
-  # see http://matplotlib.org/users/text_props.html 
+    # text = label+ ':  ' +timestamp+ ' ' +username
+    # if host: text = text + '@'+hostname+']'
 
-  # http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.figtext
-  # http://matplotlib.org/examples/pylab_examples/alignment_test.html
-  # http://matplotlib.org/users/transforms_tutorial.html
-  # explore difference between text and figtext
+    if debug or verbose:
+        print('text:', text)
 
-  # get current axis (gca)
-  #ax=plt.gca()
-  transform = plt.gca().transAxes
-  #transform=plt.gcf().transFigure
+    # cf plt.text
+    # see http://matplotlib.org/users/text_props.html
 
-  # this is needed to allow the text to be added before the first
-  # axes are drawn
-  #plt.setp(plt.gca(), xticks=(), yticks=())#, frame_on=False
+    # http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.figtext
+    # http://matplotlib.org/examples/pylab_examples/alignment_test.html
+    # http://matplotlib.org/users/transforms_tutorial.html
+    # explore difference between text and figtext
 
-  color='k'
-  figtext=True
-  if figtext: plt.figtext(0.97, 0.5, 
-    text,
-    transform=transform,
-    rotation=90, 
-    size='small', color=color,
-    backgroundcolor='w',
-    weight='ultralight', 
-    horizontalalignment='left', verticalalignment='center')
+    # get current axis (gca)
+    # ax=plt.gca()
+    transform = plt.gca().transAxes
+    # transform=plt.gcf().transFigure
 
-  if not figtext: 
-    plt.text(0.97, 0.5, 
-    text,
-    transform=transform,
-    rotation=90, 
-    size='small', color=color,
-    backgroundcolor='w',
-    weight='ultralight', 
-    horizontalalignment='left', verticalalignment='center')
+    # this is needed to allow the text to be added before the first
+    # axes are drawn
+    # plt.setp(plt.gca(), xticks=(), yticks=())#, frame_on=False
 
+    color = 'k'
+    figtext = True
+    if figtext:
+        plt.figtext(0.97, 0.5,
+                    text,
+                    transform=transform,
+                    rotation=90,
+                    size='small', color=color,
+                    backgroundcolor='w',
+                    weight='ultralight',
+                    horizontalalignment='left',
+                    verticalalignment='center')
 
+    if not figtext:
+        plt.text(0.97, 0.5,
+                 text,
+                 transform=transform,
+                 rotation=90,
+                 size='small', color=color,
+                 backgroundcolor='w',
+                 weight='ultralight',
+                 horizontalalignment='left',
+                 verticalalignment='center')
 
-  return text
+    return text
 
 if __name__ == '__main__':
 
-  import matplotlib.pyplot as plt
+    import matplotlib.pyplot as plt
 
-  plt.plot(range(10))
+    plt.plot(range(10))
 
-  plotid(debug=True, progname=True)
+    plotid(debug=True, progname=True)
 
-  plt.show()
+    plt.show()
