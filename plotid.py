@@ -2,7 +2,7 @@ from __future__ import print_function, division
 
 
 def plotid(timestamp=True, user=True, hostname=False,
-           progname=False, label=None,
+           progname=True, label=None,
            top=False, right=False, verbose=False,
            debug=False):
     """
