@@ -2,7 +2,6 @@
 # $Id: table_test.py,v 1.1 2009/08/18 11:09:42 rgm Exp rgm $
 from __future__ import print_function, division
 
-
 def table_stats(data, ext=1, verbose=True, debug=False):
     """
     pyfits function to get information about a table
@@ -94,23 +93,29 @@ def table_stats(data, ext=1, verbose=True, debug=False):
     for i in xrange(ncolumns):
         j = 0
         # process the columns that are 1D vectors
+        # added a NAN count
         if len(data.field(i).shape) == 1:
             try:
                 print(i, j, data.columns[i].name, data.columns[i].format,
                       data.columns[i].dim, data.field(i).shape,
                       len(data.field(i).shape),
-                      len(data.field(i)), ': ',
-                      np.min(data.field(i)), ': ',
-                      np.max(data.field(i)))
-
+                      len(data.field(i)), ':',
+                      np.nanmin(data.field(i)), ':',
+                      np.nanmax(data.field(i)), ':',
+                      len(data.field(i)[np.isnan(data.field(i))]), ':',
+                      data.field(i).dtype)
             except:
                 # try min, max rather than np.min, np.max
+                # http://stackoverflow.com/questions/12654093/arrays-of-strings-into-numpy-amax
+                data_min = np.min(np.array(data.field(i), dtype=object))
+                data_max = np.max(np.array(data.field(i), dtype=object))
+                data_dtype = data.field(i).dtype
                 print(i, j, data.columns[i].name, 'problem with column')
                 print(i, j, data.columns[i].name, data.columns[i].format,
                       data.columns[i].dim, data.field(i).shape,
                       len(data.field(i).shape),
-                      len(data.field(i)), ': ',
-                      min(data.field(i)), ': ', max(data.field(i)))
+                      len(data.field(i)), ':',
+                      data_min, ': ', data_max, ':', data_dtype)
 
                 pass
 
