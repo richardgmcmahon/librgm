@@ -4,7 +4,8 @@ from librgm.plotid import plotid
 
 import numpy as np
 
-def plot_radec(ra, dec, title=None, xlabel=None, ylabel=None,
+def plot_radec(ra, dec, title=None, suptitle=None,
+               xlabel=None, ylabel=None,
   plotstyle=None, linestyle=None, markersize=None,
   rarange=None, decrange=None, showplots=False, figfile=None,
   figsize=(10.0,10.0), units=None, aspect=None, noplotid=False,
@@ -21,6 +22,7 @@ def plot_radec(ra, dec, title=None, xlabel=None, ylabel=None,
   plt.ylabel('Dec')
   if ylabel != None: plt.ylabel(ylabel)
   if title != None: plt.title(title)
+  if suptitle != None: plt.suptitle(suptitle)
 
   xdata=ra
   ydata=dec
@@ -34,9 +36,9 @@ def plot_radec(ra, dec, title=None, xlabel=None, ylabel=None,
   if rarange is not None:
     plt.xlim(rarange)
 
-  if decrange is None:    
+  if decrange is None:
     plt.ylim([-90,30])
-  if decrange is not None:    
+  if decrange is not None:
     plt.ylim(decrange)
 
   if units == 'Degrees':
@@ -50,7 +52,7 @@ def plot_radec(ra, dec, title=None, xlabel=None, ylabel=None,
 
   if plotstyle is not None:
     if verbose: print('plotstyle: ', plotstyle)
-    plt.plot(xdata, ydata, plotstyle, 
+    plt.plot(xdata, ydata, plotstyle,
      markeredgecolor=None, markersize=markersize)
   #plotid.plotid()
 
@@ -65,8 +67,6 @@ def plot_radec(ra, dec, title=None, xlabel=None, ylabel=None,
 
   if showplots: plt.show()
 
-  if savefig: 
+  if savefig:
    print 'Saving: ', figfile
    plt.savefig(figfile)
-
-
