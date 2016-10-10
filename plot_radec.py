@@ -5,16 +5,20 @@ from librgm.plotid import plotid
 import numpy as np
 
 def plot_radec(ra, dec, title=None, suptitle=None,
-               xlabel=None, ylabel=None,
-  plotstyle=None, linestyle=None, markersize=None,
-  rarange=None, decrange=None, showplots=False, figfile=None,
-  figsize=(10.0,10.0), units=None, aspect=None, noplotid=False,
-  nolegend=False, verbose=False,
-  plotdir='./', savefig=True, overplot=False):
+               xlabel=None, ylabel=None, plotlabel='',
+               plotstyle=None, linestyle=None,
+               markersize=None,
+               marker='+', color='b',
+               rarange=None, decrange=None,
+               showplots=False, plotfile=None,
+               figsize=(10.0,10.0),
+               units=None, aspect=None, noplotid=False,
+               nolegend=False, verbose=False,
+               plotdir='./', savefig=True, overplot=False):
 
   #plt.setp(lines, edgecolors='None')
 
-  if figfile == None: figfile='radec.png'
+  if plotfile == None: plotfile='radec.png'
   if not overplot: plt.figure(num=None, figsize=figsize)
 
   plt.xlabel('RA')
@@ -47,8 +51,13 @@ def plot_radec(ra, dec, title=None, suptitle=None,
     plt.ylim([min(ydata),max(ydata)])
 
   if markersize is None: markersize=1.0
+
+  ndata=len(xdata)
+
   if plotstyle is None:
-    plt.plot(xdata, ydata, 'ob', markeredgecolor='b', markersize=markersize)
+    plt.plot(xdata, ydata, marker='o', c=color, linestyle='None',
+        markeredgecolor=color, markersize=markersize,
+        label=plotlabel + str(ndata))
 
   if plotstyle is not None:
     if verbose: print('plotstyle: ', plotstyle)
@@ -56,9 +65,11 @@ def plot_radec(ra, dec, title=None, suptitle=None,
      markeredgecolor=None, markersize=markersize)
   #plotid.plotid()
 
-  ndata=len(xdata)
+
   if verbose: print 'Number of data points plotted: ', ndata
-  if not nolegend: plt.legend(['n: '+ str(ndata)])
+  if not nolegend: plt.legend()
+
+  plt.grid()
 
   if not noplotid: plotid(progname=True)
 
@@ -68,5 +79,5 @@ def plot_radec(ra, dec, title=None, suptitle=None,
   if showplots: plt.show()
 
   if savefig:
-   print 'Saving: ', figfile
-   plt.savefig(figfile)
+   print 'Saving: ', plotfile
+   plt.savefig(plotfile)
