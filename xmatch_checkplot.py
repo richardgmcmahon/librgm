@@ -109,11 +109,12 @@ def xmatch_checkplot(ra1, dec1, ra2, dec2,
         print("No matches")
         return RA_med, DEC_med
 
+    xlimits = (-1*width, width)
     gs = gridspec.GridSpec(2, 2, width_ratios=[2, 1], height_ratios=[1, 2])
     fig = plt.figure()
     ax1 = plt.subplot(gs[0])
-    ax1.hist(xs, bins=100, color="r")
-    ax1.set_xlim(-1*width, width)
+    ax1.hist(xs, bins=100, color="r", range=xlimits)
+    ax1.set_xlim(xlimits)
     ax1.axes.get_xaxis().set_visible(False)
     ax1.set_ylabel("Number")
 
