@@ -104,12 +104,29 @@ def xmatch_checkplot(ra1, dec1, ra2, dec2,
     print("RA Sigma MAD", 1.486 * RA_MAD, "DEC Sigma DEC", 1.486 * DEC_MAD)
     print("RA Median Error", 1.486 * RA_MAD / math.sqrt(len(xs)),
           "DEC Median Error", 1.486 * DEC_MAD / math.sqrt(len(ys)))
+    print("dRA range:", np.min(xs1), np.max(xs1))
+    print("dDec range:", np.min(ys1), np.max(ys1))
     print()
     if len(xs) == 0:
         print("No matches")
         return RA_med, DEC_med
 
-    xlimits = (-1*width, width)
+    xs = np.asarray(xs)
+    ys = np.asarray(ys)
+    xlimits = np.asarray([-1.0*width, width])
+    ylimits = np.asarray([-1.0*width, width])
+    limits = np.asarray([xlimits, ylimits])
+    print(xlimits[0], xlimits[1])
+    print(xs.dtype)
+    print(xs.shape)
+    print(xlimits.dtype)
+    print(xlimits.shape)
+    # itest = (xs > xlimits[0] & xs < xlimits[1])
+    # xs = xs[itest]
+    # itest = (ys > ylimits[0] & ys < ylimits[1])
+    # ys = ys[itest]
+
+    print('limits:', limits)
     gs = gridspec.GridSpec(2, 2, width_ratios=[2, 1], height_ratios=[1, 2])
     fig = plt.figure()
     ax1 = plt.subplot(gs[0])
@@ -121,7 +138,8 @@ def xmatch_checkplot(ra1, dec1, ra2, dec2,
     ax2 = plt.subplot(gs[2])
     # ax2.plot(xs, ys, "k+")
     if len(xs) > 100:
-        plt.hist2d(xs, ys, bins=100, cmap="binary", norm=LogNorm())
+        plt.hist2d(xs, ys, bins=100, cmap="binary", norm=LogNorm(),
+            range=limits)
     else:
         plt.plot(xs, ys, "k.", ms=2)
     ax2.set_ylim(-1*width, width)
@@ -139,8 +157,11 @@ def xmatch_checkplot(ra1, dec1, ra2, dec2,
         fig.suptitle(suptitle + ': ' + str(ndata), fontsize='small')
 
     ax3 = plt.subplot(gs[3])
-    ax3.hist(ys, bins=100, orientation="horizontal", color="r")
-    ax3.set_ylim(-1*width, width)
+    print('limits:', limits)
+    ax3.hist(ys, bins=100, orientation="horizontal", color="r",
+        range=ylimits)
+
+    ax3.set_ylim(ylimits)
     ax3.set_xlabel("Number")
     ax3.axes.get_yaxis().set_visible(False)
     labels2 = ax3.get_xticks()
