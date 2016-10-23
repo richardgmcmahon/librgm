@@ -173,13 +173,15 @@ def xmatch_checkplot(ra1, dec1, ra2, dec2,
     if saveplot:
         lineno = str(inspect.stack()[0][2])
         print(mk_timestamp(), function_name, lineno)
+        print('plotfile:', plotfile)
+        print('plotfile_prefix:', plotfile_prefix)
         if add_plotid:
             plotid()
         if plotfile is None:
             plotfile = 'match'
-        if plotfile_prefix is not None:
+        if plotfile_prefix is not None and plotfile is None:
             plotfile = plotfile_prefix + '_match_' + datestamp + '.png'
-        if plotfile_prefix is None:
+        if plotfile_prefix is None and plotfile is None:
             plotfile = 'match_' + datestamp + '.png'
 
         print('Saving: ', plotfile)
