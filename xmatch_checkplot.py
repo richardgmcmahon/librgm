@@ -27,9 +27,9 @@ def xmatch_checkplot(ra1, dec1, ra2, dec2,
 
     Forked from Sophie Reed's version on 20160319
 
-    Plot can either be square, the square inside the circle it matches it.
-    Or all which has all the points in the matching circle. Square makes
-    the histograms more comparable.
+    Plot can either be square, the square inscribes the circle.
+    Or all which has all the points in the matching circle.
+    Square make the histograms more comparable.
 
     Compares RA_main and DEC_main columns with RA and Dec columns in the
     format output by the matching codes. Eg. RA_ + survey.
