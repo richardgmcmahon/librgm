@@ -1,13 +1,12 @@
-def xmatch_cats(
-           data1=None, data2=None,
-           colnames_radec1=['ra', 'dec'],
-           colnames_radec2=['ra', 'dec'],
-           units_radec1=['degree', 'degree'],
-           units_radec2=['degree', 'degree'],
-           plotfile_label="",
-           rmax=30.0,
-           nthneighbor=1,
-           **kwargs):
+def xmatch_2cats(data1=None, data2=None,
+                 colnames_radec1=['ra', 'dec'],
+                 colnames_radec2=['ra', 'dec'],
+                 units_radec1=['degree', 'degree'],
+                 units_radec2=['degree', 'degree'],
+                 plotfile_label="",
+                 rmax=30.0,
+                 nthneighbor=1,
+                 **kwargs):
     """RA, Dec xmatch for two lists; returns pointers
 
 
