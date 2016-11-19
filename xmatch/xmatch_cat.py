@@ -1,20 +1,32 @@
-def xmatch_2cats(data1=None, data2=None,
-                 colnames_radec1=['ra', 'dec'],
-                 colnames_radec2=['ra', 'dec'],
-                 units_radec1=['degree', 'degree'],
-                 units_radec2=['degree', 'degree'],
-                 plotfile_label="",
-                 rmax=30.0,
-                 nthneighbor=1,
-                 **kwargs):
+def xmatch_cat(data1=None, data2=None,
+               colnames_radec1=['ra', 'dec'],
+               colnames_radec2=['ra', 'dec'],
+               units_radec1=['degree', 'degree'],
+               units_radec2=['degree', 'degree'],
+               plotfile_label="",
+               rmax=30.0,
+               nthneighbor=1,
+               **kwargs):
     """RA, Dec xmatch for two lists; returns pointers
 
 
     """
 
+    import matplotlib.pyplot as plt
+
+    import numpy as np
+
+    from astropy.coordinates import SkyCoord
+    from astropy.coordinates import search_around_sky, match_coordinates_sky
+    from astropy import units as u
+
     print('colnames_radec1:', colnames_radec1)
     print('colnames_radec2:', colnames_radec2)
     print('plotfile_label:', plotfile_label)
+
+    import xmatch_checkplot
+    import xmatch_checkplot0
+
 
     # print(data1[0])
     # print(data2[0])
@@ -47,7 +59,7 @@ def xmatch_2cats(data1=None, data2=None,
     suptitle = plotfile_label
     plotfile = 'plot_xmatch_' + plotfile_label + 'a_checkplot.png'
 
-    xmatch_checkplot(ra1, dec1, ra2_xmatch, dec2_xmatch,
+    xmatch_checkplot.xmatch_checkplot(ra1, dec1, ra2_xmatch, dec2_xmatch,
                      width=rmax,
                      gtype='square',
                      saveplot=True,
@@ -56,7 +68,7 @@ def xmatch_2cats(data1=None, data2=None,
     plt.close()
 
     plotfile = 'plot_xmatch_' + plotfile_label + '_b_checkplot0.png'
-    xmatch_checkplot0(ra1, dec1, ra2_xmatch, dec2_xmatch,
+    xmatch_checkplot0.xmatch_checkplot0(ra1, dec1, ra2_xmatch, dec2_xmatch,
                       width=10.0,
                       gtype='square',
                       saveplot=True,
