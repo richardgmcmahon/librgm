@@ -36,19 +36,15 @@ def plot_radec(ra, dec, title=None, suptitle=None,
   if verbose: print('units: ', units)
 
   if rarange is None:
-    plt.xlim([0,24.0])
+    plt.xlim([min(xdata),max(xdata)])
   if rarange is not None:
     plt.xlim(rarange)
 
   if decrange is None:
-    plt.ylim([-90,30])
+    plt.ylim([min(ydata),max(ydata)])
   if decrange is not None:
     plt.ylim(decrange)
 
-  if units == 'Degrees':
-    if verbose: print('units: ', units)
-    plt.xlim([min(xdata),max(xdata)])
-    plt.ylim([min(ydata),max(ydata)])
 
   if markersize is None: markersize=1.0
 

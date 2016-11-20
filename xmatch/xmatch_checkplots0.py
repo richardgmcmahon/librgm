@@ -1,14 +1,27 @@
 def xmatch_checkplots0(ra1, dec1, ra2, dec2,
                       width=10.0,
+                      binsize=1.0,
                       saveplot=True,
                       markersize=1.0,
                       plotfile='',
                       suptitle='',
                       **kwargs):
 
+    """
+    Based on code by Chris Desira
+
+    """
+
     import numpy as np
 
+    import matplotlib.pyplot as plt
+
     from astropy import stats
+    from astropy.coordinates import SkyCoord
+    from astropy import units as u
+
+
+    from librgm.plotid import plotid
 
     rmax = width
 
@@ -17,17 +30,24 @@ def xmatch_checkplots0(ra1, dec1, ra2, dec2,
     print('RA2 range:', np.min(ra2), np.max(ra2))
     print('Dec2 range:', np.min(dec2), np.max(dec2))
 
+    # offsets in arc seconds
+    difference_ra = (ra1 - ra2) * np.cos(np.radians(dec1)) * 3600.0
+    difference_dec = (dec1 - dec2) * 3600.0
+
+    itest = (np.abs(difference_ra) < rmax) & (np.abs(difference_dec) < rmax)
+
+    difference_ra = difference_ra[itest]
+    difference_dec = difference_dec[itest]
+
     skycoord_object1 = SkyCoord(ra1, dec1, unit=('degree', 'degree'),
         frame='icrs')
     skycoord_object2 = SkyCoord(ra2, dec2, unit=('degree', 'degree'),
         frame='icrs')
 
+    skycoord_object1 = skycoord_object1[itest]
+    skycoord_object2 = skycoord_object2[itest]
+
     separations = skycoord_object1.separation(skycoord_object2)
-
-    # offsets in arc seconds
-    difference_ra = (ra1 - ra2) * np.cos(np.radians(dec1)) * 3600.0
-    difference_dec = (dec1 - dec2) * 3600.0
-
 
     med = np.median(separations.arcsec)
     ndata = len(separations)
@@ -41,7 +61,7 @@ def xmatch_checkplots0(ra1, dec1, ra2, dec2,
     ax1=fig.add_subplot(1,2,1)
 
     xdata = separations.arcsec
-    binsize=1.0
+
     n, b, patches = ax1.hist(xdata, bins=rmax/binsize,
                              range=[0.0, rmax],
                              color='green', alpha=0.5)
@@ -85,6 +105,10 @@ def xmatch_checkplots0(ra1, dec1, ra2, dec2,
     ax2.grid()
 
     fig.subplots_adjust(top=0.88)
+
+    # make room for the plotid on right edge
+    fig.subplots_adjust(right=0.95)
+    plotid()
 
     if plotfile != None:
         print('Saving plotfile:', plotfile)

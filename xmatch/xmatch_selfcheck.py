@@ -21,6 +21,8 @@ def xmatch_selfcheck(data=None, colnames_radec=['ra', 'dec'],
 
     from astropy.stats import mad_std, median_absolute_deviation
 
+    from librgm.plotid import plotid
+
     print('colnames_radec:', colnames_radec)
     print('markersize:', markersize)
     ra = data[colnames_radec[0]]
@@ -120,7 +122,12 @@ def xmatch_selfcheck(data=None, colnames_radec=['ra', 'dec'],
     fig.tight_layout()
     ax2.grid()
 
+
     fig.subplots_adjust(top=0.88)
+
+    # make room for the plotid on right edge
+    fig.subplots_adjust(right=0.95)
+    plotid()
 
     if plotfile != None:
         print('Saving plotfile:', plotfile)
