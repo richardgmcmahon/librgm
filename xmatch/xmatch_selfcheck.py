@@ -1,3 +1,5 @@
+from __future__ import (division, print_function)
+
 def xmatch_selfcheck(data=None, colnames_radec=['ra', 'dec'],
                      units_radec=['degree', 'degree'],
                      rmax=10.0,
@@ -23,10 +25,16 @@ def xmatch_selfcheck(data=None, colnames_radec=['ra', 'dec'],
 
     from librgm.plotid import plotid
 
+    print('__file__', __file__)
+    print('__name__', __name__)
+
     print('colnames_radec:', colnames_radec)
     print('markersize:', markersize)
+
     ra = data[colnames_radec[0]]
     dec = data[colnames_radec[1]]
+    print('RA range:', np.min(ra), np.max(ra))
+    print('Dec range:', np.min(dec), np.max(dec))
 
     skycoord_object = SkyCoord(ra, dec, unit=units_radec, frame='icrs')
 
@@ -40,7 +48,10 @@ def xmatch_selfcheck(data=None, colnames_radec=['ra', 'dec'],
 
 
     #set limits
-    separations = np.asarray(d2d)*3600.0
+
+    separations = np.asarray(d2d.arcsec)
+    print('Separation range:', np.min(separations), np.max(separations))
+    print('Separation median:', np.median(separations))
     upperlimit = rmax
     upperlimit2 = rmax
     separations_reduced = separations[(separations<=upperlimit)]
