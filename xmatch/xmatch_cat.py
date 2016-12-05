@@ -11,6 +11,7 @@ def xmatch_cat(data1=None, data2=None,
                debug=False,
                verbose=False,
                checkplot=True,
+               join=False
                plotfile_label="",
                **kwargs):
     """RA, Dec xmatch for two lists; returns pointers
@@ -22,9 +23,11 @@ def xmatch_cat(data1=None, data2=None,
     import numpy as np
     import matplotlib.pyplot as plt
 
+    from astropy.table import Table, hstack
     from astropy.coordinates import SkyCoord
     from astropy.coordinates import search_around_sky, match_coordinates_sky
     from astropy import units as u
+    from astropy.stats import mad_std
 
     print('__file__:', __file__)
     print('__name__:', __name__)
@@ -51,69 +54,90 @@ def xmatch_cat(data1=None, data2=None,
     # idx is an integer array into the first cordinate array to get the
     # matched points for the second coorindate array.
     # Shape of idx matches the first coordinate array
-    idx, d2d, d3d = match_coordinates_sky(skycoord1,
-                                          skycoord2,
-                                          nthneighbor=nthneighbor)
-
-    separation = skycoord1.separation(skycoord2[idx])
-
-    dra, ddec = \
-        skycoord1.spherical_offsets_to(skycoord2[idx])
-
+    idxmatch, d2d, d3d = match_coordinates_sky(skycoord1,
+                                               skycoord2,
+                                               nthneighbor=nthneighbor)
 
     # alternative 'method' form
     # idxmatch, d2d, d3d = skycoord1.match_to_catalog_sky(skycoord2)
 
+    separation = skycoord1.separation(skycoord2[idxmatch])
+
+    dra, ddec = \
+        skycoord1.spherical_offsets_to(skycoord2[idxmatch])
+
     if stats or verbose or debug:
-        print('Using: match_coordinates_sky')
-        print('radec_veron.match_to_catalog_sky(radec_dr7qso)')
         print('len(data1):', len(data1))
         print('len(data2):', len(data2))
-        print('len(idx):', len(idx))
-        print('idx range:', np.min(idx), np.max(idx))
+        print('len(idxmatch):', len(idxmatch))
+        print('idxmatch range:', np.min(idxmatch), np.max(idxmatch))
         print('d2d range:', np.min(d2d), np.max(d2d))
         print('d2d range:', np.min(d2d).arcsec, np.max(d2d).arcsec)
         print('d2d median:', np.median(d2d).arcsec)
 
-
         median_separation = np.median(separation).arcsec
-        print('Median separation (arc seconds):', median_separation)
-
+        mad_std_separation = mad_std(separation.arcsec)
+        print('dR range (arcsec):',
+              np.min(separation.arcsec), np.max(separation.arcsec))
+        print('dR mean, std (arcsec):',
+              np.mean(separation).arcsec, np.std(separation).arcsec)
+        print('dR  median, mad_std (arcsec):',
+              median_separation, mad_std_separation)
+        print()
 
         median_dra = np.median(dra).arcsec
-        print('Median dRA (arc seconds):', median_dra)
+        mad_std_dra = mad_std(dra.arcsec)
+        print('dRA min, max:',
+              np.min(dra).arcsec, np.max(dra).arcsec)
+        print('dRA mean, std:',
+              np.mean(dra).arcsec, np.std(dra).arcsec)
+        print('dRA median, mad_std:',
+              median_dra, mad_std_dra)
+        print()
 
         median_ddec = np.median(ddec).arcsec
-        print('Median dDec (arc seconds):', median_ddec)
+        mad_std_ddec = mad_std(ddec.arcsec)
+        print('dDec min, max:',
+              np.min(ddec).arcsec, np.max(ddec).arcsec)
+        print('dDec mean, std:',
+              np.mean(ddec).arcsec, np.std(ddec).arcsec)
+        print('dDec median, mad_std:',
+              median_ddec, mad_std_ddec)
+        print()
 
-    suptitle = plotfile_label
-    plotfile = 'xmatch_cat' + plotfile_label + '_a_checkplot.png'
 
-    ra2_xmatch = ra2[idx]
-    dec2_xmatch = dec2[idx]
+    if checkplot:
+        suptitle = plotfile_label
+        plotfile = 'xmatch_cat' + plotfile_label + '_a_checkplot.png'
 
-    xmatch_checkplot.xmatch_checkplot(ra1, dec1, ra2_xmatch, dec2_xmatch,
-                     width=rmax,
-                     gtype='square',
-                     saveplot=True,
-                     plotfile=plotfile,
-                     suptitle=suptitle)
-    plt.close()
+        ra2_xmatch = ra2[idxmatch]
+        dec2_xmatch = dec2[idxmatch]
 
-    plotfile = 'xmatch_cat' + plotfile_label + '_b_checkplot0.png'
-    xmatch_checkplot0.xmatch_checkplot0(ra1, dec1, ra2_xmatch, dec2_xmatch,
+        xmatch_checkplot.xmatch_checkplot(
+            ra1, dec1, ra2_xmatch, dec2_xmatch,
+            width=rmax,
+            gtype='square',
+            saveplot=True,
+            plotfile=plotfile,
+            suptitle=suptitle)
+            plt.close()
+
+            plotfile = 'xmatch_cat' + plotfile_label + '_b_checkplot0.png'
+            xmatch_checkplot0.xmatch_checkplot0(
+                      ra1, dec1, ra2_xmatch, dec2_xmatch,
                       width=10.0,
                       gtype='square',
                       saveplot=True,
                       plotfile=plotfile,
                       suptitle=suptitle)
-    plt.close()
+            plt.close()
 
-    idx1 = idx
+    idx1 = idxmatch
     idx2 = []
     separation = separation.arcsec
+
     dr = d2d.arcsec
 
-    print(len(idx), len(dr))
+    print(len(idxmatch), len(dr))
 
-    return idx , dr
+    return idxmatch, dr
