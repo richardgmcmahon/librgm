@@ -2,18 +2,19 @@ from __future__ import (division, print_function)
 
 def xmatch_cat(data1=None, data2=None,
                nthneighbor=1,
+               selfmatch=False,
                colnames_radec1=['ra', 'dec'],
                colnames_radec2=['ra', 'dec'],
                units_radec1=['degree', 'degree'],
                units_radec2=['degree', 'degree'],
                rmax=10.0,
+               rmax2=None,
                stats=True,
                debug=False,
                verbose=False,
                checkplot=True,
-               join=False
-               plotfile_label="",
-               **kwargs):
+               join=False,
+               plotfile_label=''):
     """RA, Dec xmatch for two lists; returns pointers
 
     nearest match
@@ -27,7 +28,7 @@ def xmatch_cat(data1=None, data2=None,
     from astropy.coordinates import SkyCoord
     from astropy.coordinates import search_around_sky, match_coordinates_sky
     from astropy import units as u
-    from astropy.stats import mad_std
+    from astropy.stats import mad_std, median_absolute_deviation
 
     print('__file__:', __file__)
     print('__name__:', __name__)
@@ -38,6 +39,10 @@ def xmatch_cat(data1=None, data2=None,
     import xmatch_checkplot
     import xmatch_checkplot0
 
+    if selfmatch:
+        data2 = data1
+        colnames_radec2 = colname_radec1
+        nthneighbor=2
 
     # print(data1[0])
     # print(data2[0])
@@ -47,6 +52,14 @@ def xmatch_cat(data1=None, data2=None,
 
     ra2 = data2[colnames_radec2[0]]
     dec2 = data2[colnames_radec2[1]]
+
+    if stats or verbose or debug:
+        print('RA1 range:', np.min(ra1), np.max(ra1))
+        print('Dec1 range:', np.min(dec1), np.max(dec1))
+
+        print('RA1 range:', np.min(ra2), np.max(ra2))
+        print('Dec1 range:', np.min(dec2), np.max(dec2))
+
 
     skycoord1 = SkyCoord(ra1, dec1, unit=units_radec1, frame='icrs')
     skycoord2 = SkyCoord(ra2, dec2, unit=units_radec1, frame='icrs')
@@ -120,17 +133,17 @@ def xmatch_cat(data1=None, data2=None,
             saveplot=True,
             plotfile=plotfile,
             suptitle=suptitle)
-            plt.close()
+        plt.close()
 
-            plotfile = 'xmatch_cat' + plotfile_label + '_b_checkplot0.png'
-            xmatch_checkplot0.xmatch_checkplot0(
+        plotfile = 'xmatch_cat' + plotfile_label + '_b_checkplot0.png'
+        xmatch_checkplot0.xmatch_checkplot0(
                       ra1, dec1, ra2_xmatch, dec2_xmatch,
                       width=10.0,
                       gtype='square',
                       saveplot=True,
                       plotfile=plotfile,
                       suptitle=suptitle)
-            plt.close()
+        plt.close()
 
     idx1 = idxmatch
     idx2 = []

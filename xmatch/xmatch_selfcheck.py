@@ -76,8 +76,8 @@ def xmatch_selfcheck(data=None, colnames_radec=['ra', 'dec'],
     difference_ra = ((((masked_list_ra_cat-masked_list_ra)*np.cos(np.radians(masked_list_dec_cat))))*3600.0)
     difference_dec = (((masked_list_dec_cat-masked_list_dec))*3600.0)
 
-    median_and_mean=[list(difference_ra),list(difference_dec)]
-    median_and_mean=np.asarray(median_and_mean)
+    median_and_mean = [list(difference_ra), list(difference_dec)]
+    median_and_mean = np.asarray(median_and_mean)
     mad_standard = mad_std(median_and_mean)
     mad_median = median_absolute_deviation(median_and_mean)
     length = len(masked_list_ra)
