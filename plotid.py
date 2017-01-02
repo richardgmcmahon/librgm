@@ -2,7 +2,7 @@ from __future__ import print_function, division
 
 
 def plotid(timestamp=True, user=True, hostname=False,
-           progname=True, label=None,
+           progname=True, label=None, fontsize='small',
            top=False, right=False, verbose=False,
            debug=False):
     """
@@ -115,6 +115,7 @@ def plotid(timestamp=True, user=True, hostname=False,
                     rotation=90,
                     size='small', color=color,
                     backgroundcolor='w',
+                    fontsize=fontsize,
                     weight='ultralight',
                     horizontalalignment='left',
                     verticalalignment='center')
@@ -126,6 +127,7 @@ def plotid(timestamp=True, user=True, hostname=False,
                  rotation=90,
                  size='small', color=color,
                  backgroundcolor='w',
+                 fontsize=fontsize,
                  weight='ultralight',
                  horizontalalignment='left',
                  verticalalignment='center')
