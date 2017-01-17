@@ -1,5 +1,6 @@
 from __future__ import (division, print_function)
 
+import sys
 
 import numpy as np
 import scipy.stats as stats
@@ -13,14 +14,19 @@ import matplotlib.pyplot as plt
 
 import astropy.stats as apstats
 
+sys.path.append('/home/rgm/soft/python/lib/')
+from librgm.plotid import plotid
+
+
 """
 
 
 """
-def add_columns_spherical_offsets(table=None,
+def add_columns_spherical_offsets(table=None, colname_suffix=None,
                                   ra1=None, dec1=None,
                                   ra2=None, dec2=None,
-                                  drarange=None, ddecrange=None,
+                                  plot_drarange=None,
+                                  plot_ddecrange=None,
                                   plots=False,
                                   colnames=None,
                                   **kwargs):
@@ -91,7 +97,7 @@ def add_columns_spherical_offsets(table=None,
         # drarange=[-0.5, 0.5]
         # ddecrange=[-0.5, 0.5]
         alpha = 1.0
-        markersize = 1.0
+        markersize = 4.0
         plt.figure(1, figsize=(8.0, 8.0))
         ndata = len(dra)
         plt.plot(dra.arcsec, ddec.arcsec,
@@ -100,13 +106,13 @@ def add_columns_spherical_offsets(table=None,
                  alpha=alpha, label=str(ndata))
         plt.xlabel('dra (")')
         plt.ylabel('ddec (")')
-        if drarange is not None:
-            plt.xlim(drarange)
-        if ddecrange is not None:
-            plt.ylim(ddecrange)
+        if plot_drarange is not None:
+            plt.xlim(plot_drarange)
+        if plot_ddecrange is not None:
+            plt.ylim(plot_ddecrange)
         plt.grid()
         plt.legend()
-        plotid.plotid()
+        plotid()
 
         dra_mean = np.mean(dra.arcsec)
         dra_median = np.median(dra.arcsec)
@@ -135,5 +141,10 @@ def add_columns_spherical_offsets(table=None,
             plt.suptitle(str(kwargs['plot_suptitle']), fontsize='medium')
 
         plt.show()
+
+    table['dRA_Sep'] = dra.arcsec
+    table['dDec_Sep'] = ddec.arcsec
+    table['dR_Sep'] = sep.arcsec
+    table['PA_Sep'] = pa.deg
 
     return table
