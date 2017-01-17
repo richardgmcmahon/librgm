@@ -1,6 +1,6 @@
 from __future__ import (division, print_function)
 
-def xmatch_cat(data1=None, data2=None,
+def xmatch_cat(table1=None, table2=None,
                nthneighbor=1,
                selfmatch=False,
                colnames_radec1=['ra', 'dec'],
@@ -40,18 +40,18 @@ def xmatch_cat(data1=None, data2=None,
     import xmatch_checkplot0
 
     if selfmatch:
-        data2 = data1
+        table2 = table1
         colnames_radec2 = colname_radec1
         nthneighbor=2
 
-    # print(data1[0])
-    # print(data2[0])
+    # print(table1[0])
+    # print(table2[0])
 
-    ra1 = data1[colnames_radec1[0]]
-    dec1 = data1[colnames_radec1[1]]
+    ra1 = table1[colnames_radec1[0]]
+    dec1 = table1[colnames_radec1[1]]
 
-    ra2 = data2[colnames_radec2[0]]
-    dec2 = data2[colnames_radec2[1]]
+    ra2 = table2[colnames_radec2[0]]
+    dec2 = table2[colnames_radec2[1]]
 
     if stats or verbose or debug:
         print('RA1 range:', np.min(ra1), np.max(ra1))
@@ -80,8 +80,8 @@ def xmatch_cat(data1=None, data2=None,
         skycoord1.spherical_offsets_to(skycoord2[idxmatch])
 
     if stats or verbose or debug:
-        print('len(data1):', len(data1))
-        print('len(data2):', len(data2))
+        print('len(table1):', len(table1))
+        print('len(table2):', len(table2))
         print('len(idxmatch):', len(idxmatch))
         print('idxmatch range:', np.min(idxmatch), np.max(idxmatch))
         print('d2d range:', np.min(d2d), np.max(d2d))
