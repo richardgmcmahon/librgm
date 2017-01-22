@@ -8,14 +8,14 @@ def table_metadata(table=None, test=False):
 
   DATE: date of file creation
 
-  At this time, the meta attribute of the Table class is simply an ordered 
-  dictionary and does not fully represent the structure of a FITS header 
+  At this time, the meta attribute of the Table class is simply an ordered
+  dictionary and does not fully represent the structure of a FITS header
   (for example, keyword comments are dropped).
 
   Also, keywords are silently overwritten
 
   """
-  
+
 
   import os
   import socket
@@ -50,13 +50,13 @@ def table_metadata(table=None, test=False):
     #table.meta['ABSPATH']= ABSPATH
     table.meta['TIME']= timestamp
     table.meta['DATE']= timestamp
- 
+
   if test:
 
     a = [1, 4, 5]
     b = [2.0, 5.0, 8.2]
     c = ['x', 'y', 'z']
-    table = Table([a, b, c], names=('a', 'b', 'c'), 
+    table = Table([a, b, c], names=('a', 'b', 'c'),
      meta={'name': 'first table'})
 
     print('timestamp: ',datetime.datetime.isoformat(datetime.datetime.now()))
@@ -72,17 +72,9 @@ def table_metadata(table=None, test=False):
     table.meta['PROGNAME']= progname
     table.meta['FULLPATH']= fullpath
     table.meta['TIME']= timestamp
- 
-    table.write('tmp.fits', overwrite=True)
-   
-
-  
 
     table.write('tmp.fits', overwrite=True)
-   
-
-
 
 if __name__ == "__main__":
 
-  tablemetadata(test=True)
+    table_metadata(test=True)

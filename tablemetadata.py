@@ -4,14 +4,14 @@ def tablemetadata(table=None, test=False):
   """
   add provenance metadata keywords to table
 
-  At this time, the meta attribute of the Table class is simply an ordered 
-  dictionary and does not fully represent the structure of a FITS header 
+  At this time, the meta attribute of the Table class is simply an ordered
+  dictionary and does not fully represent the structure of a FITS header
   (for example, keyword comments are dropped).
 
   Also, keywords are silently overwritten
 
   """
-  
+
 
   import os
   import socket
@@ -45,13 +45,13 @@ def tablemetadata(table=None, test=False):
     table.meta['CWD']= CWD
     #table.meta['ABSPATH']= ABSPATH
     table.meta['TIME']= timestamp
- 
+
   if test:
 
     a = [1, 4, 5]
     b = [2.0, 5.0, 8.2]
     c = ['x', 'y', 'z']
-    table = Table([a, b, c], names=('a', 'b', 'c'), 
+    table = Table([a, b, c], names=('a', 'b', 'c'),
      meta={'name': 'first table'})
 
     print('timestamp: ',datetime.datetime.isoformat(datetime.datetime.now()))
@@ -67,14 +67,8 @@ def tablemetadata(table=None, test=False):
     table.meta['PROGNAME']= progname
     table.meta['FULLPATH']= fullpath
     table.meta['TIME']= timestamp
- 
-    table.write('tmp.fits', overwrite=True)
-   
-
-  
 
     table.write('tmp.fits', overwrite=True)
-   
 
 
 
