@@ -1,79 +1,83 @@
 from __future__ import print_function, division
 
-def table_metadata(table=None, test=False):
-  """
-  add provenance metadata keywords to table
 
-  uses some of keywords defined in the standard
+def table_metadata(table=None, test=False, verbose=False):
+    """add provenance metadata keywords to table
 
-  DATE: date of file creation
+    uses some of keywords defined in the FITS standard
 
-  At this time, the meta attribute of the Table class is simply an ordered
-  dictionary and does not fully represent the structure of a FITS header
-  (for example, keyword comments are dropped).
+    DATE: date of file creation
 
-  Also, keywords are silently overwritten
+    At this time, the meta attribute of the Table class is simply an ordered
+    dictionary and does not fully represent the structure of a FITS header
+    (for example, keyword comments are dropped).
 
-  """
+    Also, keywords are silently overwritten
 
+    """
 
-  import os
-  import socket
-  import getpass
-  import time
-  import datetime
-  import traceback
+    import os
+    import socket
+    import getpass
+    import time
+    import datetime
+    import traceback
 
-  from astropy.table import Table
+    from astropy.table import Table
 
-  hostname = socket.gethostname()
-  username = getpass.getuser()
+    hostname = socket.gethostname()
+    username = getpass.getuser()
 
-  trace = traceback.extract_stack()[0]
-  progname=os.path.basename(trace[0])
-  fullpath=trace[0]
+    trace = traceback.extract_stack()[0]
+    progname = os.path.basename(trace[0])
+    fullpath = trace[0]
 
-  #ABSPATH=os.path.dirname(os.path.abspath(__file__))
+    # ABSPATH=os.path.dirname(os.path.abspath(__file__))
 
-  CWD=os.getcwd()
+    CWD = os.getcwd()
 
-  timestamp=datetime.datetime.isoformat(datetime.datetime.now())
+    timestamp = datetime.datetime.isoformat(datetime.datetime.now())
 
+    if table is not None:
 
-  if table is not None:
+        table.meta['USERNAME'] = username
+        table.meta['HOSTNAME'] = hostname
+        table.meta['FULLPATH'] = fullpath
+        table.meta['PROGNAME'] = progname
+        table.meta['CWD'] = CWD
+        # table.meta['ABSPATH'] = ABSPATH
+        table.meta['TIME'] = timestamp
+        table.meta['DATE'] = timestamp
 
-    table.meta['USERNAME']= username
-    table.meta['HOSTNAME']= hostname
-    table.meta['FULLPATH']= fullpath
-    table.meta['PROGNAME']= progname
-    table.meta['CWD']= CWD
-    #table.meta['ABSPATH']= ABSPATH
-    table.meta['TIME']= timestamp
-    table.meta['DATE']= timestamp
+    if test:
 
-  if test:
+        a = [1, 4, 5]
+        b = [2.0, 5.0, 8.2]
+        c = ['x', 'y', 'z']
+        table = Table([a, b, c], names=('a', 'b', 'c'),
+                      meta={'name': 'first table'})
 
-    a = [1, 4, 5]
-    b = [2.0, 5.0, 8.2]
-    c = ['x', 'y', 'z']
-    table = Table([a, b, c], names=('a', 'b', 'c'),
-     meta={'name': 'first table'})
+        print('timestamp:',
+              datetime.datetime.isoformat(datetime.datetime.now()))
 
-    print('timestamp: ',datetime.datetime.isoformat(datetime.datetime.now()))
+        now = time.localtime(time.time())
+        timestamp = time.strftime("%Y-%m-%dT%H:%M:%S", now)
 
-    now = time.localtime(time.time())
-    timestamp = time.strftime("%Y-%m-%dT%H:%M:%S",now)
+        table.meta['HISTORY'] = 'Hello World'
+        table.meta['HISTORY'] = ['Hello World1', 'Hello World2']
+        table.meta['COMMENT'] = ['Hello World1', 'Hello World2']
+        table.meta['USERNAME'] = username
+        table.meta['HOSTNAME'] = hostname
+        table.meta['PROGNAME'] = progname
+        table.meta['FULLPATH'] = fullpath
+        table.meta['TIME'] = timestamp
 
-    table.meta['HISTORY']= 'Hello World'
-    table.meta['HISTORY']= ['Hello World1','Hello World2']
-    table.meta['COMMENT']= ['Hello World1','Hello World2']
-    table.meta['USERNAME']= username
-    table.meta['HOSTNAME']= hostname
-    table.meta['PROGNAME']= progname
-    table.meta['FULLPATH']= fullpath
-    table.meta['TIME']= timestamp
+        if test or verbose:
+            print('Metadata')
+            for key, value in table.meta.items():
+                print('{0} = {1}'.format(key, value))
 
-    table.write('tmp.fits', overwrite=True)
+    return table
 
 if __name__ == "__main__":
 
