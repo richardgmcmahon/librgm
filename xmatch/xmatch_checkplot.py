@@ -1,11 +1,14 @@
 #  Forked from Sophie Reed's version on 20160319
 import time
 
+
+from astropy.stats import mad_std
+
 #sys.path.append("/home/rgm/soft/python/lib/")
 from librgm.plotid import plotid
 #from librgm.plot_radec import plot_radec
 #from librgm.xmatch_checkplot import xmatch_checkplot
-from librgm import stats
+#from librgm import stats
 
 
 def mk_timestamp():
@@ -99,14 +102,14 @@ def xmatch_checkplot(ra1, dec1, ra2, dec2,
 
     RA_med = np.median(xs1)
     DEC_med = np.median(ys1)
-    RA_MAD = stats.MAD(xs1, RA_med)
-    DEC_MAD = stats.MAD(ys1, DEC_med)
+    RA_mad_std = mad_std(xs1)
+    DEC_mad_std = mad_std(ys1)
+
     print("Number of points", len(xs))
-    print("RA offset", RA_med, "DEC offset", DEC_med)
-    print("RA MAD", RA_MAD, "DEC MAD", DEC_MAD)
-    print("RA Sigma MAD", 1.486 * RA_MAD, "DEC Sigma DEC", 1.486 * DEC_MAD)
-    print("RA Median Error", 1.486 * RA_MAD / math.sqrt(len(xs)),
-          "DEC Median Error", 1.486 * DEC_MAD / math.sqrt(len(ys)))
+    print("RA median offset", RA_med, "Dec median offset", DEC_mad_std)
+    print("RA Sigma(MAD)", RA_mad_std, "Dec Sigma(MAD)", DEC_mad_std)
+    print("RA median error", RA_mad_std / math.sqrt(len(xs)),
+          "Dec median error", DEC_mad_std / math.sqrt(len(ys)))
     print("dRA range:", np.min(xs1), np.max(xs1))
     print("dDec range:", np.min(ys1), np.max(ys1))
     print()
@@ -177,19 +180,19 @@ def xmatch_checkplot(ra1, dec1, ra2, dec2,
                  '"', xy=(0.01, 0.90), size="small")
     ax4.annotate("DEC offset: {0:.4f}".format(DEC_med) +
                  '"', xy=(0.01, 0.8), size="small")
-    ax4.annotate("RA MAD: {0:.4f}".format(RA_MAD) +
+    ax4.annotate("RA sigma MAD: {0:.4f}".format(RA_mad_std) +
                  '"', xy=(0.01, 0.7), size="small")
-    ax4.annotate("DEC MAD: {0:.4f}".format(DEC_MAD) +
+    ax4.annotate("DEC sigma MAD: {0:.4f}".format(DEC_mad_std) +
                  '"', xy=(0.01, 0.6), size="small")
     ax4.annotate("RA median error: {0:.4f}".
-                 format(1.486 * RA_MAD / math.sqrt(len(xs))) + '"',
+                 format(RA_mad_std / math.sqrt(len(xs))) + '"',
                  xy=(0.01, 0.5), size="small")
     ax4.annotate("DEC median error: {0:.4f}".
-                 format(1.486 * DEC_MAD / math.sqrt(len(ys))) + '"',
+                 format(DEC_mad_std / math.sqrt(len(ys))) + '"',
                  xy=(0.01, 0.4), size="small")
-    ax4.annotate("RA sigma MAD: {0:.4f}".format(RA_MAD * 1.486) +
+    ax4.annotate("RA sigma MAD: {0:.4f}".format(RA_mad_std) +
                  '"', xy=(0.01, 0.3), size="small")
-    ax4.annotate("DEC sigma MAD: {0:.4f}".format(DEC_MAD * 1.486) +
+    ax4.annotate("DEC sigma MAD: {0:.4f}".format(DEC_mad_std) +
                  '"', xy=(0.01, 0.2), size="small")
 
     ax4.axes.get_xaxis().set_visible(False)
