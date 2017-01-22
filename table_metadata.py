@@ -14,6 +14,8 @@ def table_metadata(table=None, test=False, verbose=False):
 
     Also, keywords are silently overwritten
 
+    To write mutiple COMMENT or HISTORY keywords put them into a python list.
+
     """
 
     import os
@@ -32,7 +34,7 @@ def table_metadata(table=None, test=False, verbose=False):
     progname = os.path.basename(trace[0])
     fullpath = trace[0]
 
-    # ABSPATH=os.path.dirname(os.path.abspath(__file__))
+    ABSPATH = os.path.dirname(os.path.abspath(__file__))
 
     CWD = os.getcwd()
 
@@ -45,7 +47,7 @@ def table_metadata(table=None, test=False, verbose=False):
         table.meta['FULLPATH'] = fullpath
         table.meta['PROGNAME'] = progname
         table.meta['CWD'] = CWD
-        # table.meta['ABSPATH'] = ABSPATH
+        table.meta['ABSPATH'] = ABSPATH
         table.meta['TIME'] = timestamp
         table.meta['DATE'] = timestamp
 
@@ -65,11 +67,13 @@ def table_metadata(table=None, test=False, verbose=False):
 
         table.meta['HISTORY'] = 'Hello World'
         table.meta['HISTORY'] = ['Hello World1', 'Hello World2']
+        table.meta['COMMENT'] = 'Hello World'
         table.meta['COMMENT'] = ['Hello World1', 'Hello World2']
         table.meta['USERNAME'] = username
         table.meta['HOSTNAME'] = hostname
         table.meta['PROGNAME'] = progname
         table.meta['FULLPATH'] = fullpath
+        table.meta['ABSPATH'] = ABSPATH
         table.meta['TIME'] = timestamp
 
         if test or verbose:
@@ -81,4 +85,6 @@ def table_metadata(table=None, test=False, verbose=False):
 
 if __name__ == "__main__":
 
-    table_metadata(test=True)
+    table = table_metadata(test=True)
+
+    table.write('test.fits', overwrite=True)
