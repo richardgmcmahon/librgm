@@ -1,10 +1,10 @@
 from __future__ import print_function, division
 
 
-def plotid(timestamp=True, user=True, hostname=False,
+def plotid(timestamp=True, user=True, hostname=True,
            progname=True, label=None, fontsize='small',
            top=False, right=False, verbose=False,
-           debug=False):
+           debug=False, traceback=True):
     """
     Adds timestamp and other provenance information to a plot.
 
@@ -110,6 +110,24 @@ def plotid(timestamp=True, user=True, hostname=False,
     figtext = True
     if figtext:
         plt.figtext(0.97, 0.5,
+                    text,
+                    transform=transform,
+                    rotation=90,
+                    size='small', color=color,
+                    backgroundcolor='w',
+                    fontsize=fontsize,
+                    weight='ultralight',
+                    horizontalalignment='left',
+                    verticalalignment='center')
+    if traceback:
+        trace = traceback.extract_stack()[1]
+        progname_str = os.path.basename(trace[0])
+        progline = str(trace[1])
+        progline = '({})'.format(progline)
+        function_name = trace[2]
+        text = '{} {} {}'.format(progname_str, progline, function_name)
+
+        plt.figtext(0.94, 0.5,
                     text,
                     transform=transform,
                     rotation=90,

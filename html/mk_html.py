@@ -8,6 +8,8 @@ We might want to explore the use of:
 
   https://pypi.python.org/pypi/html
 
+  or pandas html i/o or astropy html i/o
+
 """
 
 from __future__ import (absolute_import, division, print_function,
@@ -16,13 +18,24 @@ from __future__ import (absolute_import, division, print_function,
 import numpy as np
 
 
-def table(term_list, header_list, links=(False, 0, [])):
+def table(term_list, header_list, nan=None,
+          links=(False, 0, [])):
     """
     create a html table
+
+    Needs a way to define how to deal with NANs sine nan gets sorting.
+
     """
 
+    debug = False
+
     print("running function:", __name__)
+    print('type(term_list)', type(term_list))
+    print('type(term_list[0])', type(term_list[0]))
+    print('type(term_list[0][0])', type(term_list[0][0]))
     print('Number of rows:', len(term_list))
+    print('type(header_list)', type(header_list))
+    print('type(header_list[0])', type(header_list[0]))
     print('Number of column fields:', len(header_list))
 
     lines = ""
@@ -39,6 +52,15 @@ def table(term_list, header_list, links=(False, 0, [])):
         p = term_list.index(term)
 
         while n < len(term):
+
+            # print('type(term[n])', type(term[n]))
+
+            if term[n].find('nan') >= 0:
+                if debug:
+                    print("Found a 'nan':", n, term[n])
+                    print("Found a 'nan':", term)
+                is nan is not None:
+                    term[n] = '-99'
 
             if (links[0] is True) and (links[1] == n):
                 file = str(links[2][p]) + ".html"
