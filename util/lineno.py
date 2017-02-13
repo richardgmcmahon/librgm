@@ -5,10 +5,11 @@ import inspect
 import traceback
 
 def lineno(USEtraceback=False, functionName=True, fileName=True,
-           debug=False, verbose=False):
+           debug=False, verbose=False, info=False):
 
     """Return current function line number, name and filename
 
+    info and verbose modes are the same
 
     loosely based on code by Danny Yoo (dyoo@hkn.eecs.berkeley.edu)
 
@@ -94,25 +95,31 @@ def lineno(USEtraceback=False, functionName=True, fileName=True,
         print('sys._getframe().f_code.co_name:',
               sys._getframe().f_code.co_name)
 
+
     if USEtraceback:
-        lineno = traceback.extract_stack()[-1][1]
+        # (filename, line number, function name*, text)
+
+        lineno = traceback.extract_stack()[-2][1]
 
         result = lineno
 
         if functionName:
-            functionname = traceback.extract_stack()[-1][3]
+            functionname = traceback.extract_stack()[-2][2]
             result = (functionname, lineno)
 
         if fileName:
-            filename = traceback.extract_stack()[-1][3]
+            filename = traceback.extract_stack()[-2][0]
             result = (lineno, filename)
 
         if fileName and functionName:
             result = (functionname, lineno, filename)
 
 
-
     if not USEtraceback:
+        # (frame object, filename, line number, function name,
+        #  lines of context from the source code, and
+        #  the index of the current line within that list)
+
         # lineno = inspect.currentframe().f_back.f_lineno
         lineno = inspect.stack()[1][2]
 
@@ -129,18 +136,25 @@ def lineno(USEtraceback=False, functionName=True, fileName=True,
         if fileName and functionName:
             result = (functionname, lineno, filename)
 
-    if verbose:
-        print('INFO:', __file__, __name__, [str(i) for i in result])
+    if verbose or info:
+        print('INFO:', __file__, __name__,
+              ' '.join([str(i) for i in result]))
 
     return result
 
 if __name__ == '__main__':
 
     print()
-    print("hello, this is line number using inspect:\n",
+    print("Report line number using inspect:\n",
           lineno(debug=True, verbose=True))
     print()
     print()
-    print("and now use tracback; this is line:\n",
+    print("Report line number using tracback:\n",
           lineno(USEtraceback=True, debug=True, verbose=True))
     print()
+    print()
+    print("Using inspect:\n")
+    lineno(verbose=True)
+    print()
+    print("Using tracback:\n")
+    lineno(USEtraceback=True, verbose=True)

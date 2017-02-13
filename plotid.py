@@ -2,6 +2,8 @@ from __future__ import print_function, division
 
 
 def plotid(timestamp=True, user=True, hostname=True,
+           color='k', backgroundcolor='w',
+           weight='ultralight',
            progname=True, label=None, fontsize='small',
            top=False, right=False, verbose=False,
            debug=False, traceback=True):
@@ -79,9 +81,9 @@ def plotid(timestamp=True, user=True, hostname=True,
 
     if label is None:
         label = ''
-    text = '{} {}{} {} {} {}'.format(label,
+    text = '{} {}{} {} {}'.format(label,
                                      progname_str, progline,
-                                     username, timestamp, hostname_str)
+                                     username, timestamp)
 
     # text = label+ ':  ' +timestamp+ ' ' +username
     # if host: text = text + '@'+hostname+']'
@@ -106,7 +108,6 @@ def plotid(timestamp=True, user=True, hostname=True,
     # axes are drawn
     # plt.setp(plt.gca(), xticks=(), yticks=())#, frame_on=False
 
-    color = 'k'
     figtext = True
     if figtext:
         plt.figtext(0.97, 0.5,
@@ -125,7 +126,7 @@ def plotid(timestamp=True, user=True, hostname=True,
         progline = str(trace[1])
         progline = '({})'.format(progline)
         function_name = trace[2]
-        text = '{} {} {}'.format(progname_str, progline, function_name)
+        text = '{} {} {} {}'.format(progname_str, progline, function_name, hostname_str)
 
         plt.figtext(0.94, 0.5,
                     text,
@@ -150,13 +151,21 @@ def plotid(timestamp=True, user=True, hostname=True,
                  horizontalalignment='left',
                  verticalalignment='center')
 
-    return text
+    return
 
 if __name__ == '__main__':
 
     import matplotlib.pyplot as plt
 
-    plt.plot(range(10))
+    plt.plot(range(10), label='label')
+
+    plt.grid()
+
+    plt.xlabel('xlabel')
+    plt.ylabel('ylabel')
+    plt.title('Title')
+    plt.suptitle('Suptitle')
+    plt.legend()
 
     plotid(debug=True, progname=True)
 
