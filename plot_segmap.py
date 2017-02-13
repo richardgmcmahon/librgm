@@ -29,11 +29,14 @@ def plot_segmap(data=None, saveplot=True,
 
     cmap = mpl.cm.jet
     # cmap = mpl.cm.jet_r
+    # attempts make the background white
     # cmap.set_under(color='w')
     # cmax = np.max(data)
     # cmap.set_clim(1,cmax)
     # itest = data > 0.5
     # data[itest] = np.nan
+    # this should make the background white with the first 'real' data starting
+    # at 1
     data = ma.masked_where(data < 0.5, data)
     cmap.set_bad('w')
     # plt.imshow(cutout.data, origin='lower', interpolation='nearest')
