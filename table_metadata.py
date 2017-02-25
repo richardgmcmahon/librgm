@@ -34,7 +34,8 @@ def table_metadata(table=None, test=False, verbose=False):
     progname = os.path.basename(trace[0])
     fullpath = trace[0]
 
-    ABSPATH = os.path.dirname(os.path.abspath(__file__))
+    # ABSPATH = os.path.dirname(os.path.abspath(__file__))
+    ABSPATH = trace[0]
 
     CWD = os.getcwd()
 
