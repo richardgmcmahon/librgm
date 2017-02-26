@@ -41,7 +41,7 @@ def xmatch_cat(table1=None, table2=None,
 
     if selfmatch:
         table2 = table1
-        colnames_radec2 = colname_radec1
+        colnames_radec2 = colnames_radec1
         nthneighbor=2
 
     # print(table1[0])
