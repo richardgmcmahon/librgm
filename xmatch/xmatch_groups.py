@@ -109,6 +109,13 @@ def xmatch_groups(table1=None, table2=None,
             len(idxmatch1[itest]))
         idxmatch1 = idxmatch1[itest]
         idxmatch2 = idxmatch2[itest]
+        d2d = d2d[itest]
+        d3d = d3d[itest]
+
+    idxmatch1_unique = np.unique(idxmatch1)
+    idxmatch2_unique = np.unique(idxmatch2)
+    print('Number of unique idxmatch1:', len(idxmatch1_unique))
+    print('Number of unique idxmatch2:', len(idxmatch2_unique))
 
     separation = skycoord1[idxmatch1].separation(skycoord2[idxmatch2])
 
