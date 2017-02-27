@@ -58,11 +58,6 @@ def xmatch_groups(table1=None, table2=None,
     if selfmatch:
         table2 = table1
         colnames_radec2 = colnames_radec1
-        if nthneighbor is None:
-            nthneighbor=2
-
-    if nthneighbor is None:
-        nthneighbor=1
 
     ra1 = table1[colnames_radec1[0]]
     dec1 = table1[colnames_radec1[1]]
@@ -106,7 +101,7 @@ def xmatch_groups(table1=None, table2=None,
 
     idxmatch1, idxmatch2, d2d, d3d = \
         skycoord1.search_around_sky(skycoord2,
-                                            rmax * u.arcsec)
+                                    rmax * u.arcsec)
 
     separation = skycoord1[idxmatch1].separation(skycoord2[idxmatch2])
 
@@ -117,11 +112,11 @@ def xmatch_groups(table1=None, table2=None,
         print('len(table1):', len(table1))
         print('len(table2):', len(table2))
         print()
-        print('len(idxc):', len(idxc))
-        print('idxc range:', np.min(idxc), np.max(idxc))
+        print('len(idxmatch1):', len(idxmatch1))
+        print('idxmatch1 range:', np.min(idxmatch1), np.max(idxmatch1))
         print()
-        print('len(idxcatalog):', len(idxcatalog))
-        print('idxcatalog range:', np.min(idxcatalog), np.max(idxcatalog))
+        print('len(idxmatch2):', len(idxmatch2))
+        print('idxmatch1 range:', np.min(idxmatch2), np.max(idxmatch2))
         print()
         print('d2d range (arcsec):', np.min(d2d).arcsec, np.max(d2d).arcsec)
         print('d2d median (arcsec):', np.median(d2d).arcsec)
