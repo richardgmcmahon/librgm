@@ -1,7 +1,7 @@
 from __future__ import (division, print_function)
 
 def xmatch_cat(table1=None, table2=None,
-               nthneighbor=1,
+               nthneighbor=None,
                selfmatch=False,
                colnames_radec1=['ra', 'dec'],
                colnames_radec2=['ra', 'dec'],
@@ -18,6 +18,10 @@ def xmatch_cat(table1=None, table2=None,
     """RA, Dec xmatch for two lists; returns pointers
 
     nearest match
+
+
+    Self match notes:
+
 
     """
 
@@ -42,7 +46,11 @@ def xmatch_cat(table1=None, table2=None,
     if selfmatch:
         table2 = table1
         colnames_radec2 = colnames_radec1
-        nthneighbor=2
+        if nthneighbor is None:
+            nthneighbor=2
+
+    if nthneighbor is None:
+        nthneighbor=1
 
     # print(table1[0])
     # print(table2[0])
