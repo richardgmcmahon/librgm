@@ -106,7 +106,7 @@ def xmatch_groups(table1=None, table2=None,
     if selfmatch:
         itest = idxmatch1 != idxmatch2
         print('selfmatch: Number of matchs within rmax:',
-            len(idxmatch1[itest])
+            len(idxmatch1[itest]))
         idxmatch1 = idxmatch1[itest]
         idxmatch2 = idxmatch2[itest]
 
