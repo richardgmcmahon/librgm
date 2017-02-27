@@ -152,15 +152,12 @@ def xmatch_groups(table1=None, table2=None,
               median_ddec, mad_std_ddec)
         print()
 
-
-
-
     if checkplot:
-        suptitle = plotfile_label + 'nthN:' + str(nthneighbor)
+        suptitle = plotfile_label
         plotfile = 'xmatch_cat' + plotfile_label + '_a_checkplot.png'
 
-        ra2_xmatch = ra2[idxmatch]
-        dec2_xmatch = dec2[idxmatch]
+        ra2_xmatch = ra2[idxmatch2]
+        dec2_xmatch = dec2[idxmatch2]
 
         xmatch_checkplot.xmatch_checkplot(
             ra1, dec1, ra2_xmatch, dec2_xmatch,
@@ -181,8 +178,6 @@ def xmatch_groups(table1=None, table2=None,
                       suptitle=suptitle)
         plt.close()
 
-    idx1 = idxmatch
-    idx2 = []
     separation = separation.arcsec
 
     dr = d2d.arcsec
