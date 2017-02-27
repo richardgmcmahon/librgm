@@ -87,7 +87,7 @@ def xmatch_selfcheck(data=None, colnames_radec=['ra', 'dec'],
 
     fig = plt.figure(1, figsize=(10, 5))
 
-    plt.suptitle(suptitle, size=10)
+    plt.suptitle(suptitle + 'nthN:' + str(nthneighbor), size=10)
 
     ax1=fig.add_subplot(1,2,1)
 
@@ -106,7 +106,7 @@ def xmatch_selfcheck(data=None, colnames_radec=['ra', 'dec'],
     s01 = 'Median = %.2f' % med
     ax1.annotate(s01,(0.28,0.85) , xycoords = 'axes fraction',size=8)
 
-    ax1.set_xlabel('Parwise separation (arcseconds)')
+    ax1.set_xlabel('Pairwise separation (arcseconds)')
     ax1.set_ylabel('Frequency per bin')
 
     ax2 = fig.add_subplot(1,2,2, aspect='equal')

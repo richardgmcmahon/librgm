@@ -128,7 +128,7 @@ def xmatch_cat(table1=None, table2=None,
 
 
     if checkplot:
-        suptitle = plotfile_label
+        suptitle = plotfile_label + 'nthN:' + str(nthneighbor)
         plotfile = 'xmatch_cat' + plotfile_label + '_a_checkplot.png'
 
         ra2_xmatch = ra2[idxmatch]
