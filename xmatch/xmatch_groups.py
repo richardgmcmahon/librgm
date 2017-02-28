@@ -40,7 +40,7 @@ def xmatch_groups(table1=None, table2=None,
     import numpy as np
     import matplotlib.pyplot as plt
 
-    from astropy.table import Table, hstack
+    from astropy.table import Table, Column, hstack
     from astropy.coordinates import SkyCoord
     from astropy.coordinates import search_around_sky, match_coordinates_sky
     from astropy import units as u
@@ -102,17 +102,50 @@ def xmatch_groups(table1=None, table2=None,
     idxmatch1, idxmatch2, d2d, d3d = \
         skycoord1.search_around_sky(skycoord2,
                                     rmax * u.arcsec)
-
     if selfmatch:
         itest = idxmatch1 != idxmatch2
         print('selfmatch: Number of matchs within rmax:',
-            len(idxmatch1[itest]))
+            len(idxmatch1[itest]), len(table1), rmax)
         idxmatch1 = idxmatch1[itest]
         idxmatch2 = idxmatch2[itest]
         d2d = d2d[itest]
         d3d = d3d[itest]
 
-    idxmatch1_unique = np.unique(idxmatch1)
+    isort = np.argsort(idxmatch1)
+    idxmatch1 = idxmatch1[isort]
+    idxmatch2 = idxmatch2[isort]
+
+    idxmatch1_unique, index, counts = np.unique(
+        idxmatch1, return_index=True, return_counts=True)
+
+    data = counts
+    binwidth = 1
+    plt.hist(counts, bins=range(min(data), max(data) + binwidth, binwidth))
+    plt.show()
+
+    result_join = hstack(table1[idxmatch1], table1[idxmatch2])
+
+    nrows = len(result_join)
+    groupid = np.empty(nrows, dtype=int)
+    id = np.linspace(1, nrows, num=nrows, dtype=int)
+
+    for isource, source in enumerate(idxmatch1):
+        if isource == 0:
+            igroup = 1
+            groupid[isource] = igroup
+
+        if isource != 0:
+
+
+
+    print('id range:', np.min(id), np.max(id), len(id))
+    # result_join['id'] = id
+    id = Column(id, name='id')
+    print('id:', len(result_join), len(id), np.min(id), np.max(id))
+    result_join.add_column(id, index=0) # Insert before the first table column
+
+    key=raw_input("Enter any key to continue: ")
+
     idxmatch2_unique = np.unique(idxmatch2)
     print('Number of unique idxmatch1:', len(idxmatch1_unique))
     print('Number of unique idxmatch2:', len(idxmatch2_unique))
@@ -120,7 +153,7 @@ def xmatch_groups(table1=None, table2=None,
     separation = skycoord1[idxmatch1].separation(skycoord2[idxmatch2])
 
     dra, ddec = \
-        skycoord1[idxmatch2].spherical_offsets_to(skycoord2[idxmatch2])
+        skycoord1[idxmatch1].spherical_offsets_to(skycoord2[idxmatch2])
 
     if stats or verbose or debug:
         print('len(table1):', len(table1))
@@ -149,9 +182,9 @@ def xmatch_groups(table1=None, table2=None,
         median_dra = np.median(dra).arcsec
         mad_std_dra = mad_std(dra.arcsec)
         print('dRA min, max:',
-              np.min(dra).arcsec, np.max(dra).arcsec)
+              np.min(dra.arcsec), np.max(dra.arcsec))
         print('dRA mean, std:',
-              np.mean(dra).arcsec, np.std(dra).arcsec)
+              np.mean(dra.arcsec), np.std(dra.arcsec))
         print('dRA median, mad_std:',
               median_dra, mad_std_dra)
         print()
