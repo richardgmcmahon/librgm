@@ -111,49 +111,106 @@ def xmatch_groups(table1=None, table2=None,
         d2d = d2d[itest]
         d3d = d3d[itest]
 
+
     isort = np.argsort(idxmatch1)
     idxmatch1 = idxmatch1[isort]
     idxmatch2 = idxmatch2[isort]
 
+    separation = skycoord1[idxmatch1].separation(skycoord2[idxmatch2])
+    pa = skycoord1[idxmatch1].position_angle(skycoord2[idxmatch2])
+    dra, ddec = \
+        skycoord1[idxmatch1].spherical_offsets_to(skycoord2[idxmatch2])
+
     idxmatch1_unique, index, counts = np.unique(
         idxmatch1, return_index=True, return_counts=True)
-
     data = counts
     binwidth = 1
     plt.hist(counts, bins=range(min(data), max(data) + binwidth, binwidth))
     plt.show()
 
-    result_join = hstack(table1[idxmatch1], table1[idxmatch2])
+    idxmatch2_unique, index, counts = np.unique(
+        idxmatch2, return_index=True, return_counts=True)
+    data = counts
+    binwidth = 1
+    plt.hist(counts, bins=range(min(data), max(data) + binwidth, binwidth))
+    plt.show()
 
-    nrows = len(result_join)
+    print('table1 columns:', len(table1.colnames))
+    print('table2 columns:', len(table2.colnames))
+
+    # result = hstack([table1[idxmatch1], table1[idxmatch2]])
+    # print('result columns:', len(result.colnames))
+    # nrows = len(result)
+
+    xmatch1 = table1[idxmatch1]
+    xmatch2 = table2[idxmatch2]
+
+    nrows = len(xmatch1)
     groupid = np.empty(nrows, dtype=int)
-    id = np.linspace(1, nrows, num=nrows, dtype=int)
+    groupsize = np.zeros(nrows, dtype=int)
 
-    for isource, source in enumerate(idxmatch1):
+    for isource, idxsource in enumerate(idxmatch1):
         if isource == 0:
             igroup = 1
             groupid[isource] = igroup
+            if groupsize[isource] == 0:
+                groupsize[isource] = 2
 
         if isource != 0:
+            if idxmatch1[isource] == idxmatch1[isource - 1]:
+                groupsize[isource] = groupsize[isource - 1] + 1
+                groupid[isource] = groupid[isource - 1]
+
+            if idxmatch1[isource] != idxmatch1[isource - 1]:
+                groupsize[isource] = 2
+                igroup = igroup + 1
+                groupid[isource] = igroup
+
+    print('Group size range:', np.min(groupsize), np.max(groupsize))
+    for igroupsize in range(np.max(groupsize) + 1):
+        itest = (groupsize == igroupsize)
+        print('groups:', igroupsize, len(groupsize[itest]))
+
+    # remove simple mirror pairs
+    # for isource, source in enumerate(result):
+    #    if
 
 
+    key=raw_input("Enter any key to continue: ")
 
+    id = np.linspace(1, nrows, num=nrows, dtype=int)
     print('id range:', np.min(id), np.max(id), len(id))
-    # result_join['id'] = id
+    # print('id:', len(result), len(id), np.min(id), np.max(id))
+
     id = Column(id, name='id')
-    print('id:', len(result_join), len(id), np.min(id), np.max(id))
-    result_join.add_column(id, index=0) # Insert before the first table column
+    # result.add_column(id, index=0) # Insert before the first table column
+    xmatch1.add_column(id, index=0)
+
+    groupid = Column(groupid, name='groupid')
+    # result.add_column(groupid, index=1)
+    xmatch1.add_column(groupid, index=1)
+
+    groupsize = Column(groupsize, name='groupsize')
+    # result.add_column(groupsize, index=2)
+    xmatch1.add_column(groupsize, index=2)
+
+    xmatch1['dr_1_2'] = separation.arcsec
+    xmatch1['PA_1_2'] = pa.degree
+    xmatch1['dRA_1_2'] = dra.arcsec
+    xmatch1['dDec_1_2'] = ddec.arcsec
+
+    xmatch1.info('stats')
+    print('Number of rows:', len(xmatch1))
+    #result.info('stats')
+
+    xmatch1.write('closepair_groups.fits', overwrite=True)
+    # result.write('result_join.fits')
 
     key=raw_input("Enter any key to continue: ")
 
     idxmatch2_unique = np.unique(idxmatch2)
     print('Number of unique idxmatch1:', len(idxmatch1_unique))
     print('Number of unique idxmatch2:', len(idxmatch2_unique))
-
-    separation = skycoord1[idxmatch1].separation(skycoord2[idxmatch2])
-
-    dra, ddec = \
-        skycoord1[idxmatch1].spherical_offsets_to(skycoord2[idxmatch2])
 
     if stats or verbose or debug:
         print('len(table1):', len(table1))
@@ -226,7 +283,6 @@ def xmatch_groups(table1=None, table2=None,
         plt.close()
 
     separation = separation.arcsec
-
     dr = d2d.arcsec
 
     print(len(idxmatch1), len(idxmatch2), len(dr))
