@@ -194,10 +194,16 @@ def xmatch_groups(table1=None, table2=None,
     # result.add_column(groupsize, index=2)
     xmatch1.add_column(groupsize, index=2)
 
-    xmatch1['dr_1_2'] = separation.arcsec
-    xmatch1['PA_1_2'] = pa.degree
-    xmatch1['dRA_1_2'] = dra.arcsec
-    xmatch1['dDec_1_2'] = ddec.arcsec
+    xmatch1.add_column(Column(separation.arcsec, name='dR_1_2'), index=3)
+    # xmatch1['dr_1_2'] = separation.arcsec
+
+    xmatch1.add_column(Column(pa.degree, name='PA_1_2'), index=4)
+    # xmatch1['PA_1_2'] = pa.degree
+
+    xmatch1.add_column(Column(dra.arcsec, name='dRA_1_2'), index=5)
+    xmatch1.add_column(Column(ddec.degree, name='dDec_1_2'), index=6)
+    # xmatch1['dRA_1_2'] = dra.arcsec
+    # xmatch1['dDec_1_2'] = ddec.arcsec
 
     xmatch1.info('stats')
     print('Number of rows:', len(xmatch1))
@@ -205,6 +211,8 @@ def xmatch_groups(table1=None, table2=None,
 
     xmatch1.write('closepair_groups.fits', overwrite=True)
     # result.write('result_join.fits')
+
+    result = xmatch1
 
     key=raw_input("Enter any key to continue: ")
 
@@ -287,4 +295,4 @@ def xmatch_groups(table1=None, table2=None,
 
     print(len(idxmatch1), len(idxmatch2), len(dr))
 
-    return idxmatch1, idxmatch2, d2d.arcsec
+    return result, idxmatch1, idxmatch2, d2d.arcsec

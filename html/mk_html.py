@@ -59,7 +59,7 @@ def table(term_list, header_list, nan=None,
                 if debug:
                     print("Found a 'nan':", n, term[n])
                     print("Found a 'nan':", term)
-                is nan is not None:
+                if nan is not None:
                     term[n] = '-99'
 
             if (links[0] is True) and (links[1] == n):
