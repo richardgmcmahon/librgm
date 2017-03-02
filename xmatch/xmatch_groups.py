@@ -201,7 +201,7 @@ def xmatch_groups(table1=None, table2=None,
     # xmatch1['PA_1_2'] = pa.degree
 
     xmatch1.add_column(Column(dra.arcsec, name='dRA_1_2'), index=5)
-    xmatch1.add_column(Column(ddec.degree, name='dDec_1_2'), index=6)
+    xmatch1.add_column(Column(ddec.arcsec, name='dDec_1_2'), index=6)
     # xmatch1['dRA_1_2'] = dra.arcsec
     # xmatch1['dDec_1_2'] = ddec.arcsec
 
