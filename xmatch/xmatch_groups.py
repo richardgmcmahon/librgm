@@ -175,7 +175,6 @@ def xmatch_groups(table1=None, table2=None,
     # for isource, source in enumerate(result):
     #    if
 
-
     key=raw_input("Enter any key to continue: ")
 
     id = np.linspace(1, nrows, num=nrows, dtype=int)
