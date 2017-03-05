@@ -5,7 +5,8 @@ import sys
 import numpy as np
 
 def table_info(table, col_list,
-               type_v = "AB", modelcols_seperate = False,
+               type_v = "AB",
+               modelcols_seperate = False,
                debug=False, verbose=False):
     """
 
@@ -17,6 +18,8 @@ def table_info(table, col_list,
     Inputs:
         table: Astropy table
         col_list: column name list
+        type_v: AB to convert Vega mag to AB; should deprecate
+        modelcols_seperate:
 
     It formats the floats
 
@@ -102,7 +105,7 @@ def table_info(table, col_list,
 
             if col in ["TILENAME", "COADD_OBJECTS_ID", "RADEC_STRING",
                        "RUN", "Jname", "Bname", "NED",
-                       "SDSS_DR12", "PS1_DR1", "IRSA"]:
+                       "SDSS_DR12", "PS1_DR1", "IRSA", "WISE"]:
                 val_list.append(table[col][n])
                 if col == "COADD_OBJECTS_ID":
                     col = "CO_ID"
@@ -217,11 +220,13 @@ def table_info(table, col_list,
                 else:
                     band = col[-1]
                     if "MAGERR_" + band in col_list:
-                        e = t["MAGERR_" + band][n]
-                        val_list.append("%0.2f" % t[col][n] + " +/- " + "%0.4f" % e)
+                        e = table["MAGERR_" + band][n]
+                        val_list.append("%0.2f" % tband[col][n] +
+                                        " +/- " + "%0.4f" % e)
                     elif band + "_ERR" in col_list:
                             e = t[band + "_ERR"][n]
-                            val_list.append("%0.2f" % t[col][n] + " +/- " + "%0.4f" % e)
+                            val_list.append("%0.2f" % t[col][n] + " +/- "
+                                            + "%0.4f" % e)
                     else:
                         val_list.append("%0.2f" % t[col][n])
                 #print col

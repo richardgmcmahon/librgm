@@ -23,7 +23,7 @@ def table(term_list, header_list, nan=None,
     """
     create a html table
 
-    Needs a way to define how to deal with NANs sine nan gets sorting.
+    Needs a way to define how to deal with NANs so they can be sorted.
 
     """
 
@@ -172,7 +172,7 @@ def wise_url(RA, DEC):
         + 'preliminary_data=no&coaddId=&projectId=wise&' \
         + 'searchName=wise_1&shortDesc=Position&isBookmarkAble=true&' \
         + 'isDrillDownRoot=true&isSearchResult=true">' \
-        + 'The coordinates in WISE</A>'
+        + 'WISE</A>'
 
     return line
 
