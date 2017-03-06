@@ -81,6 +81,7 @@ def plotid(timestamp=True, user=True, hostname=True,
 
     if label is None:
         label = ''
+
     text = '{} {}{} {} {}'.format(label,
                                      progname_str, progline,
                                      username, timestamp)
@@ -126,7 +127,8 @@ def plotid(timestamp=True, user=True, hostname=True,
         progline = str(trace[1])
         progline = '({})'.format(progline)
         function_name = trace[2]
-        text = '{} {} {} {}'.format(progname_str, progline, function_name, hostname_str)
+        text = '{} {} {} {}'.format(progname_str, progline, function_name,
+                                    hostname_str)
 
         plt.figtext(0.94, 0.5,
                     text,

@@ -6,12 +6,14 @@ def xmatch_groups(table1=None, table2=None,
                   units_radec1=['degree', 'degree'],
                   units_radec2=['degree', 'degree'],
                   selfmatch=False,
+                  rmin=None,
                   rmax=10.0,
                   stats=True,
                   debug=False,
                   verbose=False,
                   checkplot=True,
                   join=False,
+                  plot_title=None,
                   plotfile_label=''):
     """Group RA, Dec xmatch for two lists; returns pointers
 
@@ -45,6 +47,8 @@ def xmatch_groups(table1=None, table2=None,
     from astropy.coordinates import search_around_sky, match_coordinates_sky
     from astropy import units as u
     from astropy.stats import mad_std, median_absolute_deviation
+
+    from librgm.plotid import plotid
 
     print('__file__:', __file__)
     print('__name__:', __name__)
@@ -121,18 +125,39 @@ def xmatch_groups(table1=None, table2=None,
     dra, ddec = \
         skycoord1[idxmatch1].spherical_offsets_to(skycoord2[idxmatch2])
 
+    print(len(idxmatch1), np.min(idxmatch1), np.max(idxmatch1))
     idxmatch1_unique, index, counts = np.unique(
         idxmatch1, return_index=True, return_counts=True)
     data = counts
+
     binwidth = 1
-    plt.hist(counts, bins=range(min(data), max(data) + binwidth, binwidth))
+    ndata = np.sum(counts)
+    print(len(data), data.shape, np.min(data), np.max(data))
+    plt.hist(data, bins=range(min(data), max(data) + binwidth, binwidth),
+             label=str(ndata))
+    if plot_title is not None:
+        plt.title(plot_title)
+    plt.xlabel('Group size')
+    plt.ylabel('Frequency')
+    plt.legend()
+    plotid()
     plt.show()
 
     idxmatch2_unique, index, counts = np.unique(
         idxmatch2, return_index=True, return_counts=True)
     data = counts
     binwidth = 1
-    plt.hist(counts, bins=range(min(data), max(data) + binwidth, binwidth))
+    ndata=np.sum(counts)
+    print(len(data), np.min(data), np.max(data))
+    plt.hist(data,
+             bins=range(min(data), max(data) + binwidth, binwidth),
+             label=str(ndata))
+    if plot_title is not None:
+        plt.title(plot_title)
+    plt.xlabel('Group size')
+    plt.ylabel('Frequency')
+    plotid()
+    plt.legend()
     plt.show()
 
     print('table1 columns:', len(table1.colnames))
@@ -207,6 +232,11 @@ def xmatch_groups(table1=None, table2=None,
     xmatch1.info('stats')
     print('Number of rows:', len(xmatch1))
     #result.info('stats')
+
+    # exclude duplicates or small separation objects
+    if rmin is not None:
+        itest = (xmatch1['dR_1_2'] > rmin)
+        xmatch1 = xmatch1[itest]
 
     xmatch1.write('closepair_groups.fits', overwrite=True)
     # result.write('result_join.fits')

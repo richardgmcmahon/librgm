@@ -24,8 +24,12 @@ def mk_ps1_url(RA, DEC, size=None, output_size=None, zoom_factor=1.0):
 
     url_base = 'http://ps1images.stsci.edu/cgi-bin/ps1cutouts?'
 
-    output_size = 128
-    size = int(60.0/zoom_factor)
+    if output_size is None:
+        output_size = 128
+
+    if size is None:
+        size = int(60.0/zoom_factor)
+
     url = "<A HREF = " + url_base + \
        "pos=" + str("%.5f" % RA) + "," + str("%.5f" % DEC) + \
        "&size=" + str("%.0f" % size) + \
