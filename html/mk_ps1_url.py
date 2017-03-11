@@ -1,3 +1,5 @@
+from __future__ import print_function, division
+
 def mk_ps1_url(RA, DEC, size=None, output_size=None, zoom_factor=1.0):
     """
 
