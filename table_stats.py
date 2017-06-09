@@ -39,24 +39,27 @@ def table_stats(data, ext=1, verbose=True, debug=False):
 
     import pyfits
 
+    from astropy.table import Table
+
     import numpy as np
 
-    from pause import *
+    UseAstropy = True
 
     print('Executing:', sys.argv[0], __version__)
+    print(__name__, __file__)
+    print('type:', type(data))
 
     if debug:
         help(data)
 
     # data, hdr = pyfits.getdata(infile, ext, header=True)
 
-    infile = data
-
     if isinstance(data, np.ndarray):
         print('isInstance: numpy.ndarray')
         ncolumns = len(data.columns)
         nrows = len(data)
 
+    infile = data
     print('Infile:', data)
     print('Extension:', ext)
 
@@ -96,6 +99,7 @@ def table_stats(data, ext=1, verbose=True, debug=False):
         # added a NAN count
         if len(data.field(i).shape) == 1:
             try:
+                n_unique = np.unique(data.field(i))
                 print(i, j, data.columns[i].name, data.columns[i].format,
                       data.columns[i].dim, data.field(i).shape,
                       len(data.field(i).shape),
@@ -103,10 +107,12 @@ def table_stats(data, ext=1, verbose=True, debug=False):
                       np.nanmin(data.field(i)), ':',
                       np.nanmax(data.field(i)), ':',
                       len(data.field(i)[np.isnan(data.field(i))]), ':',
-                      data.field(i).dtype)
+                      data.field(i).dtype, len(n_unique))
             except:
+                # deal with the strings
                 # try min, max rather than np.min, np.max
                 # http://stackoverflow.com/questions/12654093/arrays-of-strings-into-numpy-amax
+                n_unique = np.unique(data.field(i))
                 data_min = np.min(np.array(data.field(i), dtype=object))
                 data_max = np.max(np.array(data.field(i), dtype=object))
                 data_dtype = data.field(i).dtype
@@ -115,7 +121,8 @@ def table_stats(data, ext=1, verbose=True, debug=False):
                       data.columns[i].dim, data.field(i).shape,
                       len(data.field(i).shape),
                       len(data.field(i)), ':',
-                      data_min, ': ', data_max, ':', data_dtype)
+                      data_min, ': ', data_max, ':', data_dtype,
+                      len(n_unique))
 
                 pass
 

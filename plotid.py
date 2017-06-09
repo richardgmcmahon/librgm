@@ -1,7 +1,7 @@
 from __future__ import print_function, division
 
 
-def plotid(timestamp=True, user=True, hostname=True,
+def plotid(timestamp=True, user=True, hostname=False,
            color='k', backgroundcolor='w',
            weight='ultralight',
            progname=True, label=None, fontsize='small',
@@ -10,8 +10,11 @@ def plotid(timestamp=True, user=True, hostname=True,
     """
     Adds timestamp and other provenance information to a plot.
 
+
     Options:
     include date, username, hostname, program filename
+
+    fontsize = ['x-small', 'small']
 
     could even geotag it?
     could add provenance to the png file
@@ -110,17 +113,37 @@ def plotid(timestamp=True, user=True, hostname=True,
     # plt.setp(plt.gca(), xticks=(), yticks=())#, frame_on=False
 
     figtext = True
+    xtext = 0.98
+    dxtext = 0.030
     if figtext:
-        plt.figtext(0.97, 0.5,
+        plt.figtext(xtext, 0.5,
                     text,
                     transform=transform,
                     rotation=90,
-                    size='small', color=color,
+                    size=fontsize, color=color,
                     backgroundcolor='w',
                     fontsize=fontsize,
                     weight='ultralight',
                     horizontalalignment='left',
                     verticalalignment='center')
+
+        cwd = os.getcwd()
+
+        text = '{} {}'.format(cwd, hostname_str)
+
+        xtext = xtext - dxtext
+        plt.figtext(xtext, 0.5,
+                    text,
+                    transform=transform,
+                    rotation=90,
+                    size=fontsize, color=color,
+                    backgroundcolor='w',
+                    fontsize=fontsize,
+                    weight='ultralight',
+                    horizontalalignment='left',
+                    verticalalignment='center')
+
+    # give the funtion call info
     if traceback:
         trace = traceback.extract_stack()[1]
         progname_str = os.path.basename(trace[0])
@@ -130,11 +153,12 @@ def plotid(timestamp=True, user=True, hostname=True,
         text = '{} {} {} {}'.format(progname_str, progline, function_name,
                                     hostname_str)
 
-        plt.figtext(0.94, 0.5,
+        xtext = xtext - dxtext
+        plt.figtext(xtext, 0.5,
                     text,
                     transform=transform,
                     rotation=90,
-                    size='small', color=color,
+                    size=fontsize, color=color,
                     backgroundcolor='w',
                     fontsize=fontsize,
                     weight='ultralight',
@@ -146,12 +170,13 @@ def plotid(timestamp=True, user=True, hostname=True,
                  text,
                  transform=transform,
                  rotation=90,
-                 size='small', color=color,
+                 size=fontsize, color=color,
                  backgroundcolor='w',
                  fontsize=fontsize,
                  weight='ultralight',
                  horizontalalignment='left',
                  verticalalignment='center')
+
 
     return
 
