@@ -1,6 +1,7 @@
 from __future__ import (division, print_function)
 
 def xmatch_cat(table1=None, table2=None,
+               radec1=None, radec2=None,
                nthneighbor=None,
                selfmatch=False,
                colnames_radec1=['ra', 'dec'],
@@ -9,7 +10,7 @@ def xmatch_cat(table1=None, table2=None,
                units_radec2=['degree', 'degree'],
                stats=True,
                debug=False,
-               verbose=False)
+               verbose=False):
     """RA, Dec nearest xmatch for two lists; returns pointers
 
     nearest match
@@ -34,8 +35,6 @@ def xmatch_cat(table1=None, table2=None,
     print('__name__:', __name__)
     print('colnames_radec1:', colnames_radec1)
     print('colnames_radec2:', colnames_radec2)
-    print('plotfile_label:', plotfile_label)
-
 
     if selfmatch:
         table2 = table1
@@ -45,9 +44,6 @@ def xmatch_cat(table1=None, table2=None,
 
     if nthneighbor is None:
         nthneighbor=1
-
-    # print(table1[0])
-    # print(table2[0])
 
     ra1 = table1[colnames_radec1[0]]
     dec1 = table1[colnames_radec1[1]]
