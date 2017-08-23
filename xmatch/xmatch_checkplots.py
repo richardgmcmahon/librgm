@@ -1,4 +1,4 @@
-def xmatch_cat_checkplots(table1=None, table2=None, idxmatch=None,
+def xmatch_checkplots(table1=None, table2=None, idxmatch=None,
                           colnames_radec1=['ra', 'dec'],
                           colnames_radec2=['ra', 'dec'],
                           units_radec1=['degree', 'degree'],
@@ -8,7 +8,11 @@ def xmatch_cat_checkplots(table1=None, table2=None, idxmatch=None,
                           rmax=10.0, rmax2=None,
                           debug=False,
                           verbose=False):
+    """
 
+    BEWARE: work in progress
+
+    """
     import xmatch_checkplot
     import xmatch_checkplot0
 
