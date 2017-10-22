@@ -40,10 +40,10 @@ def xmatch_cat(table1=None, table2=None,
         table2 = table1
         colnames_radec2 = colnames_radec1
         if nthneighbor is None:
-            nthneighbor=2
+            nthneighbor = 2
 
     if nthneighbor is None:
-        nthneighbor=1
+        nthneighbor = 1
 
     ra1 = table1[colnames_radec1[0]]
     dec1 = table1[colnames_radec1[1]]
@@ -60,7 +60,7 @@ def xmatch_cat(table1=None, table2=None,
 
 
     skycoord1 = SkyCoord(ra1, dec1, unit=units_radec1, frame='icrs')
-    skycoord2 = SkyCoord(ra2, dec2, unit=units_radec1, frame='icrs')
+    skycoord2 = SkyCoord(ra2, dec2, unit=units_radec2, frame='icrs')
 
     # idx is an integer array into the first cordinate array to get the
     # matched points for the second coorindate array.
