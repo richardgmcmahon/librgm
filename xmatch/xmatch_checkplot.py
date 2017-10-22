@@ -1,3 +1,4 @@
+from __future__ import (division, print_function)
 #  Forked from Sophie Reed's version on 20160319
 import time
 

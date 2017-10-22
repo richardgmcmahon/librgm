@@ -47,9 +47,14 @@ def xmatch_cat(table1=None, table2=None,
 
     ra1 = table1[colnames_radec1[0]]
     dec1 = table1[colnames_radec1[1]]
+    print('table1: ', colnames_radec1[0], table1[colnames_radec1[0]].unit)
+    print('table1: ', colnames_radec1[1], table1[colnames_radec1[1]].unit)
 
     ra2 = table2[colnames_radec2[0]]
     dec2 = table2[colnames_radec2[1]]
+    print('table2: ', colnames_radec2[0], table2[colnames_radec2[0]].unit)
+    print('table2: ', colnames_radec2[1], table2[colnames_radec2[1]].unit)
+
 
     if stats or verbose or debug:
         print('RA1 range:', np.min(ra1), np.max(ra1))

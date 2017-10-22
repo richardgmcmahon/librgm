@@ -1,3 +1,5 @@
+from __future__ import (division, print_function)
+
 def xmatch_checkplots(table1=None, table2=None, idxmatch=None,
                           colnames_radec1=['ra', 'dec'],
                           colnames_radec2=['ra', 'dec'],
@@ -13,21 +15,31 @@ def xmatch_checkplots(table1=None, table2=None, idxmatch=None,
     BEWARE: work in progress
 
     """
+    import numpy as np
+
     import xmatch_checkplot
     import xmatch_checkplot0
 
     ra1 = table1[colnames_radec1[0]]
     dec1 = table1[colnames_radec1[1]]
+    if units_radec1[0].find('rad') >= 0:
+        ra1 = np.rad2deg(table1[colnames_radec1[0]])
+    if units_radec1[1].find('rad') >= 0:
+       dec1 = np.rad2deg(table1[colnames_radec1[1]])
+
 
     ra2 = table2[colnames_radec2[0]]
     dec2 = table2[colnames_radec2[1]]
-
+    if units_radec2[0].find('rad') >= 0:
+        ra2 = np.rad2deg(table2[colnames_radec2[0]])
+    if units_radec2[1].find('rad') >= 0:
+       dec2 = np.rad2deg(table2[colnames_radec2[1]])
 
     if plotfile_label is None:
         plotfile_label = ''
 
     # suptitle = plotfile_label + 'nthN:' + str(nthneighbor)
-    suptitle = plotfile_label
+    # suptitle = plotfile_label
     plotfile = 'xmatch_cat' + plotfile_label + '_a_checkplot.png'
 
     ra2_xmatch = ra2[idxmatch]
