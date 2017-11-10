@@ -1,5 +1,8 @@
-def mk_ned_url(RA, DEC, radius=1.0, debug=False, verbose=False):
+def mk_ned_url(RA, DEC, radius=0.1, debug=False, verbose=False):
     """
+    RA in degrees
+    Dec in dregrees
+    radius in arc mins
 
     """
     link = "<A HREF=http://ned.ipac.caltech.edu/cgi-bin/objsearch?" \
