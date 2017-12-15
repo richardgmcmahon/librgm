@@ -1,4 +1,7 @@
 """
+
+subpackage syntax
+
 this will allow import and call of the form
 
 from librgm.xmatch import xmatch_groups
