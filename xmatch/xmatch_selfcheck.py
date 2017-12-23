@@ -91,7 +91,8 @@ def xmatch_selfcheck(data=None, colnames_radec=['ra', 'dec'],
 
     ax1=fig.add_subplot(1,2,1)
 
-    n, b, patches = ax1.hist(separations_orig, bins=upperlimit2/0.5,
+    bins = int(upperlimit2/0.5)
+    n, b, patches = ax1.hist(separations_orig, bins=bins,
                              range=[0.0, upperlimit2],
                              color='green', alpha=0.5)
     bin_min = np.where(n == n.min())
