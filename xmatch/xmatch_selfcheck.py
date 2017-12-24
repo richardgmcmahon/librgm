@@ -2,7 +2,7 @@ from __future__ import (division, print_function)
 
 def xmatch_selfcheck(data=None, colnames_radec=['ra', 'dec'],
                      units_radec=['degree', 'degree'],
-                     rmax=10.0,
+                     rmax=10.0, binsize=None,
                      plotfile=None,
                      markersize=2.0,
                      nthneighbor=2, suptitle="",
@@ -91,9 +91,15 @@ def xmatch_selfcheck(data=None, colnames_radec=['ra', 'dec'],
 
     ax1=fig.add_subplot(1,2,1)
 
-    bins = int(upperlimit2/0.5)
+    if binsize is None:
+        bins = int(upperlimit2/0.5)
+    if binsize is not None:
+        bins = int(rmax/binsize) + 1
+    print('bins:', bins)
+    hist_range = [0.0, upperlimit2]
+    print('hist_range:', hist_range)
     n, b, patches = ax1.hist(separations_orig, bins=bins,
-                             range=[0.0, upperlimit2],
+                             range=hist_range,
                              color='green', alpha=0.5)
     bin_min = np.where(n == n.min())
 
