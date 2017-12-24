@@ -15,6 +15,16 @@ def xmatch_cat(table1=None, table2=None,
 
     nearest match
 
+    input can be an astropy table or zipped radec as a list
+
+    e.g. 
+
+    c = zip([1],[1])
+    radec1 = zip(ra1 , dec1)
+    
+
+    radec1 = np.column_stack(ra1, dec1))
+
 
     Self match notes:
 
