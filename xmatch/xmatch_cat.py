@@ -17,11 +17,11 @@ def xmatch_cat(table1=None, table2=None,
 
     input can be an astropy table or zipped radec as a list
 
-    e.g. 
+    e.g.
 
     c = zip([1],[1])
     radec1 = zip(ra1 , dec1)
-    
+
 
     radec1 = np.column_stack(ra1, dec1))
 
@@ -135,6 +135,11 @@ def xmatch_cat(table1=None, table2=None,
 
     dr = d2d.arcsec
 
+    # return dra, ddec, dr in arcsec
+    # as a list or could be dict; check if scales from 10^3 -> 10^6 -> 10^9
+    drplus = [dra, ddec, dr]
+
     print(len(idxmatch), len(dr))
+    print(len(drplus), len(drplus[0]), len(drplus[1]), len(drplus[2]))
 
     return idxmatch, dr
