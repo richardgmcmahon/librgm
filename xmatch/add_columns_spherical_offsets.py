@@ -22,37 +22,39 @@ from librgm.plotid import plotid
 
 
 """
-def add_columns_spherical_offsets(table=None, colname_suffix=None,
+def add_columns_spherical_offsets(table=None,
                                   ra1=None, dec1=None,
                                   ra2=None, dec2=None,
+                                  colname_suffix=None,
                                   plot_drarange=None,
                                   plot_ddecrange=None,
                                   plots=False,
                                   colnames=None,
+                                  verbose=None,
                                   **kwargs):
     """
 
+    input is ra1, dec1, ra2, ra2 in pairwise match order
+
     http://docs.astropy.org/en/stable/api/astropy.table.Table.html#astropy.table.Table.add_columns
-
-
     http://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html
-
-
     http://docs.astropy.org/en/stable/coordinates/matchsep.html
-
     http://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord.position_angle
 
     plots are based on cdesira
 
     """
 
-    print('ra1 range:', np.min(ra1), np.max(ra1))
-    print('dec1 range:', np.min(dec1), np.max(dec1))
+    if verbose:
+        print('ra1 range:', np.min(ra1), np.max(ra1))
+        print('dec1 range:', np.min(dec1), np.max(dec1))
 
-    print('ra2 range:', np.min(ra2), np.max(ra2))
-    print('dec2 range:', np.min(dec2), np.max(dec2))
+        print('ra2 range:', np.min(ra2), np.max(ra2))
+        print('dec2 range:', np.min(dec2), np.max(dec2))
 
     # convert ra, dec to units of deg
+    # technically this is not needed for the astropy matching since
+    # astropy supports units
     if ra1.unit != 'deg':
         ra1 = ra1 * u.deg
     if dec1.unit != 'deg':
@@ -65,12 +67,13 @@ def add_columns_spherical_offsets(table=None, colname_suffix=None,
         dec2 = dec2 * u.deg
     c2 = SkyCoord(ra=ra2, dec=dec2)
 
-    print('ra1 range:', np.min(ra1), np.max(ra1))
-    print('dec1 range:', np.min(dec1), np.max(dec1))
+    if verbose:
+        print('ra1 range:', np.min(ra1), np.max(ra1))
+        print('dec1 range:', np.min(dec1), np.max(dec1))
 
-    print('ra2 range:', np.min(ra2), np.max(ra2))
-    print('dec2 range:', np.min(dec2), np.max(dec2))
-    print()
+        print('ra2 range:', np.min(ra2), np.max(ra2))
+        print('dec2 range:', np.min(dec2), np.max(dec2))
+        print()
 
     dra, ddec = c1.spherical_offsets_to(c2)
     sep = c1.separation(c2)
@@ -93,6 +96,7 @@ def add_columns_spherical_offsets(table=None, colname_suffix=None,
           np.std(ddec.arcsec), apstats.mad_std(ddec.arcsec))
     print()
 
+    # need to move these outside this function for portability
     if plots:
         # drarange=[-0.5, 0.5]
         # ddecrange=[-0.5, 0.5]
@@ -142,9 +146,16 @@ def add_columns_spherical_offsets(table=None, colname_suffix=None,
 
         plt.show()
 
-    table['dRA_Sep'] = dra.arcsec
-    table['dDec_Sep'] = ddec.arcsec
-    table['dR_Sep'] = sep.arcsec
-    table['PA_Sep'] = pa.deg
+    if colname_suffix is None:
+        colname_suffix = ''
+
+    if colname_suffix is not None:
+        colname_suffix = '_' + colname_suffix
+
+    % maybe should be in degrees
+    table['dRA' + colname_suffix] = dra.arcsec
+    table['dDec' + colname_suffix] = ddec.arcsec
+    table['dR' + colname_suffix] = sep.arcsec
+    table['PA' + colname_suffix] = pa.deg
 
     return table
