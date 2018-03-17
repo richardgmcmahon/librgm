@@ -152,7 +152,7 @@ def add_columns_spherical_offsets(table=None,
     if colname_suffix is not None:
         colname_suffix = '_' + colname_suffix
 
-    % maybe should be in degrees
+    # maybe should be in degrees
     table['dRA' + colname_suffix] = dra.arcsec
     table['dDec' + colname_suffix] = ddec.arcsec
     table['dR' + colname_suffix] = sep.arcsec
