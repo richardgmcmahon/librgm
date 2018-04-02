@@ -18,3 +18,4 @@ from .xmatch_checkplot0 import *
 from .xmatch_checkplots0 import *
 from .xmatch_selfcheck import *
 from .add_columns_spherical_offsets import *
+from .check_matching import *

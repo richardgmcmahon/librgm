@@ -45,6 +45,8 @@ def xmatch_cat(table1=None, table2=None,
     print('__name__:', __name__)
     print('colnames_radec1:', colnames_radec1)
     print('colnames_radec2:', colnames_radec2)
+    table1.info()
+    table2.info()
 
     if selfmatch:
         table2 = table1
@@ -55,7 +57,9 @@ def xmatch_cat(table1=None, table2=None,
     if nthneighbor is None:
         nthneighbor = 1
 
+    print(colnames_radec1[0])
     ra1 = table1[colnames_radec1[0]]
+    print(colnames_radec1[1])
     dec1 = table1[colnames_radec1[1]]
     print('table1: ', colnames_radec1[0], table1[colnames_radec1[0]].unit)
     print('table1: ', colnames_radec1[1], table1[colnames_radec1[1]].unit)
@@ -64,7 +68,6 @@ def xmatch_cat(table1=None, table2=None,
     dec2 = table2[colnames_radec2[1]]
     print('table2: ', colnames_radec2[0], table2[colnames_radec2[0]].unit)
     print('table2: ', colnames_radec2[1], table2[colnames_radec2[1]].unit)
-
 
     if stats or verbose or debug:
         print('RA1 range:', np.min(ra1), np.max(ra1))

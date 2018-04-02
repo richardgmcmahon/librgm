@@ -37,7 +37,8 @@ def table_stats(data, ext=1, verbose=True, debug=False):
 
     import traceback
 
-    import pyfits
+
+    # import pyfits
 
     from astropy.table import Table
 
