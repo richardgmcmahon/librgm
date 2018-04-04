@@ -34,6 +34,7 @@ import matplotlib.pyplot as plt
 from matplotlib import rc
 from matplotlib.ticker import NullFormatter
 
+from librgm.plotid import plotid
 
 def mad_med(data, axis = None):
     return np.median(np.absolute(data - np.median(data, axis)), axis)

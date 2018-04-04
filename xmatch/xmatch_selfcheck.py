@@ -98,7 +98,11 @@ def xmatch_selfcheck(data=None, colnames_radec=['ra', 'dec'],
     print('bins:', bins)
     hist_range = [0.0, upperlimit2]
     print('hist_range:', hist_range)
-    n, b, patches = ax1.hist(separations_orig, bins=bins,
+    itest = (separations_orig < rmax)
+    ndata = len(separations_orig[itest])
+    n, b, patches = ax1.hist(separations_orig[itest],
+                             bins=bins,
+                             label=str(ndata),
                              range=hist_range,
                              color='green', alpha=0.5)
     bin_min = np.where(n == n.min())
@@ -115,11 +119,16 @@ def xmatch_selfcheck(data=None, colnames_radec=['ra', 'dec'],
 
     ax1.set_xlabel('Pairwise separation (arcseconds)')
     ax1.set_ylabel('Frequency per bin')
+    ax1.legend(loc='lower right')
 
     ax2 = fig.add_subplot(1,2,2, aspect='equal')
 
     alpha = 1.0
-    ax2.plot(difference_ra,difference_dec,'oc',
+    itest = (np.abs(difference_ra) < rmax) & \
+            (np.abs(difference_dec) < rmax)
+    ndata = len(difference_ra[itest])
+    ax2.plot(difference_ra[itest], difference_dec[itest],
+             'oc', label = str(ndata),
              markersize=markersize,
              markeredgewidth=0.0,
              alpha=alpha) #0.5 smallest size
@@ -137,9 +146,10 @@ def xmatch_selfcheck(data=None, colnames_radec=['ra', 'dec'],
     s3 = 'sigma_MAD = %.2f' % mad_standard
     ax2.annotate(s3,(0.45,0.80) , xycoords = 'axes fraction',size=8)
 
+
     fig.tight_layout()
     ax2.grid()
-
+    ax2.legend(loc='lower right')
 
     fig.subplots_adjust(top=0.88)
 
@@ -153,7 +163,7 @@ def xmatch_selfcheck(data=None, colnames_radec=['ra', 'dec'],
 
     if ('save' in keyword_parameter):
         path_to_save = str(keyword_parameter['save'])
-        plt.savefig(path_to_save,dpi=150)
+        plt.savefig(path_to_save)
     else:
         plt.show()
 
