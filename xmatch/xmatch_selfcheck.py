@@ -1,11 +1,14 @@
 from __future__ import (division, print_function)
 
-def xmatch_selfcheck(data=None, colnames_radec=['ra', 'dec'],
+def xmatch_selfcheck(data=None,
+                     colnames_radec=['ra', 'dec'],
                      units_radec=['degree', 'degree'],
-                     rmax=10.0, binsize=None,
+                     rmax=10.0,
+                     binsize=None,
                      plotfile=None,
                      markersize=2.0,
-                     nthneighbor=2, suptitle="",
+                     nthneighbor=2,
+                     suptitle="",
                      **keyword_parameter):
     """
     Based on check_matching.py by Chris Desira (Summer 2016)
@@ -14,6 +17,7 @@ def xmatch_selfcheck(data=None, colnames_radec=['ra', 'dec'],
 
     """
 
+    import time
     import numpy as np
 
     import matplotlib.pyplot as plt
@@ -31,21 +35,26 @@ def xmatch_selfcheck(data=None, colnames_radec=['ra', 'dec'],
     print('colnames_radec:', colnames_radec)
     print('markersize:', markersize)
 
+    t0 = time.time()
+
     ra = data[colnames_radec[0]]
     dec = data[colnames_radec[1]]
     print('RA range:', np.min(ra), np.max(ra))
     print('Dec range:', np.min(dec), np.max(dec))
 
-    skycoord_object = SkyCoord(ra, dec, unit=units_radec, frame='icrs')
+    skycoord_objects = SkyCoord(ra, dec, unit=units_radec, frame='icrs')
 
     # nearest neighbor matches to itself
     # idx is an integer array into the first cordinate array to get the
     # matched points for the second coorindate array.
     # Shape of idx matches the first coordinate array
-    idx, d2d, d3d = match_coordinates_sky(skycoord_object,
-                                          skycoord_object,
+    print('Elapsed time(secs):', time.time() - t0)
+    print('Self xmatch starting:', len(skycoord_objects))
+    idx, d2d, d3d = match_coordinates_sky(skycoord_objects,
+                                          skycoord_objects,
                                           nthneighbor=nthneighbor)
-
+    print('Self xmatch completed:', len(idx))
+    print('Elapsed time(secs):', time.time() - t0)
 
     #set limits
 
@@ -62,10 +71,10 @@ def xmatch_selfcheck(data=None, colnames_radec=['ra', 'dec'],
     # separations_orig = separations[(separations<=upperlimit2)]
     # psfmag_reduced=np.asarray(psfmag)[(np.asarray(psfmag)<18.0)]
 
-    masked_list_ra = np.asarray(skycoord_object.ra)[(idx)]
-    masked_list_dec = np.asarray(skycoord_object.dec)[(idx)]
-    masked_list_ra_cat = np.asarray(skycoord_object.ra)
-    masked_list_dec_cat = np.asarray(skycoord_object.dec)
+    masked_list_ra = np.asarray(skycoord_objects.ra)[(idx)]
+    masked_list_dec = np.asarray(skycoord_objects.dec)[(idx)]
+    masked_list_ra_cat = np.asarray(skycoord_objects.ra)
+    masked_list_dec_cat = np.asarray(skycoord_objects.dec)
     # masked = skycoord_object[idx]
     # dra, ddec = skycoord_object.spherical_offsets_to(masked)
     # sky = SkyCoord(masked_list_ra*u.degree, masked_list_dec*u.degree, frame='icrs')
@@ -81,7 +90,7 @@ def xmatch_selfcheck(data=None, colnames_radec=['ra', 'dec'],
     mad_standard = mad_std(median_and_mean)
     mad_median = median_absolute_deviation(median_and_mean)
     length = len(masked_list_ra)
-    med=np.median(separations)
+    med = np.median(separations)
 
     #pylab.title("file: %s"%files,size=14, fontsize='medium')
 
@@ -89,7 +98,7 @@ def xmatch_selfcheck(data=None, colnames_radec=['ra', 'dec'],
 
     plt.suptitle(suptitle + 'nthN:' + str(nthneighbor), size=10)
 
-    ax1=fig.add_subplot(1,2,1)
+    ax1 = fig.add_subplot(1,2,1)
 
     if binsize is None:
         bins = int(upperlimit2/0.5)
@@ -109,13 +118,13 @@ def xmatch_selfcheck(data=None, colnames_radec=['ra', 'dec'],
 
     ax1.locator_params(axis='x',nbins=4)
     s0 = 'Matched to self'
-    ax1.annotate(s0,(0.28,0.95) , xycoords = 'axes fraction',size=8)
+    ax1.annotate(s0,(0.28,0.95), xycoords='axes fraction', size=8)
 
     s04 = '# = %i'%length
-    ax1.annotate(s04,(0.28,0.90) , xycoords = 'axes fraction',size=8)
+    ax1.annotate(s04,(0.28,0.90), xycoords='axes fraction', size=8)
 
     s01 = 'Median = %.2f' % med
-    ax1.annotate(s01,(0.28,0.85) , xycoords = 'axes fraction',size=8)
+    ax1.annotate(s01,(0.28,0.85), xycoords='axes fraction', size=8)
 
     ax1.set_xlabel('Pairwise separation (arcseconds)')
     ax1.set_ylabel('Frequency per bin')
