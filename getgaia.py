@@ -2,6 +2,9 @@
 
 get remote Gaia data using astropy.astroquery
 
+sychronous and asychronous queries are supported
+with current (2018, April) timeouts of 1min and 30min
+
 
 """
 def getgaia(debug=False, ralist=None, declist=None, cone_search=False,
