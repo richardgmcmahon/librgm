@@ -21,6 +21,12 @@ def xmatch_checkplots(table1=None, table2=None, idxmatch=None,
     import xmatch_checkplot
     import xmatch_checkplot0
 
+    if suptitle is None:
+        suptitle = ''
+
+    if plotfile_label is None:
+        plotfile_label = ''
+
     ra1 = table1[colnames_radec1[0]]
     dec1 = table1[colnames_radec1[1]]
     if units_radec1[0].find('rad') >= 0:
@@ -36,8 +42,6 @@ def xmatch_checkplots(table1=None, table2=None, idxmatch=None,
     if units_radec2[1].find('rad') >= 0:
        dec2 = np.rad2deg(table2[colnames_radec2[1]])
 
-    if plotfile_label is None:
-        plotfile_label = ''
 
     # suptitle = plotfile_label + 'nthN:' + str(nthneighbor)
     # suptitle = plotfile_label
