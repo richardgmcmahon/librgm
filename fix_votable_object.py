@@ -4,6 +4,8 @@ def fix_votable_object(table, verbose=False):
     supported by FITs to bool
     """
 
+    from astropy.table import Table, Column
+
     for (icol, column) in enumerate(table.columns):
         if verbose:
             print(icol, table.columns[icol].name,
