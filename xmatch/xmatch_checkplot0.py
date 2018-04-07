@@ -1,4 +1,5 @@
-def xmatch_checkplot0(ra1, dec1, ra2, dec2,
+def xmatch_checkplot0(ra1, dec1,
+                      ra2, dec2,
                       width=10.0,
                       binsize=0.1,
                       saveplot=True,
@@ -22,6 +23,9 @@ def xmatch_checkplot0(ra1, dec1, ra2, dec2,
     from astropy import units as u
 
     from librgm.plotid import plotid
+
+    if suptitle is None:
+        suptitle=''
 
     rmax = width
 
@@ -51,8 +55,6 @@ def xmatch_checkplot0(ra1, dec1, ra2, dec2,
 
     fig = plt.figure(1, figsize=(10, 5))
 
-    if suptitle is None:
-        suptitle=''
     plt.suptitle(suptitle + ': '+ str(ndata_all))
 
     ax1=fig.add_subplot(1,2,1)
@@ -61,7 +63,8 @@ def xmatch_checkplot0(ra1, dec1, ra2, dec2,
     itest = xdata < rmax
     xdata = xdata[itest]
     ndata = len(xdata)
-    n, b, patches = ax1.hist(xdata, bins=rmax/binsize,
+    bins = int(rmax/binsize)
+    n, b, patches = ax1.hist(xdata, bins=bins,
                              color='green', alpha=0.5)
 
     bin_min = np.where(n == n.min())
