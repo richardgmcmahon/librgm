@@ -23,15 +23,37 @@ which can lead to some confusion. i.e. it confused me.
 ###  (1) astropy.coordinates.match_coordinates_sky
     
 * http://docs.astropy.org/en/stable/api/astropy.coordinates.match_coordinates_sky.html#astropy.coordinates.match_coordinates_sky
+
+match_to_catalog_sky is a Skycoord method
+
+match_coordinates_sky is a function
+
+Both return identical results
+
+
 ```   
      match_coordinates_sky(
          matchcoord, catalogcoord, nthneighbor=1,
          storekdtree=u'_kdtree_sky')
 
      returns idx, sep2d, sep3d
-```    
- Finds the nearest or nth neighbour on-sky matches of a coordinate or
- coordinates in a set of catalog coordinates.
+```
+
+e.g.
+
+```
+
+idx, d2d, d3d = skycoord1.match_to_catalog_sky(skycoord2)
+
+or
+
+idx, d2d, d3d = match_coordinates_sky(skycoord1, skycoord2)  
+
+
+```
+
+Finds the nearest or nth neighbour on-sky matches of a coordinate or
+coordinates in a set of catalog coordinates.
     
 match_coordinates_sky is a python function
     
@@ -53,6 +75,22 @@ match_coordinates_sky is a python function
     #  match_to_catalog_sky is a python method
 
 
+## Multiple matching within a radius
+
+called Searching Around Coordinates in astropy
+
+```
+idx1, idx2, d2d, d3d = \
+    SkyCoord1.search_around_sky(SkyCoord2, 10.0*u.arcsec)
+```
+
+The key difference for these methods is that there can be multiple (or no)
+matches in catalog around any locations in c. Hence, indices into both
+skycoord1 and skycoord2 are returned instead of just indices into catalog.
+These can then be indexed back into the two SkyCoord objects, or, for that
+matter, any array with the same order:
+
+
 
 ra, dec list could maybe be a zipped i.e. radec = zip(ra, dec)
 
@@ -60,6 +98,8 @@ also, could work out the input data form internally; table versus list
 
 The broad idea is makes the functions as easy to use as TOPCAT and STILTS.
 
+
+### Some good practice suggestions
 
 It is good practice to write the input filename into the table metadata.
 
