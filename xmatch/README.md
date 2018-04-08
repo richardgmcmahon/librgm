@@ -2,7 +2,9 @@
 
 Various positional cross matching functions that are under development.
 
-They take either a ra, dec lists in units of degrees or astropy tables
+e.g. checkplots is currentlyt be rationalised. be patient
+
+They take either a ra, dec lists of values in units of degrees or astropy tables
 with aribitrary units. For astropy tables the column names are specified
 as arguments.
 
@@ -20,22 +22,22 @@ which can lead to some confusion. i.e. it confused me.
     
 ###  (1) astropy.coordinates.match_coordinates_sky
     
-http://docs.astropy.org/en/stable/api/astropy.coordinates.match_coordinates_sky.html#astropy.coordinates.match_coordinates_sky
-''    
+* http://docs.astropy.org/en/stable/api/astropy.coordinates.match_coordinates_sky.html#astropy.coordinates.match_coordinates_sky
+```   
      match_coordinates_sky(
          matchcoord, catalogcoord, nthneighbor=1,
          storekdtree=u'_kdtree_sky')
 
      returns idx, sep2d, sep3d
+```    
+ Finds the nearest or nth neighbour on-sky matches of a coordinate or
+ coordinates in a set of catalog coordinates.
     
- Finds the nearest on-sky matches of a coordinate or coordinates in a
-      set of catalog coordinates.
-    
-      match_coordinates_sky is a python function
+match_coordinates_sky is a python function
     
 ### (2) astropy.coordinates.match_coordinates_sky
-    #
-    # http://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord.match_to_catalog_sky
+
+* http://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord.match_to_catalog_sky
     #
     #
     #
