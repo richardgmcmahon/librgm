@@ -2,28 +2,18 @@ from __future__ import (division, print_function)
 #  Forked from Sophie Reed's version on 20160319
 import time
 
-
 from astropy.stats import mad_std
 
 #sys.path.append("/home/rgm/soft/python/lib/")
 from librgm.plotid import plotid
+from librgm.plotid import mk_timestamp
 #from librgm.plot_radec import plot_radec
 #from librgm.xmatch_checkplot import xmatch_checkplot
 #from librgm import stats
 
 
-def mk_timestamp():
-    """
-
-    ISO timestamp
-
-    """
-    timestamp = time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime())
-
-    return timestamp
-
-
 def xmatch_checkplot(ra1, dec1, ra2, dec2,
+                     figsize = (6.0, 6.0),
                      width=10.0,
                      gtype="all", add_plotid=True, prefix=None,
                      saveplot=True,
@@ -135,7 +125,7 @@ def xmatch_checkplot(ra1, dec1, ra2, dec2,
 
     print('limits:', limits)
     gs = gridspec.GridSpec(2, 2, width_ratios=[2, 1], height_ratios=[1, 2])
-    fig = plt.figure()
+    fig = plt.figure(figsize=figsize)
     ax1 = plt.subplot(gs[0])
     ax1.hist(xs, bins=100, color="r", range=xlimits)
     ax1.set_xlim(xlimits)

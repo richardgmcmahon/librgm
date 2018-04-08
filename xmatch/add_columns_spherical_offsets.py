@@ -3,6 +3,7 @@ from __future__ import (division, print_function)
 import sys
 
 import numpy as np
+
 import scipy.stats as stats
 
 from astropy.table import Table
