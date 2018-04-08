@@ -43,6 +43,11 @@ def xmatch_cat(table1=None, table2=None,
 
     print('__file__:', __file__)
     print('__name__:', __name__)
+    if 'filename' in table1.meta:
+        print('table1.filename:', table1.meta['filename']
+    if 'filename' in table2.meta:
+        print('table2.filename:', table2.meta['filename']
+
     print('colnames_radec1:', colnames_radec1)
     print('colnames_radec2:', colnames_radec2)
     table1.info()
