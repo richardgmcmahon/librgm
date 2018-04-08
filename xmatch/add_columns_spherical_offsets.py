@@ -30,7 +30,7 @@ def add_columns_spherical_offsets(table=None,
                                   plot_ddecrange=None,
                                   plots=False,
                                   colnames=None,
-                                  verbose=None,
+                                  verbose=False,
                                   **kwargs):
     """
 
@@ -41,7 +41,7 @@ def add_columns_spherical_offsets(table=None,
     http://docs.astropy.org/en/stable/coordinates/matchsep.html
     http://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord.position_angle
 
-    plots are based on cdesira
+    plots are based on cdesira code
 
     """
 
@@ -52,13 +52,24 @@ def add_columns_spherical_offsets(table=None,
         print('ra2 range:', np.min(ra2), np.max(ra2))
         print('dec2 range:', np.min(dec2), np.max(dec2))
 
-    # convert ra, dec to units of deg
+    # I am not sure whether the next part is needed or working
+    # convert ra, dec to units of deg since SkyCoord defaults to def
     # technically this is not needed for the astropy matching since
     # astropy supports units
-    if ra1.unit != 'deg':
-        ra1 = ra1 * u.deg
-    if dec1.unit != 'deg':
-        dec1 = dec1 * u.deg
+    try:
+        if ra1.unit != 'deg':
+            ra1 = ra1 * u.deg
+    except:
+        # ra1.unit = 'deg'
+        pass
+    try:
+        if dec1.unit != 'deg':
+            dec1 = dec1 * u.deg
+    except:
+        pass
+
+    print(type(ra1), len(ra1))
+    print(type(dec1), len(dec1))
     c1 = SkyCoord(ra=ra1, dec=dec1)
 
     if ra2.unit != 'deg':
