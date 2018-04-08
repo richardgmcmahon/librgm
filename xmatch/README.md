@@ -12,3 +12,11 @@ also, could work out the input data form internally; table versus list
 
 The broad idea is makes the functions as easy to use as TOPCAT and STILTS.
 
+
+It is good practice to write the input filename into the table metadata.
+
+table.meta['filename'] = filename
+
+You can then check it if it is present later with:
+if 'filename' in table.meta:
+    print('filename:', filename)

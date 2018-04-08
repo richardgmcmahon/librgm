@@ -45,14 +45,18 @@ def add_columns_spherical_offsets(table=None,
 
     """
 
+
     if verbose:
+        if 'filename' in data.meta:
+            print('filename:', filename)
+
         print('ra1 range:', np.min(ra1), np.max(ra1))
         print('dec1 range:', np.min(dec1), np.max(dec1))
 
         print('ra2 range:', np.min(ra2), np.max(ra2))
         print('dec2 range:', np.min(dec2), np.max(dec2))
 
-    # I am not sure whether the next part is needed or working
+    # I am not sure whether/why the next part is needed or working
     # convert ra, dec to units of deg since SkyCoord defaults to def
     # technically this is not needed for the astropy matching since
     # astropy supports units
