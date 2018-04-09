@@ -78,8 +78,8 @@ idx1, idx2, d2d, d3d = \
     SkyCoord1.search_around_sky(SkyCoord2, 10.0*u.arcsec)
 ```
 
-method: http://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord.search_around_3d
-function: http://docs.astropy.org/en/stable/api/astropy.coordinates.search_around_sky.html
+* method: http://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord.search_around_sky
+* function: http://docs.astropy.org/en/stable/api/astropy.coordinates.search_around_sky.html
 
 
 The key difference for these methods is that there can be multiple (or no)
