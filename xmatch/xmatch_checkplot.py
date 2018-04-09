@@ -6,7 +6,7 @@ from astropy.stats import mad_std
 
 #sys.path.append("/home/rgm/soft/python/lib/")
 from librgm.plotid import plotid
-from librgm.plotid import mk_timestamp
+from librgm.mk_timestamp import mk_timestamp
 #from librgm.plot_radec import plot_radec
 #from librgm.xmatch_checkplot import xmatch_checkplot
 #from librgm import stats

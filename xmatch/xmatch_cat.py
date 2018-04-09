@@ -43,15 +43,27 @@ def xmatch_cat(table1=None, table2=None,
 
     print('__file__:', __file__)
     print('__name__:', __name__)
-    if 'filename' in table1.meta:
-        print('table1.filename:', table1.meta['filename'])
-    if 'filename' in table2.meta:
-        print('table2.filename:', table2.meta['filename'])
+    try:
+        if 'filename' in table1.meta:
+            print('table1.filename:', table1.meta['filename'])
+    except:
+        print("table1 has no metadata or table1.meta['filename']")
 
     print('colnames_radec1:', colnames_radec1)
-    print('colnames_radec2:', colnames_radec2)
     table1.info()
-    table2.info()
+
+    # selfmatch does not need a 2nd table
+    if not selfmatch:
+        try:
+            if 'filename' in table2.meta:
+                print('table2.filename:', table2.meta['filename'])
+        except:
+            print("table2 has no metadata or table2.meta['filename']")
+
+
+        print('colnames_radec2:', colnames_radec2)
+
+        table2.info()
 
     if selfmatch:
         table2 = table1
