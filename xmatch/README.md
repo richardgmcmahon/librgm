@@ -1,8 +1,9 @@
 
 
-Various positional cross matching functions that are under development.
+Various high level positional cross matching functions based on astropy
+that are under development.
 
-e.g. checkplots is currentlyt be rationalised. be patient
+e.g. checkplots is currently be rationalised. Please be patient
 
 They take either a ra, dec lists of values in units of degrees or astropy tables
 with aribitrary units. For astropy tables the column names are specified
@@ -10,23 +11,27 @@ as arguments.
 
 See:
 
+* http://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html
 * http://docs.astropy.org/en/stable/coordinates/matchsep.html
 * http://docs.astropy.org/en/stable/api/astropy.coordinates.match_coordinates_sky.html
 * http://docs.astropy.org/en/stable/api/astropy.coordinates.search_around_sky.html
 
-Astropy has two ‘methods’ or ‘functions’: One is  a function and a method
-which can lead to some confusion. i.e. it confused me.
+Astropy has two ‘methods’ or ‘functions’: One is a function and the other
+is a SkyCoord method which can lead to some confusion. i.e. it confused me.
 
     
 ## match_coordinates_sky and match_to_catalog_sky
-    
-###  (1) astropy.coordinates.match_coordinates_sky
-    
-* http://docs.astropy.org/en/stable/api/astropy.coordinates.match_coordinates_sky.html#astropy.coordinates.match_coordinates_sky
 
-match_to_catalog_sky is a Skycoord method
+Finds the nearest or nth neighbour on-sky matches of a coordinate or
+coordinates in a set of catalog coordinates.
+
+###  match_coordinates_sky
+    
+* http://docs.astropy.org/en/stable/api/astropy.coordinates.match_coordinates_sky.html
 
 match_coordinates_sky is a function
+
+match_to_catalog_sky is a Skycoord method
 
 Both return identical results
 
@@ -43,21 +48,16 @@ e.g.
 
 ```
 
-idx, d2d, d3d = skycoord1.match_to_catalog_sky(skycoord2)
+idx, d2d, d3d = match_coordinates_sky(skycoord1, skycoord2)  
 
 or
 
-idx, d2d, d3d = match_coordinates_sky(skycoord1, skycoord2)  
-
+idx, d2d, d3d = skycoord1.match_to_catalog_sky(skycoord2)
 
 ```
 
-Finds the nearest or nth neighbour on-sky matches of a coordinate or
-coordinates in a set of catalog coordinates.
     
-match_coordinates_sky is a python function
-    
-### (2) astropy.coordinates.match_coordinates_sky
+### (2) SkyCoord.match_to_catalog_sky
 
 * http://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord.match_to_catalog_sky
     #
