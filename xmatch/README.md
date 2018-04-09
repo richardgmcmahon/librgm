@@ -73,14 +73,23 @@ called Searching Around Coordinates in astropy
 SkyCoord.search_around_sky like SkyCoord match_to_catalog_sky is a
 SkyCoord method.
 
+* method: http://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord.search_around_sky
+
 ```
 idx1, idx2, d2d, d3d = \
     SkyCoord1.search_around_sky(SkyCoord2, 10.0*u.arcsec)
 ```
 
-* method: http://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord.search_around_sky
+
 * function: http://docs.astropy.org/en/stable/api/astropy.coordinates.search_around_sky.html
 
+```
+idx1, idx2, d2d, d3d = \
+    astropy.coordinates.search_around_sky(SkyCoords1, SkyCoords2,
+                                          seplimit,
+                                          storekdtree='kdtree_sky'
+
+```
 
 The key difference for these methods is that there can be multiple (or no)
 matches in catalog around any locations in c. Hence, indices into both
