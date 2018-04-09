@@ -25,10 +25,6 @@ is a SkyCoord method which can lead to some confusion. i.e. it confused me.
 Finds the nearest or nth neighbour on-sky matches of a coordinate or
 coordinates in a set of catalog coordinates.
 
-###  match_coordinates_sky
-    
-* http://docs.astropy.org/en/stable/api/astropy.coordinates.match_coordinates_sky.html
-
 match_coordinates_sky is a function
 
 match_to_catalog_sky is a Skycoord method
@@ -36,53 +32,50 @@ match_to_catalog_sky is a Skycoord method
 Both return identical results
 
 
+###  match_coordinates_sky
+    
+* http://docs.astropy.org/en/stable/api/astropy.coordinates.match_coordinates_sky.html
+
+
 ```   
      match_coordinates_sky(
          matchcoord, catalogcoord, nthneighbor=1,
          storekdtree=u'_kdtree_sky')
 
-     returns idx, sep2d, sep3d
+     .....
+
+     return idx, sep2d, sep3d
 ```
 
 e.g.
 
 ```
-
 idx, d2d, d3d = match_coordinates_sky(skycoord1, skycoord2)  
-
-or
-
-idx, d2d, d3d = skycoord1.match_to_catalog_sky(skycoord2)
 
 ```
 
     
-### (2) SkyCoord.match_to_catalog_sky
+### SkyCoord.match_to_catalog_sky
 
 * http://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord.match_to_catalog_sky
-    #
-    #
-    #
-    #  returns idx, sep2d, sep3d
-    #
-    #
-    # Finds the nearest on-sky matches of this coordinate in a set of
-    # catalog coordinates.
-    #
-    # For more on how to use this (and related) functionality, see the
-    # examples in Separations, Catalog Matching, and Related Functionality.
-    #
-    #  match_to_catalog_sky is a python method
+
+match_to_catalog_sky(catalogcoord, nthneighbor=1)
 
 
-## Multiple matching within a radius
+```
+idx, d2d, d3d = skycoord1.match_to_catalog_sky(skycoord2)
+```
+
+## Multiple matching within a radius: search_around_sky
 
 called Searching Around Coordinates in astropy
+
 
 ```
 idx1, idx2, d2d, d3d = \
     SkyCoord1.search_around_sky(SkyCoord2, 10.0*u.arcsec)
 ```
+
 
 The key difference for these methods is that there can be multiple (or no)
 matches in catalog around any locations in c. Hence, indices into both
