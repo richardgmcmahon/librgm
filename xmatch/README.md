@@ -76,6 +76,9 @@ SkyCoord method.
 * method: http://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord.search_around_sky
 
 ```
+
+search_around_sky(searcharoundcoords, seplimit)
+
 idx1, idx2, d2d, d3d = \
     SkyCoord1.search_around_sky(SkyCoord2, 10.0*u.arcsec)
 ```
