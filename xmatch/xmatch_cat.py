@@ -8,7 +8,7 @@ def xmatch_cat(table1=None, table2=None,
                colnames_radec2=['ra', 'dec'],
                units_radec1=['degree', 'degree'],
                units_radec2=['degree', 'degree'],
-               stats=True,
+               stats=False,
                debug=False,
                verbose=False):
     """RA, Dec nearest xmatch for two lists; returns pointers
@@ -41,16 +41,18 @@ def xmatch_cat(table1=None, table2=None,
 
     from astropy.stats import mad_std, median_absolute_deviation
 
-    print('__file__:', __file__)
-    print('__name__:', __name__)
+    if verbose or debug:
+        print('__file__:', __file__)
+        print('__name__:', __name__)
     try:
         if 'filename' in table1.meta:
             print('table1.filename:', table1.meta['filename'])
     except:
         print("table1 has no metadata or table1.meta['filename']")
 
-    print('colnames_radec1:', colnames_radec1)
-    table1.info()
+    if verbose or debug:
+        print('colnames_radec1:', colnames_radec1)
+        table1.info()
 
     # selfmatch does not need a 2nd table
     if not selfmatch:
@@ -60,10 +62,9 @@ def xmatch_cat(table1=None, table2=None,
         except:
             print("table2 has no metadata or table2.meta['filename']")
 
-
-        print('colnames_radec2:', colnames_radec2)
-
-        table2.info()
+        if verbose or debug:
+            print('colnames_radec2:', colnames_radec2)
+            table2.info()
 
     if selfmatch:
         table2 = table1
@@ -74,17 +75,17 @@ def xmatch_cat(table1=None, table2=None,
     if nthneighbor is None:
         nthneighbor = 1
 
-    print(colnames_radec1[0])
     ra1 = table1[colnames_radec1[0]]
-    print(colnames_radec1[1])
     dec1 = table1[colnames_radec1[1]]
-    print('table1: ', colnames_radec1[0], table1[colnames_radec1[0]].unit)
-    print('table1: ', colnames_radec1[1], table1[colnames_radec1[1]].unit)
+    if verbose or debug:
+        print('table1: ', colnames_radec1[0], table1[colnames_radec1[0]].unit)
+        print('table1: ', colnames_radec1[1], table1[colnames_radec1[1]].unit)
 
     ra2 = table2[colnames_radec2[0]]
     dec2 = table2[colnames_radec2[1]]
-    print('table2: ', colnames_radec2[0], table2[colnames_radec2[0]].unit)
-    print('table2: ', colnames_radec2[1], table2[colnames_radec2[1]].unit)
+    if verbose or debug:
+        print('table2: ', colnames_radec2[0], table2[colnames_radec2[0]].unit)
+        print('table2: ', colnames_radec2[1], table2[colnames_radec2[1]].unit)
 
     if stats or verbose or debug:
         print('RA1 range:', np.min(ra1), np.max(ra1))
@@ -159,7 +160,9 @@ def xmatch_cat(table1=None, table2=None,
     # as a list or could be dict; check if scales from 10^3 -> 10^6 -> 10^9
     drplus = [dra, ddec, dr]
 
-    print(len(idxmatch2), len(dr))
-    print(len(drplus), len(drplus[0]), len(drplus[1]), len(drplus[2]))
+    if debug or verbose:
+        print(len(idxmatch2), len(dr))
+        print(len(drplus), len(drplus[0]), len(drplus[1]), len(drplus[2]))
 
+    # could add option to return dr, dra, ddec
     return idxmatch2, dr
