@@ -104,6 +104,8 @@ def xmatch_cat(table1=None, table2=None,
     # idx is an integer array into the second cordinate array to get the
     # matched points for the second coordindate array.
     # Shape of idx matches the first coordinate array
+    idx1 = []
+    idx2 = []
     if not method:
         if not multimatch:
             idx2, d2d, d3d = \
@@ -112,24 +114,36 @@ def xmatch_cat(table1=None, table2=None,
                                       nthneighbor=nthneighbor)
         if multimatch:
             idx1, idx2, d2d, d3d = \
-                search_around_sky(skysoords1,
-                                  skysoords2,
-                                  seplimit)
+                search_around_sky(skycoord1,
+                                  skycoord2,
+                                  seplimit * u.arcsec)
 
     # alternative 'method' form
     if method:
         idx2, d2d, d3d = \
             skycoord1.match_to_catalog_sky(skycoord2,
                                            nthneighbor=nthneighbor)
+    if not multimatch:
+        separation = skycoord1.separation(skycoord2[idx2])
 
-    separation = skycoord1.separation(skycoord2[idx2])
+    if multimatch:
+        separation = skycoord1[idx1].separation(skycoord2[idx2])
 
-    dra, ddec = \
-        skycoord1.spherical_offsets_to(skycoord2[idx2])
+    if not multimatch:
+        dra, ddec = \
+            skycoord1.spherical_offsets_to(skycoord2[idx2])
+
+    if multimatch:
+        dra, ddec = \
+            skycoord1[idx1].spherical_offsets_to(skycoord2[idx2])
+
 
     if stats or verbose or debug:
+        print('multimatch:', multimatch)
+        print('seplimit:', seplimit)
         print('len(table1):', len(table1))
         print('len(table2):', len(table2))
+        print('len(idx1):', len(idx1))
         print('len(idx2):', len(idx2))
         print('idxmatch range:', np.min(idx2), np.max(idx2))
         print('d2d range:', np.min(d2d), np.max(d2d))
@@ -183,4 +197,4 @@ def xmatch_cat(table1=None, table2=None,
         return idx2, dr
 
     if multimatch:
-        return idx1, idx2, dr
+        return (idx1, idx2), dr

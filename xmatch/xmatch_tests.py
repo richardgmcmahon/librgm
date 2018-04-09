@@ -207,7 +207,11 @@ if __name__ == '__main__':
     sys.path.append("/home/rgm/soft/python/lib/")
     from librgm import xmatch
 
+    t0 = time.time()
+
     args = getargs()
+
+    debug = args.debug
 
     if args.verbose or args.debug:
             help(xmatch)
@@ -215,9 +219,8 @@ if __name__ == '__main__':
         print('__file__:', __file__)
         help(xmatch_cat)
 
-
+    multimatch = True
     savefig = True
-    t0 = time.time()
 
     ndata1 = args.n1
     ndata2 = args.n2
@@ -280,7 +283,7 @@ if __name__ == '__main__':
     rmax = 7200.0
     binsize = 60.0
     idx = xmatch_selfcheck(data=table, rmax=rmax, binsize=binsize,
-                           showplot=True, debug=True)
+                           showplot=True, debug=debug)
 
 
     # xmatch table1 and table2
@@ -290,13 +293,23 @@ if __name__ == '__main__':
     table2.info('stats')
 
     print()
-    print('xmatch table1 to table2')
+    print('xmatch table1 to table2:', len(table1), len(table2))
     t0 = time.time()
-    idxmatch, dr = xmatch_cat(table1=table1, table2=table2)
+    if not multimatch:
+        idxmatch, dr = xmatch_cat(table1=table1, table2=table2,
+                                  stats=True,
+                                  multimatch=False)
+    if multimatch:
+        idxmatch, dr = xmatch_cat(table1=table1, table2=table2,
+                                  stats=True,
+                                  seplimit=100.0,
+                                  multimatch=True)
     print("Elapsed time %.3f seconds" % (time.time() - t0))
 
     t0 = time.time()
+    print('method=True')
     idxmatch, dr = xmatch_cat(table1=table1, table2=table2,
+                              stats=True,
                               method=True)
     print("Elapsed time %.3f seconds" % (time.time() - t0))
 
