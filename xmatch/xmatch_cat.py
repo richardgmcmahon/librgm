@@ -3,6 +3,8 @@ from __future__ import (division, print_function)
 def xmatch_cat(table1=None, table2=None,
                radec1=None, radec2=None,
                nthneighbor=None,
+               multimatch=False,
+               seplimit=10.0,
                selfmatch=False,
                colnames_radec1=['ra', 'dec'],
                colnames_radec2=['ra', 'dec'],
@@ -10,7 +12,8 @@ def xmatch_cat(table1=None, table2=None,
                units_radec2=['degree', 'degree'],
                stats=False,
                debug=False,
-               verbose=False):
+               verbose=False,
+               method=False):
     """RA, Dec nearest xmatch for two lists; returns pointers
 
     nearest match
@@ -101,23 +104,34 @@ def xmatch_cat(table1=None, table2=None,
     # idx is an integer array into the second cordinate array to get the
     # matched points for the second coordindate array.
     # Shape of idx matches the first coordinate array
-    idxmatch2, d2d, d3d = match_coordinates_sky(skycoord1,
-                                               skycoord2,
-                                               nthneighbor=nthneighbor)
+    if not method:
+        if not multimatch:
+            idx2, d2d, d3d = \
+                match_coordinates_sky(skycoord1,
+                                      skycoord2,
+                                      nthneighbor=nthneighbor)
+        if multimatch:
+            idx1, idx2, d2d, d3d = \
+                search_around_sky(skysoords1,
+                                  skysoords2,
+                                  seplimit)
 
     # alternative 'method' form
-    # idxmatch2, d2d, d3d = skycoord1.match_to_catalog_sky(skycoord2)
+    if method:
+        idx2, d2d, d3d = \
+            skycoord1.match_to_catalog_sky(skycoord2,
+                                           nthneighbor=nthneighbor)
 
-    separation = skycoord1.separation(skycoord2[idxmatch2])
+    separation = skycoord1.separation(skycoord2[idx2])
 
     dra, ddec = \
-        skycoord1.spherical_offsets_to(skycoord2[idxmatch2])
+        skycoord1.spherical_offsets_to(skycoord2[idx2])
 
     if stats or verbose or debug:
         print('len(table1):', len(table1))
         print('len(table2):', len(table2))
-        print('len(idxmatch2):', len(idxmatch2))
-        print('idxmatch range:', np.min(idxmatch2), np.max(idxmatch2))
+        print('len(idx2):', len(idx2))
+        print('idxmatch range:', np.min(idx2), np.max(idx2))
         print('d2d range:', np.min(d2d), np.max(d2d))
         print('d2d range:', np.min(d2d).arcsec, np.max(d2d).arcsec)
         print('d2d median:', np.median(d2d).arcsec)
@@ -161,8 +175,12 @@ def xmatch_cat(table1=None, table2=None,
     drplus = [dra, ddec, dr]
 
     if debug or verbose:
-        print(len(idxmatch2), len(dr))
+        print(len(idx2), len(dr))
         print(len(drplus), len(drplus[0]), len(drplus[1]), len(drplus[2]))
 
     # could add option to return dr, dra, ddec
-    return idxmatch2, dr
+    if not multimatch:
+        return idx2, dr
+
+    if multimatch:
+        return idx1, idx2, dr

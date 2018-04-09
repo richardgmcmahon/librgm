@@ -238,7 +238,8 @@ if __name__ == '__main__':
                               debug=False,
                               verbose=True)
     print("Elapsed time %.3f seconds" % (time.time() - t0))
-    raw_input('Type any key to continue> ')
+    if args.debug:
+        raw_input('Type any key to continue> ')
     dr_median = np.median(dr)
     dr_mad_std = mad_std(dr)
     numpoints = len(dr)
@@ -267,7 +268,8 @@ if __name__ == '__main__':
     print("Elapsed time %.3f seconds" % (time.time() - t0))
     print("Elapsed time {:.3f} sec".format(time.time() - t0))
 
-    raw_input('Type any key to continue> ')
+    if args.debug:
+        raw_input('Type any key to continue> ')
 
     table = table1
     if args.debug:
@@ -293,9 +295,19 @@ if __name__ == '__main__':
     idxmatch, dr = xmatch_cat(table1=table1, table2=table2)
     print("Elapsed time %.3f seconds" % (time.time() - t0))
 
+    t0 = time.time()
+    idxmatch, dr = xmatch_cat(table1=table1, table2=table2,
+                              method=True)
+    print("Elapsed time %.3f seconds" % (time.time() - t0))
+
     # xmatch table2 and table1
     print()
     print('xmatch table2 to table1')
     t0 = time.time()
     idxmatch, dr = xmatch_cat(table1=table2, table2=table1)
+    print("Elapsed time %.3f seconds" % (time.time() - t0))
+
+    t0 = time.time()
+    idxmatch, dr = xmatch_cat(table1=table2, table2=table1,
+                              method=True)
     print("Elapsed time %.3f seconds" % (time.time() - t0))
