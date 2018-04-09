@@ -27,9 +27,16 @@ coordinates in a set of catalog coordinates.
 
 match_coordinates_sky is a function
 
-match_to_catalog_sky is a Skycoord method
+match_to_catalog_sky is a Skycoord method.
 
 Both return identical results
+
+For search_around_sky which returns 0 to n matches within a
+search radis the function and method have the same name.
+
+It would be convenient is maybe if the match_coordinates_sky function
+was renamed as match_to_catalog_sky. It would be worth checking that
+it does not already exist as a function name.
 
 
 ###  match_coordinates_sky
