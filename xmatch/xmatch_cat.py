@@ -97,26 +97,26 @@ def xmatch_cat(table1=None, table2=None,
     skycoord1 = SkyCoord(ra1, dec1, unit=units_radec1, frame='icrs')
     skycoord2 = SkyCoord(ra2, dec2, unit=units_radec2, frame='icrs')
 
-    # idx is an integer array into the first cordinate array to get the
-    # matched points for the second coorindate array.
+    # idx is an integer array into the second cordinate array to get the
+    # matched points for the second coordindate array.
     # Shape of idx matches the first coordinate array
-    idxmatch, d2d, d3d = match_coordinates_sky(skycoord1,
+    idxmatch2, d2d, d3d = match_coordinates_sky(skycoord1,
                                                skycoord2,
                                                nthneighbor=nthneighbor)
 
     # alternative 'method' form
-    # idxmatch, d2d, d3d = skycoord1.match_to_catalog_sky(skycoord2)
+    # idxmatch2, d2d, d3d = skycoord1.match_to_catalog_sky(skycoord2)
 
-    separation = skycoord1.separation(skycoord2[idxmatch])
+    separation = skycoord1.separation(skycoord2[idxmatch2])
 
     dra, ddec = \
-        skycoord1.spherical_offsets_to(skycoord2[idxmatch])
+        skycoord1.spherical_offsets_to(skycoord2[idxmatch2])
 
     if stats or verbose or debug:
         print('len(table1):', len(table1))
         print('len(table2):', len(table2))
-        print('len(idxmatch):', len(idxmatch))
-        print('idxmatch range:', np.min(idxmatch), np.max(idxmatch))
+        print('len(idxmatch2):', len(idxmatch2))
+        print('idxmatch range:', np.min(idxmatch2), np.max(idxmatch2))
         print('d2d range:', np.min(d2d), np.max(d2d))
         print('d2d range:', np.min(d2d).arcsec, np.max(d2d).arcsec)
         print('d2d median:', np.median(d2d).arcsec)
@@ -159,7 +159,7 @@ def xmatch_cat(table1=None, table2=None,
     # as a list or could be dict; check if scales from 10^3 -> 10^6 -> 10^9
     drplus = [dra, ddec, dr]
 
-    print(len(idxmatch), len(dr))
+    print(len(idxmatch2), len(dr))
     print(len(drplus), len(drplus[0]), len(drplus[1]), len(drplus[2]))
 
-    return idxmatch, dr
+    return idxmatch2, dr
