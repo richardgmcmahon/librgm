@@ -3,6 +3,12 @@
 Various high level positional cross matching functions based on astropy
 that are under development.
 
+The goal is to be as easy to use as TOPCAT and STILTS and give comparable results:
+
+* STILTS: http://www.star.bris.ac.uk/~mbt/stilts/sun256/match.html
+* TOPCAT: http://www.star.bris.ac.uk/~mbt/topcat/sun253/sun253.html
+** http://www.star.bris.ac.uk/~mbt/topcat/sun253/sun253.html#matchCriteria
+
 e.g. checkplots is currently be rationalised. Please be patient
 
 They take either a ra, dec lists of values in units of degrees or astropy tables
