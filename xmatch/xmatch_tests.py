@@ -18,7 +18,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # 3rd party functions
-from astropy.table import Table, Column
+from astropy.table import Table, Column, hstack
 from astropy.coordinates import FK4, FK5
 from astropy.coordinates import Angle
 from astropy.stats import mad_std
@@ -36,7 +36,7 @@ from librgm.xmatch import xmatch_selfcheck
 def mk_data(ndata=10000, savefig=True,
             rarange=None, decrange=None,
             astrotable=True,
-            plots=True,
+            plots=True, showplot=False,
             projection=None):
     """
 
@@ -118,7 +118,10 @@ def mk_data(ndata=10000, savefig=True,
             print('Saving:', plotfile)
             plt.savefig(plotfile)
 
-        plt.show()
+        if showplot:
+            plt.show()
+
+        plt.close()
 
     nrows = len(ra)
     print('Number of rows:', nrows)
@@ -171,8 +174,14 @@ def getargs():
         "--decrange", default=[-90.0, 30.0], type=float, nargs=2,
         help="Declination range in degrees in form Deg Deg")
 
+    parser.add_argument("--showplot", action="store_true",
+                        help="optional to show plots")
+
     parser.add_argument("--projection", action="store_true",
                         help="optional verbose mode")
+
+    parser.add_argument("--multimatch", action="store_true",
+                        help="optional multimatch mode")
 
     parser.add_argument("--verbose", action="store_true",
                         help="optional matplotlib projection")
@@ -211,6 +220,7 @@ if __name__ == '__main__':
 
     args = getargs()
 
+    showplot = args.showplot
     debug = args.debug
 
     if args.verbose or args.debug:
@@ -219,7 +229,7 @@ if __name__ == '__main__':
         print('__file__:', __file__)
         help(xmatch_cat)
 
-    multimatch = True
+    multimatch = args.multimatch
     savefig = True
 
     ndata1 = args.n1
@@ -227,7 +237,7 @@ if __name__ == '__main__':
     if ndata2 == 0:
         ndata2 = ndata1
 
-    table1 = mk_data(ndata=ndata1, savefig=True)
+    table1 = mk_data(ndata=ndata1, savefig=True, showplot=showplot)
     table2 = mk_data(ndata=ndata2, savefig=True, plots=False)
     print('Input data created:', len(table1), len(table2))
     print("Elapsed time %.3f seconds" % (time.time() - t0))
@@ -235,11 +245,11 @@ if __name__ == '__main__':
     """RA, Dec nearest xmatch for two lists; returns pointers """
     print('table1 selfxmatch')
     t0 = time.time()
-    idxmatch, dr = xmatch_cat(table1=table1,
-                              selfmatch=True,
-                              stats=True,
-                              debug=False,
-                              verbose=True)
+    idx, dr = xmatch_cat(table1=table1,
+                         selfmatch=True,
+                         stats=True,
+                         debug=False,
+                         verbose=True)
     print("Elapsed time %.3f seconds" % (time.time() - t0))
     if args.debug:
         raw_input('Type any key to continue> ')
@@ -266,7 +276,9 @@ if __name__ == '__main__':
         print('Saving:', plotfile)
         plt.savefig(plotfile)
 
-    plt.show()
+    print('showplot:', showplot)
+    if showplot:
+        plt.show()
 
     print("Elapsed time %.3f seconds" % (time.time() - t0))
     print("Elapsed time {:.3f} sec".format(time.time() - t0))
@@ -282,11 +294,12 @@ if __name__ == '__main__':
     table.info('stats')
     rmax = 7200.0
     binsize = 60.0
+
     idx = xmatch_selfcheck(data=table, rmax=rmax, binsize=binsize,
-                           showplot=True, debug=debug)
+                           showplot=showplot, debug=debug)
 
 
-    # xmatch table1 and table2
+    # xmatch table1 to table2
     table1.info()
     table1.info('stats')
     table2.info()
@@ -296,31 +309,56 @@ if __name__ == '__main__':
     print('xmatch table1 to table2:', len(table1), len(table2))
     t0 = time.time()
     if not multimatch:
-        idxmatch, dr = xmatch_cat(table1=table1, table2=table2,
+        idx2, dr = xmatch_cat(table1=table1, table2=table2,
                                   stats=True,
                                   multimatch=False)
+
     if multimatch:
-        idxmatch, dr = xmatch_cat(table1=table1, table2=table2,
+        idx, dr = xmatch_cat(table1=table1, table2=table2,
                                   stats=True,
                                   seplimit=100.0,
                                   multimatch=True)
+        idx1 = idx[0]
+        idx2 = idx[1]
+        print()
+        print('Maximum separation:', np.max(dr))
+        print('len(idx1), len(idx2):', len(idx1), len(idx2))
+        print('Number of unique rows in idx1:', len(np.unique(idx1)))
+        print('Number of unique rows in idx2:', len(np.unique(idx2)))
+        print()
+
     print("Elapsed time %.3f seconds" % (time.time() - t0))
 
     t0 = time.time()
     print('method=True')
-    idxmatch, dr = xmatch_cat(table1=table1, table2=table2,
-                              stats=True,
-                              method=True)
+    if not multimatch:
+        idx, dr = xmatch_cat(table1=table1, table2=table2,
+                         stats=True,
+                         method=True)
+
+    if multimatch:
+        idx, dr = xmatch_cat(table1=table1, table2=table2,
+                                  stats=True,
+                                  seplimit=100.0,
+                                  multimatch=True,
+                                  method=True)
+        idx1 = idx[0]
+        idx2 = idx[1]
+        print()
+        print('Maximum separation:', np.max(dr))
+        print('len(idx1), len(idx2):', len(idx1), len(idx2))
+        print('Number of unique rows in idx1:', len(np.unique(idx1)))
+        print('Number of unique rows in idx2:', len(np.unique(idx2)))
+        print()
+
     print("Elapsed time %.3f seconds" % (time.time() - t0))
 
-    # xmatch table2 and table1
-    print()
-    print('xmatch table2 to table1')
-    t0 = time.time()
-    idxmatch, dr = xmatch_cat(table1=table2, table2=table1)
-    print("Elapsed time %.3f seconds" % (time.time() - t0))
+    # join the two tables:
+    print('join the two tables: table1 -> table2')
+    if not multimatch:
+        result = hstack([table1, table2[idx2]])
 
-    t0 = time.time()
-    idxmatch, dr = xmatch_cat(table1=table2, table2=table1,
-                              method=True)
-    print("Elapsed time %.3f seconds" % (time.time() - t0))
+    if multimatch:
+        result = hstack([table1[idx1], table2[idx2]])
+
+    result.info()

@@ -6,6 +6,8 @@ def xmatch_selfcheck(data=None,
                      rmax=10.0,
                      binsize=None,
                      plotfile=None,
+                     saveplot=True,
+                     showplot=False,
                      markersize=2.0,
                      nthneighbor=2,
                      suptitle="",
@@ -166,14 +168,16 @@ def xmatch_selfcheck(data=None,
     fig.subplots_adjust(right=0.95)
     plotid()
 
-    if plotfile != None:
+    if plotfile is None:
+        plotfile = 'xmatch_selfcheck.png'
+
+    if plotfile != None and saveplot:
         print('Saving plotfile:', plotfile)
         plt.savefig(plotfile)
 
-    if ('save' in keyword_parameter):
-        path_to_save = str(keyword_parameter['save'])
-        plt.savefig(path_to_save)
-    else:
+    if showplot:
         plt.show()
+
+    plt.close()
 
     return idx

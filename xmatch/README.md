@@ -17,7 +17,7 @@ column names are specified as arguments.
 
 See:
 
-* [Astropy astronomical coordinate package](http://docs.astropy.org/en/stable/coordinates/) (astropy.coordinates)¶
+* [Astropy astronomical coordinate package](http://docs.astropy.org/en/stable/coordinates/) (astropy.coordinates)
 * [Separations, Catalog Matching, and Related Functionality](http://docs.astropy.org/en/stable/coordinates/matchsep.html)
 * http://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html
 * http://docs.astropy.org/en/stable/api/astropy.coordinates.match_coordinates_sky.html
@@ -60,7 +60,12 @@ e.g.
 
 idx2 is index to object in skycoord2. idx2 has the same number of elements
 as skycoord1. i.e. len(idx2) = len(skycoord2)
-    
+
+You can create a new table using the columns from two tables using hstack.
+
+result = hstack([table1, table2[idx2])
+
+
 ### match_to_catalog_sky (SkyCoord method) [source](http://docs.astropy.org/en/stable/_modules/astropy/coordinates/sky_coordinate.html#SkyCoord.match_to_catalog_sky)
 
 
