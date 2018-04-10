@@ -120,20 +120,26 @@ def xmatch_cat(table1=None, table2=None,
 
     # alternative 'method' form
     if method:
-        idx2, d2d, d3d = \
-            skycoord1.match_to_catalog_sky(skycoord2,
-                                           nthneighbor=nthneighbor)
+        if not multimatch:
+            idx2, d2d, d3d = \
+                skycoord1.match_to_catalog_sky(skycoord2,
+                                              nthneighbor=nthneighbor)
+
+        if multimatch:
+            idx1, idx2, d2d, d3d = \
+                skycoord1.search_around_sky(skycoord2,
+                                            seplimit * u.arcsec)
+
+
+    # compute the separations and
     if not multimatch:
         separation = skycoord1.separation(skycoord2[idx2])
-
-    if multimatch:
-        separation = skycoord1[idx1].separation(skycoord2[idx2])
-
-    if not multimatch:
         dra, ddec = \
             skycoord1.spherical_offsets_to(skycoord2[idx2])
 
+
     if multimatch:
+        separation = skycoord1[idx1].separation(skycoord2[idx2])
         dra, ddec = \
             skycoord1[idx1].spherical_offsets_to(skycoord2[idx2])
 

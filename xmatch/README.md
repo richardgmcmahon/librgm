@@ -24,10 +24,9 @@ See:
 * http://docs.astropy.org/en/stable/api/astropy.coordinates.search_around_sky.html
 
     
-## Nearest or nth nearest neighbour match: match_coordinates_sky; match_to_catalog_sky
+## Nearest or nth nearest neighbour match
 
-
-Finds the nearest or nth neaarest neighbour on-sky matches for a coordinate or
+Find the nearest or nth neaarest neighbour on-sky matches for a coordinate or
 list of coordinates in catalog or table.
 
 * match_coordinates_sky is a function
@@ -63,17 +62,13 @@ as skycoord1. i.e. len(idx2) = len(skycoord2)
 
 You can create a new table using the columns from two tables using hstack.
 
-result = hstack([table1, table2[idx2])
+result = astropy.Table.hstack([table1, table2[idx2])
 
 
 ### match_to_catalog_sky (SkyCoord method) [source](http://docs.astropy.org/en/stable/_modules/astropy/coordinates/sky_coordinate.html#SkyCoord.match_to_catalog_sky)
 
 
 * http://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord.match_to_catalog_sky
-
-
-For search_around_sky which returns 0 to n matches within a
-search radius the function and method have the same name.
 
 It would be convenient is maybe if the match_coordinates_sky function
 was renamed as match_to_catalog_sky. It would be worth checking that
@@ -86,10 +81,15 @@ match_to_catalog_sky(catalogcoord, nthneighbor=1)
 idx, d2d, d3d = skycoord1.match_to_catalog_sky(skycoord2)
 ```
 
-
-## Multiple matching within a radius: search_around_sky
+## Multiple matching within a radius
 
 called Searching Around Coordinates in astropy
+
+* search_around_sky is the name of both the function and method
+
+For search_around_sky which returns 0 to n matches within a
+search radius the function and method have the same name.
+
 
 SkyCoord.search_around_sky like SkyCoord match_to_catalog_sky is a
 SkyCoord method.
