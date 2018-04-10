@@ -23,6 +23,11 @@ See:
 * http://docs.astropy.org/en/stable/api/astropy.coordinates.match_coordinates_sky.html
 * http://docs.astropy.org/en/stable/api/astropy.coordinates.search_around_sky.html
 
+
+* [Source code for astropy.coordinates.matching](http://docs.astropy.org/en/stable/_modules/astropy/coordinates/matching.html)
+* [Source code for astropy.coordinates.sky_coordinate](http://docs.astropy.org/en/stable/_modules/astropy/coordinates/sky_coordinate.html)
+
+
     
 ## Nearest or nth nearest neighbour match
 
@@ -86,6 +91,8 @@ idx, d2d, d3d = skycoord1.match_to_catalog_sky(skycoord2)
 called Searching Around Coordinates in astropy
 
 * search_around_sky is the name of both the function and method
+
+
 
 For search_around_sky which returns 0 to n matches within a
 search radius the function and method have the same name.
