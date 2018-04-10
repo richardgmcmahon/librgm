@@ -28,9 +28,10 @@ sys.path.append("/home/rgm/soft/python/lib/")
 from librgm.plotid import plotid
 from librgm.plot_radec import plot_radec
 from librgm.xmatch import xmatch_cat
+from librgm.xmatch import xmatch_selfcheck
+
 from librgm.xmatch import xmatch_checkplot
 from librgm.xmatch import xmatch_checkplots
-from librgm.xmatch import xmatch_selfcheck
 
 
 def mk_data(ndata=10000, savefig=True,
@@ -52,7 +53,7 @@ def mk_data(ndata=10000, savefig=True,
     dec = np.rad2deg(np.arccos(cosdec)) - 90.0
 
     if plots:
-        plt.figure(figsize=(8,7))
+        plt.figure(figsize=(8, 7))
 
         # aitiff, hammer, mollweide
         # projection = 'aitoff'
@@ -158,7 +159,7 @@ def getargs():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
         description=description)
 
-    n1_default = int(1e4)
+    n1_default = int(1e5)
     parser.set_defaults(n1=n1_default)
     parser.add_argument("--n1", type=int,
                         help="Number of data points in table 1")
@@ -168,17 +169,15 @@ def getargs():
 
     parser.add_argument(
         "--rarange", default=[0.0, 360.0], type=float, nargs=2,
-        help="RA range in hours in form Deg Deg")
+        help="RA range in hours in form Degree Degree")
 
     parser.add_argument(
         "--decrange", default=[-90.0, 30.0], type=float, nargs=2,
-        help="Declination range in degrees in form Deg Deg")
-
+        help="Declination range in degrees in form Degree Degree")
 
     parser.add_argument(
         "--seplimit", default=100.0, type=float,
         help="maximum separation for multimatch mode")
-
 
     parser.add_argument("--showplot", action="store_true",
                         help="optional to show plots")
@@ -256,6 +255,7 @@ if __name__ == '__main__':
     print('Input data created:', len(table1), len(table2))
     print("Elapsed time %.3f seconds" % (time.time() - t0))
 
+
     """RA, Dec nearest xmatch for two lists; returns pointers """
     print('table1 selfxmatch')
     t0 = time.time()
@@ -267,23 +267,43 @@ if __name__ == '__main__':
     print("Elapsed time %.3f seconds" % (time.time() - t0))
     if args.debug:
         raw_input('Type any key to continue> ')
+    dr_mean = np.average(dr)
     dr_median = np.median(dr)
     dr_mad_std = mad_std(dr)
     numpoints = len(dr)
 
 
+    plt.figure(figsize=(12, 6))
+    plt.subplot(1, 2, 1)
+
     """Default is taken from the rcParam hist.bins."""
     prefix = os.path.basename(__file__)
     plt.suptitle(prefix + ': ' + 'dr histogram')
-    plot_label = ("median:  {:.2f} arcsec".format(dr_median) + '\n' +
-                  "mad_std: {:.2f} arcsec".format(dr_mad_std) + '\n' +
-                  "npts: {}".format(numpoints))
-    plt.hist(dr, bins=100, fill=False, histtype='step',
+    plot_label = ("npts: {}".format(numpoints) + '\n' +
+                  "mean:  {:.2f} arcsec".format(dr_mean) + '\n' +
+                  "median:  {:.2f} arcsec".format(dr_median) + '\n' +
+                  "mad_std: {:.2f} arcsec".format(dr_mad_std))
+
+    n_bins = 100
+    plt.hist(dr, bins=n_bins, fill=False, histtype='step',
              label=plot_label)
     plt.grid()
     plt.xlabel('Pairwise radial separation (arcsec)')
     plt.ylabel('Frequency per bin')
     plt.legend()
+
+
+    plt.subplot(1, 2, 2)
+    # plot the cumulative histogram
+    # based on https://matplotlib.org/examples/statistics/histogram_demo_cumulative.html
+    plt.hist(dr, bins=n_bins, normed=1, histtype='step',
+                           cumulative=True)
+
+    # Overlay a reversed cumulative histogram.
+    plt.hist(dr, bins=n_bins, normed=1, histtype='step',
+             cumulative=-1)
+    plt.grid()
+    plotid()
 
     if savefig:
         plotfile = prefix + '_dr.png'
@@ -312,7 +332,6 @@ if __name__ == '__main__':
     idx = xmatch_selfcheck(data=table, rmax=rmax, binsize=binsize,
                            showplot=showplot, debug=debug)
 
-
     # xmatch table1 to table2
     table1.info()
     table1.info('stats')
@@ -325,36 +344,14 @@ if __name__ == '__main__':
     if not multimatch:
         idx2, dr = xmatch_cat(table1=table1, table2=table2,
                                   stats=True,
-                                  multimatch=False)
+                                  multimatch=False,
+                                  method=method)
 
     if multimatch:
         idx, dr = xmatch_cat(table1=table1, table2=table2,
                                   stats=True,
                                   seplimit=seplimit,
-                                  multimatch=True)
-        idx1 = idx[0]
-        idx2 = idx[1]
-        print()
-        print('Maximum separation:', np.max(dr))
-        print('len(idx1), len(idx2):', len(idx1), len(idx2))
-        print('Number of unique rows in idx1:', len(np.unique(idx1)))
-        print('Number of unique rows in idx2:', len(np.unique(idx2)))
-        print()
-
-    print("Elapsed time %.3f seconds" % (time.time() - t0))
-
-    t0 = time.time()
-    print('method=', method)
-    if not multimatch:
-        idx, dr = xmatch_cat(table1=table1, table2=table2,
-                         stats=True,
-                             method=method)
-
-    if multimatch:
-        idx, dr = xmatch_cat(table1=table1, table2=table2,
-                                  stats=True,
-                                  seplimit=seplimit,
-                                  multimatch=True,
+                                  multimatch=multimatch,
                                   method=method)
         idx1 = idx[0]
         idx2 = idx[1]
@@ -367,6 +364,7 @@ if __name__ == '__main__':
 
     print("Elapsed time %.3f seconds" % (time.time() - t0))
 
+    t0 = time.time()
     # join the two tables:
     print('join the two tables: table1 -> table2')
     if not multimatch:
