@@ -9,7 +9,7 @@ The goal is to be as easy to use as TOPCAT and STILTS and give comparable result
 * TOPCAT: http://www.star.bris.ac.uk/~mbt/topcat/sun253/sun253.html
   * http://www.star.bris.ac.uk/~mbt/topcat/sun253/sun253.html#matchCriteria
 
-e.g. checkplot# is currently be rationalised. Please be patient
+Note: checkplot# is currently be rationalised. Please be patient
 
 The fucntions take either a ra, dec lists of values in units of degrees
 or as astropy table columns with aribitrary units. For astropy tables the
@@ -23,25 +23,23 @@ See:
 * http://docs.astropy.org/en/stable/api/astropy.coordinates.search_around_sky.html
 
     
-## Nearest or nth nearest neighbour from pairwise match: match_coordinates_sky; match_to_catalog_sky
+## Nearest or nth nearest neighbour match: match_coordinates_sky; match_to_catalog_sky
 
 Finds the nearest or nth neighbour on-sky matches of a coordinate or
 coordinates in a set of catalog coordinates.
 
-# match_coordinates_sky is a function
-
-# match_to_catalog_sky is a Skycoord method.
+* match_coordinates_sky is a function
+* match_to_catalog_sky is a Skycoord method.
 
 Both return identical results.
 
-
-###  match_coordinates_sky
+###  match_coordinates_sky [[source] (http://docs.astropy.org/en/stable/_modules/astropy/coordinates/sky_coordinate.html#SkyCoord.match_to_catalog_sky)]
     
 * http://docs.astropy.org/en/stable/api/astropy.coordinates.match_coordinates_sky.html
 
 
 ```   
-def match_coordinates_sky(matchcoord,
+    match_coordinates_sky(matchcoord,
                           catalogcoord,
                           nthneighbor=1,
                           storekdtree=u'_kdtree_sky')
@@ -54,10 +52,12 @@ def match_coordinates_sky(matchcoord,
 e.g.
 
 ```
-idx2, d2d, d3d = match_coordinates_sky(skycoord1, skycoord2)  
+    idx2, d2d, d3d = match_coordinates_sky(skycoord1, skycoord2)  
 
 ```
 
+idx2 is index to object in skycoord2. idx2 has the same number of elements
+as skycoord1. i.e. len(idx2) = len(skycoord2)
     
 ### SkyCoord.match_to_catalog_sky (SkyCoord method)
 
@@ -71,14 +71,13 @@ It would be convenient is maybe if the match_coordinates_sky function
 was renamed as match_to_catalog_sky. It would be worth checking that
 it does not already exist as a function name.
 
-
-
 match_to_catalog_sky(catalogcoord, nthneighbor=1)
 
 
 ```
 idx, d2d, d3d = skycoord1.match_to_catalog_sky(skycoord2)
 ```
+
 
 ## Multiple matching within a radius: search_around_sky
 
