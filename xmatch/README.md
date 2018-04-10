@@ -33,7 +33,7 @@ coordinates in a set of catalog coordinates.
 
 Both return identical results.
 
-###  match_coordinates_sky [[source] (http://docs.astropy.org/en/stable/_modules/astropy/coordinates/sky_coordinate.html#SkyCoord.match_to_catalog_sky)]
+###  match_coordinates_sky [source] (http://docs.astropy.org/en/stable/_modules/astropy/coordinates/sky_coordinate.html#SkyCoord.match_to_catalog_sky)
     
 * http://docs.astropy.org/en/stable/api/astropy.coordinates.match_coordinates_sky.html
 
