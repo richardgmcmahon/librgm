@@ -9,40 +9,30 @@ The goal is to be as easy to use as TOPCAT and STILTS and give comparable result
 * TOPCAT: http://www.star.bris.ac.uk/~mbt/topcat/sun253/sun253.html
   * http://www.star.bris.ac.uk/~mbt/topcat/sun253/sun253.html#matchCriteria
 
-e.g. checkplots is currently be rationalised. Please be patient
+e.g. checkplot# is currently be rationalised. Please be patient
 
-They take either a ra, dec lists of values in units of degrees or astropy tables
-with aribitrary units. For astropy tables the column names are specified
-as arguments.
+The fucntions take either a ra, dec lists of values in units of degrees
+or as astropy table columns with aribitrary units. For astropy tables the
+column names are specified as arguments.
 
 See:
 
-* http://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html
 * http://docs.astropy.org/en/stable/coordinates/matchsep.html
+* http://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html
 * http://docs.astropy.org/en/stable/api/astropy.coordinates.match_coordinates_sky.html
 * http://docs.astropy.org/en/stable/api/astropy.coordinates.search_around_sky.html
 
-Astropy has two ‘methods’ or ‘functions’: One is a function and the other
-is a SkyCoord method which can lead to some confusion. i.e. it confused me.
-
     
-## match_coordinates_sky and match_to_catalog_sky
+## Nearest or nth nearest neighbour from pairwise match: match_coordinates_sky; match_to_catalog_sky
 
 Finds the nearest or nth neighbour on-sky matches of a coordinate or
 coordinates in a set of catalog coordinates.
 
-match_coordinates_sky is a function
+# match_coordinates_sky is a function
 
-match_to_catalog_sky is a Skycoord method.
+# match_to_catalog_sky is a Skycoord method.
 
-Both return identical results
-
-For search_around_sky which returns 0 to n matches within a
-search radis the function and method have the same name.
-
-It would be convenient is maybe if the match_coordinates_sky function
-was renamed as match_to_catalog_sky. It would be worth checking that
-it does not already exist as a function name.
+Both return identical results.
 
 
 ###  match_coordinates_sky
@@ -51,9 +41,10 @@ it does not already exist as a function name.
 
 
 ```   
-     match_coordinates_sky(
-         matchcoord, catalogcoord, nthneighbor=1,
-         storekdtree=u'_kdtree_sky')
+def match_coordinates_sky(matchcoord,
+                          catalogcoord,
+                          nthneighbor=1,
+                          storekdtree=u'_kdtree_sky')
 
      .....
 
@@ -63,14 +54,24 @@ it does not already exist as a function name.
 e.g.
 
 ```
-idx, d2d, d3d = match_coordinates_sky(skycoord1, skycoord2)  
+idx2, d2d, d3d = match_coordinates_sky(skycoord1, skycoord2)  
 
 ```
 
     
-### SkyCoord.match_to_catalog_sky
+### SkyCoord.match_to_catalog_sky (SkyCoord method)
 
 * http://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord.match_to_catalog_sky
+
+
+For search_around_sky which returns 0 to n matches within a
+search radius the function and method have the same name.
+
+It would be convenient is maybe if the match_coordinates_sky function
+was renamed as match_to_catalog_sky. It would be worth checking that
+it does not already exist as a function name.
+
+
 
 match_to_catalog_sky(catalogcoord, nthneighbor=1)
 
