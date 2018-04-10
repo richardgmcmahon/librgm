@@ -17,7 +17,7 @@ column names are specified as arguments.
 
 See:
 
-* http://docs.astropy.org/en/stable/coordinates/matchsep.html
+* [Separations, Catalog Matching, and Related Functionality](http://docs.astropy.org/en/stable/coordinates/matchsep.html)
 * http://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html
 * http://docs.astropy.org/en/stable/api/astropy.coordinates.match_coordinates_sky.html
 * http://docs.astropy.org/en/stable/api/astropy.coordinates.search_around_sky.html
@@ -35,9 +35,6 @@ list of coordinates in catalog or table.
 Both return identical results.
 
 ###  match_coordinates_sky [source](http://docs.astropy.org/en/stable/_modules/astropy/coordinates/matching.html#match_coordinates_sky)
-
-
-http://docs.astropy.org/en/stable/_modules/astropy/coordinates/sky_coordinate.html#SkyCoord.match_to_catalog_sky)
     
 * http://docs.astropy.org/en/stable/api/astropy.coordinates.match_coordinates_sky.html
 
@@ -63,7 +60,7 @@ e.g.
 idx2 is index to object in skycoord2. idx2 has the same number of elements
 as skycoord1. i.e. len(idx2) = len(skycoord2)
     
-### SkyCoord.match_to_catalog_sky (SkyCoord method) [source](http://docs.astropy.org/en/stable/_modules/astropy/coordinates/sky_coordinate.html#SkyCoord.match_to_catalog_sky)
+### match_to_catalog_sky (SkyCoord method) [source](http://docs.astropy.org/en/stable/_modules/astropy/coordinates/sky_coordinate.html#SkyCoord.match_to_catalog_sky)
 
 
 * http://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord.match_to_catalog_sky
