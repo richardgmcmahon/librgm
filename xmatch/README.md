@@ -94,6 +94,8 @@ search radius the function and method have the same name.
 SkyCoord.search_around_sky like SkyCoord match_to_catalog_sky is a
 SkyCoord method.
 
+### method [source](http://docs.astropy.org/en/stable/_modules/astropy/coordinates/sky_coordinate.html#SkyCoord.search_around_sky)
+
 * method: http://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord.search_around_sky
 
 ```
@@ -104,6 +106,7 @@ idx1, idx2, d2d, d3d = \
     SkyCoord1.search_around_sky(SkyCoord2, 10.0*u.arcsec)
 ```
 
+### function [source](http://docs.astropy.org/en/stable/_modules/astropy/coordinates/matching.html#search_around_sky)
 
 * function: http://docs.astropy.org/en/stable/api/astropy.coordinates.search_around_sky.html
 
