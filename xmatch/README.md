@@ -25,15 +25,19 @@ See:
     
 ## Nearest or nth nearest neighbour match: match_coordinates_sky; match_to_catalog_sky
 
-Finds the nearest or nth neighbour on-sky matches of a coordinate or
-coordinates in a set of catalog coordinates.
+
+Finds the nearest or nth neaarest neighbour on-sky matches for a coordinate or
+list of coordinates in catalog or table.
 
 * match_coordinates_sky is a function
 * match_to_catalog_sky is a Skycoord method.
 
 Both return identical results.
 
-###  match_coordinates_sky [source](http://docs.astropy.org/en/stable/_modules/astropy/coordinates/sky_coordinate.html#SkyCoord.match_to_catalog_sky)
+###  match_coordinates_sky [source](http://docs.astropy.org/en/stable/_modules/astropy/coordinates/matching.html#match_coordinates_sky)
+
+
+http://docs.astropy.org/en/stable/_modules/astropy/coordinates/sky_coordinate.html#SkyCoord.match_to_catalog_sky)
     
 * http://docs.astropy.org/en/stable/api/astropy.coordinates.match_coordinates_sky.html
 
@@ -59,7 +63,8 @@ e.g.
 idx2 is index to object in skycoord2. idx2 has the same number of elements
 as skycoord1. i.e. len(idx2) = len(skycoord2)
     
-### SkyCoord.match_to_catalog_sky (SkyCoord method)
+### SkyCoord.match_to_catalog_sky (SkyCoord method) [source](http://docs.astropy.org/en/stable/_modules/astropy/coordinates/sky_coordinate.html#SkyCoord.match_to_catalog_sky)
+
 
 * http://docs.astropy.org/en/stable/api/astropy.coordinates.SkyCoord.html#astropy.coordinates.SkyCoord.match_to_catalog_sky
 
