@@ -174,11 +174,20 @@ def getargs():
         "--decrange", default=[-90.0, 30.0], type=float, nargs=2,
         help="Declination range in degrees in form Deg Deg")
 
+
+    parser.add_argument(
+        "--seplimit", default=100.0, type=float,
+        help="maximum separation for multimatch mode")
+
+
     parser.add_argument("--showplot", action="store_true",
                         help="optional to show plots")
 
     parser.add_argument("--projection", action="store_true",
                         help="optional verbose mode")
+
+    parser.add_argument("--method", action="store_true",
+                        help="use method")
 
     parser.add_argument("--multimatch", action="store_true",
                         help="optional multimatch mode")
@@ -230,8 +239,13 @@ if __name__ == '__main__':
         help(xmatch_cat)
 
     multimatch = args.multimatch
+    seplimit = args.seplimit
+    method = args.method
+
+
     savefig = True
 
+    # create the two lists; default is two lists with the same length
     ndata1 = args.n1
     ndata2 = args.n2
     if ndata2 == 0:
@@ -316,7 +330,7 @@ if __name__ == '__main__':
     if multimatch:
         idx, dr = xmatch_cat(table1=table1, table2=table2,
                                   stats=True,
-                                  seplimit=100.0,
+                                  seplimit=seplimit,
                                   multimatch=True)
         idx1 = idx[0]
         idx2 = idx[1]
@@ -330,18 +344,18 @@ if __name__ == '__main__':
     print("Elapsed time %.3f seconds" % (time.time() - t0))
 
     t0 = time.time()
-    print('method=True')
+    print('method=', method)
     if not multimatch:
         idx, dr = xmatch_cat(table1=table1, table2=table2,
                          stats=True,
-                         method=True)
+                             method=method)
 
     if multimatch:
         idx, dr = xmatch_cat(table1=table1, table2=table2,
                                   stats=True,
-                                  seplimit=100.0,
+                                  seplimit=seplimit,
                                   multimatch=True,
-                                  method=True)
+                                  method=method)
         idx1 = idx[0]
         idx2 = idx[1]
         print()
