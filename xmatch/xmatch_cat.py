@@ -200,7 +200,7 @@ def xmatch_cat(table1=None, table2=None,
 
     # could add option to return dr, dra, ddec
     if not multimatch:
-        return idx2, dr
+        return idx2, dr, dra, ddec
 
     if multimatch:
-        return (idx1, idx2), dr
+        return (idx1, idx2), dr, dra, ddec

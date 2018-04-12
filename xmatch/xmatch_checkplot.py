@@ -24,6 +24,8 @@ def xmatch_checkplot(ra1, dec1, ra2, dec2,
 
     Forked from Sophie Reed's version on 20160319
 
+    uses hist2d; a point based option would be useful
+
     Plot can either be square, the square inscribes the circle.
     Or all which has all the points in the matching circle.
     Square make the histograms more comparable.
@@ -58,6 +60,8 @@ def xmatch_checkplot(ra1, dec1, ra2, dec2,
 
     ndata = len(ra1)
 
+
+    # this could probably be simplified and speeded up
     n = 0
     xs = []
     ys = []
@@ -135,10 +139,13 @@ def xmatch_checkplot(ra1, dec1, ra2, dec2,
     ax2 = plt.subplot(gs[2])
     # ax2.plot(xs, ys, "k+")
     if len(xs) > 100:
-        plt.hist2d(xs, ys, bins=100, cmap="binary", norm=LogNorm(),
-            range=limits)
+        plt.hist2d(xs, ys, bins=100,
+                   cmap="binary",
+                   norm=LogNorm(),
+                   range=limits)
     else:
         plt.plot(xs, ys, "k.", ms=2)
+
     ax2.set_ylim(-1*width, width)
     ax2.set_xlim(-1*width, width)
     ax2.set_xlabel('Delta RA /"')

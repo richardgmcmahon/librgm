@@ -1,6 +1,7 @@
 from __future__ import (division, print_function)
 
-def xmatch_checkplots(table1=None, table2=None, idxmatch=None,
+def xmatch_checkplots(table1=None, idxmatch1=None,
+                      table2=None, idxmatch2=None,
                           colnames_radec1=['ra', 'dec'],
                           colnames_radec2=['ra', 'dec'],
                           units_radec1=['degree', 'degree'],
@@ -18,8 +19,8 @@ def xmatch_checkplots(table1=None, table2=None, idxmatch=None,
     """
     import numpy as np
 
-    import xmatch_checkplot
-    import xmatch_checkplot0
+    from librgm.xmatch import xmatch_checkplot
+    from librgm.xmatch import xmatch_checkplot0
 
     if suptitle is None:
         suptitle = ''
@@ -42,16 +43,23 @@ def xmatch_checkplots(table1=None, table2=None, idxmatch=None,
     if units_radec2[1].find('rad') >= 0:
        dec2 = np.rad2deg(table2[colnames_radec2[1]])
 
-
     # suptitle = plotfile_label + 'nthN:' + str(nthneighbor)
     # suptitle = plotfile_label
     plotfile = 'xmatch_cat' + plotfile_label + '_a_checkplot.png'
 
-    ra2_xmatch = ra2[idxmatch]
-    dec2_xmatch = dec2[idxmatch]
+    if idxmatch1 is None:
+        ra1_xmatch = ra1
+        dec1_xmatch = dec1
+    if idxmatch1 is not None:
+        ra1_xmatch = ra1[idxmatch1]
+        dec1_xmatch = dec1[idxmatch1]
+
+    ra2_xmatch = ra2[idxmatch2]
+    dec2_xmatch = dec2[idxmatch2]
 
     xmatch_checkplot.xmatch_checkplot(
-        ra1, dec1, ra2_xmatch, dec2_xmatch,
+        ra1_xmatch, dec1_xmatch,
+        ra2_xmatch, dec2_xmatch,
         width=rmax,
         gtype='square',
         saveplot=True,

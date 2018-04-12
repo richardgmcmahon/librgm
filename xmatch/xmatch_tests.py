@@ -31,6 +31,7 @@ from librgm.xmatch import xmatch_cat
 from librgm.xmatch import xmatch_selfcheck
 
 from librgm.xmatch import xmatch_checkplot
+from librgm.xmatch import xmatch_checkplot0
 from librgm.xmatch import xmatch_checkplots
 
 
@@ -90,7 +91,6 @@ def mk_data(ndata=10000, savefig=True,
         plt.grid()
         plt.legend(loc='upper right')
 
-
         # 2nd plot
         plt.subplot(2, 1, 2)
         ydata = cosdec
@@ -112,6 +112,7 @@ def mk_data(ndata=10000, savefig=True,
         plt.grid()
 
         plotid()
+
 
 
         if savefig:
@@ -155,9 +156,10 @@ def getargs():
     __version__ = '0.1'
 
     description = 'xmatch tests'
+    epilog = ''
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-        description=description)
+        description=description, epilog=epilog)
 
     n1_default = int(1e5)
     parser.set_defaults(n1=n1_default)
@@ -176,7 +178,7 @@ def getargs():
         help="Declination range in degrees in form Degree Degree")
 
     parser.add_argument(
-        "--seplimit", default=100.0, type=float,
+        "--seplimit", default=5000.0, type=float,
         help="maximum separation for multimatch mode")
 
     parser.add_argument("--showplot", action="store_true",
@@ -251,7 +253,9 @@ if __name__ == '__main__':
         ndata2 = ndata1
 
     table1 = mk_data(ndata=ndata1, savefig=True, showplot=showplot)
+    colnames1_radec = ['ra', 'dec']
     table2 = mk_data(ndata=ndata2, savefig=True, plots=False)
+    colnames2_radec = ['ra', 'dec']
     print('Input data created:', len(table1), len(table2))
     print("Elapsed time %.3f seconds" % (time.time() - t0))
 
@@ -271,7 +275,6 @@ if __name__ == '__main__':
     dr_median = np.median(dr)
     dr_mad_std = mad_std(dr)
     numpoints = len(dr)
-
 
     plt.figure(figsize=(12, 6))
     plt.subplot(1, 2, 1)
@@ -293,16 +296,35 @@ if __name__ == '__main__':
     plt.legend()
 
 
-    plt.subplot(1, 2, 2)
+    # plt.subplot(1, 2, 2)
     # plot the cumulative histogram
     # based on https://matplotlib.org/examples/statistics/histogram_demo_cumulative.html
-    plt.hist(dr, bins=n_bins, normed=1, histtype='step',
-                           cumulative=True)
-
+    #plt.hist(dr, bins=n_bins, normed=1, histtype='step',
+    #                       cumulative=True)
     # Overlay a reversed cumulative histogram.
-    plt.hist(dr, bins=n_bins, normed=1, histtype='step',
-             cumulative=-1)
+    # plt.hist(dr, bins=n_bins, normed=1, histtype='step',
+    #         cumulative=-1)
+    #plt.grid()
+    #plotid()
+
+    plt.subplot(1, 2, 2)
+
+    data = dr
+    index = np.argsort(data, axis=None)
+    data_sorted = data[index]
+
+    # calculate the proportional values of samples
+    ndata = len(data)
+    ydata = (np.arange(1.0, ndata+1)) / ndata
+    plt.plot(data_sorted, ydata)
+    data_sorted = data_sorted[::-1]
+    plt.plot(data_sorted, ydata)
+
+    plt.xlabel('Pairwise radial separation (arcsec)')
+    plt.ylabel('Normalised Cumulative Frequency')
+
     plt.grid()
+
     plotid()
 
     if savefig:
@@ -364,6 +386,62 @@ if __name__ == '__main__':
 
     print("Elapsed time %.3f seconds" % (time.time() - t0))
 
+    if not multimatch:
+        ra1 = table1[colnames1_radec[0]]
+        dec1 = table1[colnames1_radec[1]]
+        ra2 = table1[colnames2_radec[0]][idx2]
+        dec2 = table1[colnames2_radec[1]][idx2]
+
+    if multimatch:
+        ra1 = table1[colnames1_radec[0]][idx1]
+        dec1 = table1[colnames1_radec[1]][idx1]
+        ra2 = table1[colnames2_radec[0]][idx2]
+        dec2 = table1[colnames2_radec[1]][idx2]
+
+    checkplot_width = 5000.0
+    xmatch_checkplot(ra1, dec1, ra2, dec2,
+                     figsize = (6.0, 6.0),
+                     width=checkplot_width,
+                     gtype="all",
+                     add_plotid=True,
+                     prefix=None,
+                     saveplot=True,
+                     plotfile="",
+                     plotfile_prefix=None,
+                     title="",
+                     suptitle="")
+
+
+    xmatch_checkplot0(ra1, dec1,
+                      ra2, dec2,
+                      width=checkplot_width,
+                      binsize=0.1,
+                      saveplot=True,
+                      markersize=1.0,
+                      plotfile='',
+                      suptitle=None)
+
+    if not multimatch:
+        table1x = table1
+    if multimatch:
+        tablex1 = table1[idx]
+
+    tablex2 = table2[idx2]
+
+    xmatch_checkplots(table1=table1,
+                      table2=table2, idxmatch=idx2,
+                      colnames_radec1=['ra', 'dec'],
+                      colnames_radec2=['ra', 'dec'],
+                      units_radec1=['degree', 'degree'],
+                      units_radec2=['degree', 'degree'],
+                      showplot=True,
+                      plotfile_label=None,
+                      suptitle=None,
+                      rmax=10.0, rmax2=None,
+                      debug=False,
+                      verbose=False)
+
+
     t0 = time.time()
     # join the two tables:
     print('join the two tables: table1 -> table2')
@@ -374,3 +452,5 @@ if __name__ == '__main__':
         result = hstack([table1[idx1], table2[idx2]])
 
     result.info()
+
+    result.write('xmatch_test.fits', overwrite=True)
