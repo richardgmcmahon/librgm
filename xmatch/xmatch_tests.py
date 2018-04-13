@@ -382,7 +382,7 @@ if __name__ == '__main__':
     plotid()
 
     if savefig:
-        plotfile = prefix + '_dr.png'
+        plotfile = prefix + '_dra_ddec.png'
         print('Saving:', plotfile)
         plt.savefig(plotfile)
 
