@@ -263,11 +263,11 @@ if __name__ == '__main__':
     """RA, Dec nearest xmatch for two lists; returns pointers """
     print('table1 selfxmatch')
     t0 = time.time()
-    idx, dr = xmatch_cat(table1=table1,
-                         selfmatch=True,
-                         stats=True,
-                         debug=False,
-                         verbose=True)
+    idx, dr, dra, ddec = xmatch_cat(table1=table1,
+                                    selfmatch=True,
+                                    stats=True,
+                                    debug=False,
+                                    verbose=True)
     print("Elapsed time %.3f seconds" % (time.time() - t0))
     if args.debug:
         raw_input('Type any key to continue> ')
@@ -336,6 +336,62 @@ if __name__ == '__main__':
     if showplot:
         plt.show()
 
+    plt.figure(figsize=(12, 6))
+    plt.subplot(1, 2, 1)
+
+    print(len(dra))
+    print(np.min(dra), np.max(dra))
+    dra_mean = np.average(dra)
+    dra_median = np.median(dra)
+    dra_mad_std = mad_std(dra)
+
+    plt.suptitle(prefix + ': ' + 'dra histogram')
+    plot_label = ("npts: {}".format(numpoints) + '\n' +
+                  "mean:  {:.2f} arcsec".format(dra_mean) + '\n' +
+                  "median:  {:.2f} arcsec".format(dra_median) + '\n' +
+                  "mad_std: {:.2f} arcsec".format(dra_mad_std))
+
+    n_bins = 100
+    plt.hist(dra, bins=n_bins, fill=False, histtype='step',
+             label=plot_label)
+    plt.grid()
+    plt.xlabel('RA pairwise radial separation (arcsec)')
+    plt.ylabel('Frequency per bin')
+    plt.legend()
+
+    plt.subplot(1, 2, 2)
+
+    ddec_mean = np.average(ddec)
+    ddec_median = np.median(ddec)
+    ddec_mad_std = mad_std(ddec)
+
+    plt.suptitle(prefix + ': ' + 'ddec histogram')
+    plot_label = ("npts: {}".format(numpoints) + '\n' +
+                  "mean:  {:.2f} arcsec".format(ddec_mean) + '\n' +
+                  "median:  {:.2f} arcsec".format(ddec_median) + '\n' +
+                  "mad_std: {:.2f} arcsec".format(ddec_mad_std))
+
+    n_bins = 100
+    plt.hist(ddec, bins=n_bins, fill=False, histtype='step',
+             label=plot_label)
+    plt.grid()
+    plt.xlabel('RA pairwise radial separation (arcsec)')
+    plt.ylabel('Frequency per bin')
+    plt.legend()
+
+    plotid()
+
+    if savefig:
+        plotfile = prefix + '_dr.png'
+        print('Saving:', plotfile)
+        plt.savefig(plotfile)
+
+    print('showplot:', showplot)
+    if showplot:
+        plt.show()
+
+
+
     print("Elapsed time %.3f seconds" % (time.time() - t0))
     print("Elapsed time {:.3f} sec".format(time.time() - t0))
 
@@ -364,17 +420,17 @@ if __name__ == '__main__':
     print('xmatch table1 to table2:', len(table1), len(table2))
     t0 = time.time()
     if not multimatch:
-        idx2, dr = xmatch_cat(table1=table1, table2=table2,
-                                  stats=True,
-                                  multimatch=False,
-                                  method=method)
+        idx2, dr, dra, ddec = xmatch_cat(table1=table1, table2=table2,
+                                         stats=True,
+                                         multimatch=False,
+                                         method=method)
 
     if multimatch:
-        idx, dr = xmatch_cat(table1=table1, table2=table2,
-                                  stats=True,
-                                  seplimit=seplimit,
-                                  multimatch=multimatch,
-                                  method=method)
+        idx, dr, dra, ddec = xmatch_cat(table1=table1, table2=table2,
+                                       stats=True,
+                                       seplimit=seplimit,
+                                       multimatch=multimatch,
+                                       method=method)
         idx1 = idx[0]
         idx2 = idx[1]
         print()

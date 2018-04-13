@@ -186,9 +186,11 @@ def xmatch_cat(table1=None, table2=None,
               median_ddec, mad_std_ddec)
         print()
 
+    # convert to arcsec for convenience
     separation = separation.arcsec
-
     dr = d2d.arcsec
+    dra = dra.arcsec
+    ddec = ddec.arcsec
 
     # return dra, ddec, dr in arcsec
     # as a list or could be dict; check if scales from 10^3 -> 10^6 -> 10^9
