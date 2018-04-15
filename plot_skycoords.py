@@ -1,6 +1,3 @@
-;; This buffer is for text that is not saved, and for Lisp evaluation.
-;; To create a file, visit it with C-x C-f and enter text in its buffer.
-
 def plot_skycoords(system='Galactic', axis='latitude',
                    units='degree', wrap_ra24hr=False,
                    overplot=False, label=True):
