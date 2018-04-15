@@ -1,189 +1,154 @@
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
+import os
+import sys
 import time
 
 import numpy as np
-from matplotlib import pyplot as plt
-
-# from astropy.coordinates import Angle
+import matplotlib.pyplot as plt
+from astropy.table import Table
 from astropy.coordinates import SkyCoord
-import astropy.units as units
+from astropy.coordinates import BarycentricTrueEcliptic
+from astropy import units as units
 
+# import private functions
+sys.path.append("/home/rgm/soft/python/lib/")
 from librgm.plotid import plotid
 
-def plot_radec(ra=None, dec=None,
-               table=None,
-               xcolname='ra', ycolname='dec',
-               rarange=None,
-               decrange=None,
-               system='equatorial',
+def plot_radec(table=None,
+               xcolname='ra',
+               ycolname='dec',
+               ra=None,
+               dec=None,
                frame='equatorial',
                projection='cartesian',
-               aspect=None,
                figsize=(8.0, 8.0),
                title=None,
                suptitle=None,
-               xlabel=None,
-               ylabel=None,
-               plotlabel='',
-               plotstyle=None,
-               linestyle=None,
-               markersize=None,
-               marker='+',
-               color='b',
-               showplots=False,
                plotfile=None,
                plotfile_prefix=None,
-               plotfile_suffix=None,
-               noplotid=False,
-               legend=True,
-               plotdir='./',
-               savefig=True,
-               overplot=False,
+               marker='o',
+               markersize=0.5,
+               color='b',
+               markeredgecolor='b',
+               alpha=1.0,
+               linestyle=None,
+               showplot=False,
                verbose=False,
                debug=False):
-
-
     """
 
     assumes units are degree
 
-    Supports ra, dec lists or astropy table
+    subplot projections need angles to be in radians so conversion from
+    degrees to radians is needed
 
-    http://docs.astropy.org/en/stable/coordinates/skycoord.html#example-1-plotting-random-data-in-aitoff-projection
-
-    http://www.astropy.org/astropy-tutorials/plot-catalog.html
-
-    from astropy.coordinates import SkyCoord
-    from astropy.coordinates import ICRS, Galactic, FK4, FK5
-    from astropy.coordinates import BarycentricTrueEcliptic
-    from astropy import units
-
-    skycoords = SkyCoord(ra=ra, dec=dec, units='deg')
-    galactic = skycoords.galactic
-
-    xdata = galactic.l.wrap_at(180*units.deg)
-    ydata = galactic.b.wrap_at(180*units.deg)
-    plot(xdata, ydata)
-
-    skycoords_ecliptic = skycoords.transform_to(BarycentricTrueEcliptic)
-
+    ra, dec can be as lists or table columns
 
     """
-    #plt.setp(lines, edgecolors='None')
+    import time
+
+    t0 = time.time()
 
     plt.figure(num=None, figsize=figsize)
-    if not overplot:
-        plt.figure(num=None, figsize=figsize)
-
-        if projection == "aitoff":
-            plt.subplot(111, projection="aitoff")
-
+    if projection != "cartesian":
+        plt.subplot(111, projection="aitoff")
 
     if table is not None:
-       ra = table[xcolname]
-       dec = table[ycolname]
+        ra = table[xcolname]
+        dec = table[ycolname]
 
-    if frame == 'equatorial' or system == 'equatorial':
+    print(frame, projection)
+    if frame == 'equatorial':
         if projection == 'cartesian':
             xdata = ra
             ydata = dec
 
+        # convert to radians and wrap around at 180degrees so 0 is
+        # in middle and range is -180 to +180 degrees althougf input
+        # is in radians.
         if projection != 'cartesian':
             skycoords = SkyCoord(ra=ra, dec=dec, unit='deg')
             xdata = skycoords.ra.wrap_at(180 * units.deg).radian
             ydata = skycoords.dec.radian
 
-    if str.lower(system) != 'equatorial':
+    if frame != 'equatorial':
         skycoords = SkyCoord(ra=ra, dec=dec, unit='deg')
 
+    if frame == 'galactic':
         # convert ra, dec to galactic
-        if str.lower(system) == 'galactic':
-           galactic = skycoords.galactic
-           xdata = galactic.l.degree
-           ydata = galactic.b.degree
+        galactic = skycoords.galactic
+        if projection == 'cartesian':
+            xdata = galactic.l.degree
+            ydata = galactic.b.degree
 
-        # convert ra, dec to ecliptic
-        if str.lower(system) == 'ecliptic':
-           pass
+        if projection != 'cartesian':
+            xdata = galactic.l.wrap_at(180 * units.deg).radian
+            ydata = galactic.b.radian
 
+    if frame == 'ecliptic':
+        skycoords_ecliptic = skycoords.transform_to(BarycentricTrueEcliptic)
+        if projection == 'cartesian':
+            xdata = skycoords_ecliptic.lon.degree
+            ydata = skycoords_ecliptic.lat.degree
 
-    if verbose or debug:
-        print('RA range: ', np.min(xdata), np.max(xdata))
-        print('Dec range: ', np.min(ydata), np.max(ydata))
-        print('units: ', units)
+        if projection != 'cartesian':
+            xdata = skycoords_ecliptic.lon.wrap_at(180 * units.deg).radian
+            ydata = skycoords_ecliptic.lat.radian
 
-    if projection == 'equatorial':
+    ndata = len(xdata)
+    xmin = np.min(xdata)
+    xmax = np.max(xdata)
+    ymin = np.min(ydata)
+    ymax = np.max(ydata)
 
-        if rarange is None:
-            plt.xlim([np.min(xdata), np.max(xdata)])
-        if rarange is not None:
-            plt.xlim(rarange)
-
-        if decrange is None:
-            plt.ylim([np.min(ydata), np.max(ydata)])
-        if decrange is not None:
-            plt.ylim(decrange)
-
-    if markersize is None:
-        markersize=1.0
-
-    ndata=len(xdata)
     print('Number of points:', ndata)
-    if plotstyle is None:
-        plt.plot(xdata, ydata,
-                 marker='o', c=color,
-                 linestyle='None',
-                 markeredgecolor=color,
-                 markersize=markersize,
-                 label=plotlabel + str(ndata))
+    plt.plot(xdata, ydata,
+             marker=marker, color=color,
+             markersize=markersize,
+             alpha=alpha,
+             markeredgecolor=markeredgecolor,
+             linestyle='None',
+             label=str(ndata))
 
-    if plotstyle is not None:
-      if verbose: print('plotstyle: ', plotstyle)
-      plt.plot(xdata, ydata, plotstyle,
-               markeredgecolor=None,
-               markersize=markersize)
-    #plotid.plotid()
-
-
-    plt.xlabel('RA')
-    if xlabel != None:
-        plt.xlabel(xlabel)
-
-    plt.ylabel('Dec')
-    if ylabel != None:
-        plt.ylabel(ylabel)
-    if title != None:
-        plt.title(title)
-    if suptitle != None:
-        plt.suptitle(suptitle)
-
-    if legend:
-        plt.legend()
+    if projection == 'cartesian':
+        plt.xlim(xmin, xmax)
+        plt.ylim(ymin, ymax)
 
     plt.grid()
+    plt.legend(loc='upper right')
 
-    if not noplotid:
-        plotid(progname=True)
 
-    if aspect == 'equal':
-        plt.axes().set_aspect('equal')
+    if title is not None:
+         plt.title(title)
+    if suptitle is not None:
+        plt.suptitle(suptitle, fontsize='medium')
 
-    if showplots:
-        plt.show()
+    if frame == 'equatorial':
+        plt.xlabel('Right Ascension: [degree] ' + xcolname)
+        plt.ylabel('Declination: [degree] ' + ycolname)
+
+    if frame == 'galactic':
+        plt.xlabel('Galactic Longitude (l) [degree]')
+        plt.ylabel('Galactic Latitute (b) [degree]')
+
+    if frame == 'ecliptic':
+        plt.xlabel('Ecliptic Longitude [degree]')
+        plt.ylabel('Ecliptic Latitute [degree]')
+
+    plotid()
 
     if plotfile is None and plotfile_prefix is None:
         plotfile_prefix = 'plot'
 
     plotfile = plotfile_prefix + '_' + projection + '_radec.png'
+    print('Saving:', plotfile)
+    plt.savefig(plotfile)
 
+    if showplot:
+        plt.show()
 
-    if savefig:
-        print('Saving: ', plotfile)
-        plt.savefig(plotfile)
+    plt.close()
 
-
-if __name__ == "__main__":
-    """
-    Example and tests
-
-    """
-    print('Need to add a demo here; see my astropy plot_galactic.py')
+    return
