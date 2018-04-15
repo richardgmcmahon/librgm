@@ -1,19 +1,19 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
-import os
 import sys
 import time
 
 import numpy as np
 import matplotlib.pyplot as plt
+
 from astropy.table import Table
 from astropy.coordinates import SkyCoord
 from astropy.coordinates import BarycentricTrueEcliptic
 from astropy import units as units
 
 # import private functions
-sys.path.append("/home/rgm/soft/python/lib/")
+# sys.path.append("/home/rgm/soft/python/lib/")
 from librgm.plotid import plotid
 
 def plot_radec(table=None,
@@ -21,13 +21,18 @@ def plot_radec(table=None,
                ycolname='dec',
                ra=None,
                dec=None,
+               rarange=None,
+               decrange=None,
                frame='equatorial',
                projection='cartesian',
+               aspect=None,
                figsize=(8.0, 8.0),
                title=None,
                suptitle=None,
-               plotfile=None,
-               plotfile_prefix=None,
+               xlabel=None,
+               ylabel=None,
+               plotlabel='',
+               plotstyle=None,
                marker='o',
                markersize=0.5,
                color='b',
@@ -35,6 +40,9 @@ def plot_radec(table=None,
                alpha=1.0,
                linestyle=None,
                showplot=False,
+               savefig=True,
+               plotfile=None,
+               plotfile_prefix=None,
                verbose=False,
                debug=False):
     """
