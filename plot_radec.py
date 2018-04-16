@@ -26,6 +26,7 @@ def plot_radec(table=None,
                frame='equatorial',
                projection='cartesian',
                aspect=None,
+               overplot=False,
                figsize=(8.0, 8.0),
                title=None,
                suptitle=None,
@@ -58,16 +59,17 @@ def plot_radec(table=None,
     import time
 
     t0 = time.time()
+    print(frame, projection)
+    print(figsize)
 
     plt.figure(num=None, figsize=figsize)
     if projection != "cartesian":
-        plt.subplot(111, projection="aitoff")
+        plt.subplot(111, projection=projection)
 
     if table is not None:
         ra = table[xcolname]
         dec = table[ycolname]
 
-    print(frame, projection)
     if frame == 'equatorial':
         if projection == 'cartesian':
             xdata = ra
@@ -111,7 +113,8 @@ def plot_radec(table=None,
     ymin = np.min(ydata)
     ymax = np.max(ydata)
 
-    print('Number of points:', ndata)
+    print('Number of points:', ndata, type(xdata), type(ydata))
+    print(marker, markersize, alpha, color, markeredgecolor)
     plt.plot(xdata, ydata,
              marker=marker, color=color,
              markersize=markersize,

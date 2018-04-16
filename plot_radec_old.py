@@ -1,12 +1,13 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
+import sys
 import time
 
 import numpy as np
 from matplotlib import pyplot as plt
 
-# from astropy.coordinates import Angle
+from astropy.table import Table
 from astropy.coordinates import SkyCoord
 from astropy.coordinates import BarycentricTrueEcliptic
 import astropy.units as units
@@ -24,6 +25,7 @@ def plot_radec(table=None,
                frame='equatorial',
                projection='cartesian',
                aspect=None,
+               overplot=False,
                figsize=(8.0, 8.0),
                title=None,
                suptitle=None,
@@ -45,7 +47,6 @@ def plot_radec(table=None,
                legend=True,
                plotdir='./',
                savefig=True,
-               overplot=False,
                verbose=False,
                debug=False):
     """
@@ -77,11 +78,14 @@ def plot_radec(table=None,
     """
 
     import time
+
     t0 = time.time()
+    print(frame, projection)
     #plt.setp(lines, edgecolors='None')
 
-    plt.figure(num=None, figsize=figsize)
+    print('overplot:', overplot)
     if not overplot:
+        print(figsize)
         plt.figure(num=None, figsize=figsize)
         if projection != "cartesian":
             plt.subplot(111, projection=projection)
@@ -131,7 +135,6 @@ def plot_radec(table=None,
             xdata = skycoords_ecliptic.lon.wrap_at(180 * units.deg).radian
             ydata = skycoords_ecliptic.lat.radian
 
-
     if debug:
         print('coordination transformation complete')
         print('Elapsed time(secs): ',time.time() - t0, lineno())
@@ -140,21 +143,23 @@ def plot_radec(table=None,
         print(type(xdata), type(ydata), len(xdata))
         print('RA range: ', np.min(xdata), np.max(xdata))
         print('Dec range: ', np.min(ydata), np.max(ydata))
-        print('units: ', units)
-
 
     if debug:
         print('Elapsed time(secs): ',time.time() - t0, lineno())
         print('plotstyle:', plotstyle)
     ndata = len(xdata)
-    print('Number of points:', ndata)
+    print('Number of points:', ndata, type(xdata), type(ydata))
+    print(xdata.size, xdata.shape)
+    print(ydata.size, ydata.shape)
 
     if debug:
         print()
+        print('plotstyle:', plotstyle)
         print('point plotting starting')
         print('Elapsed time(secs): ',time.time() - t0, lineno())
 
     if plotstyle is None:
+        print(marker, markersize, alpha, color, markeredgecolor)
         plt.plot(xdata, ydata,
                  marker=marker, color=color,
                  markersize=markersize,
@@ -164,12 +169,13 @@ def plot_radec(table=None,
                  label=plotlabel + str(ndata))
 
     # this is placeholder for bining in 2D
-    if plotstyle is not None:
-        if verbose: print('plotstyle: ', plotstyle)
-        plt.plot(xdata, ydata, plotstyle,
-                 markeredgecolor=None,
-                 markersize=markersize,
-                 linestyle='None')
+    #if plotstyle is not None:
+    #    if verbose:
+    #        print('plotstyle: ', plotstyle)
+    #    plt.plot(xdata, ydata, plotstyle,
+    #             markeredgecolor=None,
+    #             markersize=markersize,
+    #             linestyle='None')
     #plotid.plotid()
 
     if debug:
@@ -205,7 +211,7 @@ def plot_radec(table=None,
         plt.legend()
 
     if not noplotid:
-        plotid(progname=True)
+        plotid()
 
     if aspect == 'equal':
         plt.axes().set_aspect('equal')
@@ -226,6 +232,8 @@ def plot_radec(table=None,
         print('Saving: ', plotfile)
         plt.savefig(plotfile)
 
+    print('Close the plot')
+    print('Elapsed time(secs): ',time.time() - t0, lineno())
     plt.close()
 
     if debug:
