@@ -7,8 +7,15 @@ Usage
 python getargs.py --help
 
 
-args = getargs()
-debug = args.debug()
+def getargs():
+
+....
+
+if __name__=='__main__':
+
+    args = getargs()
+    debug = args.debug()
+
 
 """
 
