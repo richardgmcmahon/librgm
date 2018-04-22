@@ -10,9 +10,9 @@ with current (2018, April) timeouts of 1min and 30min
 
 
 """
-def getgaia(ralist=None, declist=None, cone_search=False,
-            width=10.0, height=10.0, radius=5.0,
-            test=False, debug=False):
+def getcat_gaia(ralist=None, declist=None, cone_search=False,
+                width=10.0, height=10.0, radius=5.0,
+                test=False, debug=False):
     """
 
 
