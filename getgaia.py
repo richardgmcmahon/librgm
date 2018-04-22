@@ -2,14 +2,19 @@
 
 get remote Gaia data using astropy.astroquery
 
+astroquery.gaia uses the ESA archive; we could add option to use
+CDS Vizier via TAP or Vizier cone search
+
 sychronous and asychronous queries are supported
 with current (2018, April) timeouts of 1min and 30min
 
 
 """
-def getgaia(debug=False, ralist=None, declist=None, cone_search=False,
-            width=10.0, height=10.0, radius=5.0, test=False):
+def getgaia(ralist=None, declist=None, cone_search=False,
+            width=10.0, height=10.0, radius=5.0,
+            test=False, debug=False):
     """
+
 
     """
 
@@ -44,7 +49,6 @@ def getgaia(debug=False, ralist=None, declist=None, cone_search=False,
         coord = SkyCoord(ra=ra, dec=dec,
                          unit=(u.degree, u.degree),
                          frame='icrs')
-
 
         t0 = time.time()
         if not cone_search:

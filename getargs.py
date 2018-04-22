@@ -16,7 +16,6 @@ if __name__=='__main__':
     args = getargs()
     debug = args.debug()
 
-
 """
 
 def getargs(verbose=False):
