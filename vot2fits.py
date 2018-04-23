@@ -51,6 +51,18 @@ def getargs(verbose=False):
     parser.add_argument("--infile",
                         help="Input file name")
 
+    parser.add_argument("--info",
+                        action='store_true',
+                        help="table info")
+
+    parser.add_argument("--stats",
+                        action='store_true',
+                        help="table statistics")
+
+    parser.add_argument("--fixvot",
+                        action='store_true',
+                        help="fix vot object problem")
+
     parser.add_argument("--debug",
                         action='store_true',
                         help="debug option")
@@ -86,10 +98,21 @@ if __name__=='__main__':
 
     args = getargs()
 
+    fixvot = args.fixvot
+
     infile = args.infile
 
     print('Reading:', infile)
     table = Table.read(infile)
+
+    if args.info:
+        table.info()
+
+    if args.stats:
+        table.info('stats')
+
+    if fixvot:
+        table = fix_votable_object(table)
 
     # filename without file extension
     infile_basename = os.path.splitext(os.path.basename(infile))[0]

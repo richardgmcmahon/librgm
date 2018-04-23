@@ -7,13 +7,16 @@ sys.path.append('/home/rgm/soft/python/lib/')
 from librgm.plotid import plotid
 
 def plot_radec_sourcecat(data=None,
+                         colnames_radec=['RAJ2000', 'DEJ2000'],
+                         sourcemag_column=None,
+                         sourcemag_fontsize='small',
                          label=None,
                          sourceName=None,
                          radius=3.0,
                          alpha=0.2,
                          color='green',
                          radec_centre=None,
-                         colnames_radec=['RAJ2000', 'DEJ2000'],
+
                          xrange = [-2.5, 2.5],
                          yrange = [-2.5, 2.5],
                          overplot=True,
@@ -123,6 +126,10 @@ def plot_radec_sourcecat(data=None,
                             edgecolor=color,
                             linestyle='dashed', linewidth=1.0)
         ax.add_artist(circle)
+
+        # need to format it to two decimal places eg " -99.99"
+        marker_text = str(data[sourcemag_column])
+        ax.annotate(marker_text, (x,y)
 
     ndata = len(xdata)
     plt.plot(xdata, ydata, '+', color=color, label=label + ':' + str(ndata))
