@@ -8,15 +8,15 @@ from librgm.plotid import plotid
 
 def plot_radec_sourcecat(data=None,
                          colnames_radec=['RAJ2000', 'DEJ2000'],
-                         sourcemag_column=None,
+                         colname_sourcemag=None,
                          sourcemag_fontsize='small',
+                         sourcemag_offsets=(0.30, 0.30),
                          label=None,
                          sourceName=None,
                          radius=3.0,
                          alpha=0.2,
                          color='green',
                          radec_centre=None,
-
                          xrange = [-2.5, 2.5],
                          yrange = [-2.5, 2.5],
                          overplot=True,
@@ -112,7 +112,7 @@ def plot_radec_sourcecat(data=None,
 
     patches = []
     ax = plt.gcf().gca()
-    for x, y in zip(xdata, ydata):
+    for i, (x, y) in enumerate(zip(xdata, ydata)):
         print(x, y, radius)
         circle = plt.Circle((x, y), radius,
                             color=color, alpha=alpha,
@@ -128,8 +128,10 @@ def plot_radec_sourcecat(data=None,
         ax.add_artist(circle)
 
         # need to format it to two decimal places eg " -99.99"
-        marker_text = str(data[sourcemag_column])
-        ax.annotate(marker_text, (x,y)
+        marker_text = '{:6.2f}'.format(data[colname_sourcemag][i])
+        ax.annotate(marker_text,
+                    (x + sourcemag_offsets[0], y + sourcemag_offsets[1]),
+                    color=color)
 
     ndata = len(xdata)
     plt.plot(xdata, ydata, '+', color=color, label=label + ':' + str(ndata))

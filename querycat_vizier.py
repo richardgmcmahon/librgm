@@ -77,15 +77,17 @@ def querycat_vizier(ralist=None,
                          unit=(u.deg, u.deg),
                          frame='icrs')
 
-        print(isource, coord)
+        print(isource, coord, radius, catalog)
         # query = Vizier(catalog=catalog))
 
+        result = []
         # the [0] is since Vizier can return results from more than 1 table
         try:
             result = Vizier.query_region(coord,
                                          radius=radius,
                                          catalog=catalog)
         except:
+             print("Unexpected error:", sys.exc_info()[0])
              pass
 
         print('result:', isource, len(result))
