@@ -105,6 +105,7 @@ def plot_radec_sourcecat(data=None,
 
     xdata = xdata[itest]
     ydata = ydata[itest]
+    sourcemag = data[colname_sourcemag][itest]
     ndata = len(xdata)
 
     plt.figure(figsize=(8,8))
@@ -128,7 +129,7 @@ def plot_radec_sourcecat(data=None,
         ax.add_artist(circle)
 
         # need to format it to two decimal places eg " -99.99"
-        marker_text = '{:6.2f}'.format(data[colname_sourcemag][i])
+        marker_text = '{:6.2f}'.format(sourcemag[i])
         ax.annotate(marker_text,
                     (x + sourcemag_offsets[0], y + sourcemag_offsets[1]),
                     color=color)
