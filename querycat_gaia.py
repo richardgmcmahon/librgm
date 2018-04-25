@@ -18,7 +18,7 @@ ORDER BY dist ASC'
 
 """
 def querycat_gaia(ralist=None, declist=None, cone_search=False,
-                width=10.0, height=10.0, radius=5.0,
+                  width=10.0, height=10.0, radius=5.0, dr2=False,
                 test=False, debug=False):
     """
 
@@ -32,6 +32,12 @@ def querycat_gaia(ralist=None, declist=None, cone_search=False,
     import astropy.units as u
     from astropy.coordinates import SkyCoord
     from astroquery.gaia import Gaia
+
+    if dr2:
+        help(Gaia)
+        gaiadr2_table = Gaia.load_table('gaiadr2.gaia_source')
+        for column in (gaiadr1_table.get_columns()):
+            print(column.get_name())
 
     if debug:
         help(Gaia)
