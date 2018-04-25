@@ -9,12 +9,32 @@ sychronous and asychronous queries are supported
 with current (2018, April) timeouts of 1min and 30min
 
 Launched query:
-'SELECT DISTANCE(POINT('ICRS',ra,dec),
+SELECT DISTANCE(POINT('ICRS',ra,dec),
 POINT('ICRS',304.82563658,11.4523159813)) AS dist, *
 FROM gaiadr1.gaia_source
 WHERE
-CONTAINS(POINT('ICRS',ra,dec), BOX('ICRS',304.82563658,11.4523159813, 0.00555555555556, 0.00555555555556)) = 1
-ORDER BY dist ASC'
+    CONTAINS(POINT('ICRS',ra,dec),
+             BOX('ICRS', 304.82563658,11.4523159813,
+                 0.00555555555556, 0.00555555555556)) = 1
+ORDER BY dist ASC
+short version:
+
+SELECT DISTANCE(POINT('ICRS',ra,dec),
+POINT('ICRS',304.82563658,11.4523159813)) AS dist, *
+FROM "I/337/gaia"
+WHERE
+    CONTAINS(POINT('ICRS',ra,dec),
+             BOX('ICRS', 304.82563658,11.4523159813,
+                 0.00555555555556, 0.00555555555556)) = 1
+ORDER BY dist ASC
+
+
+
+I/337/gaia
+
+
+
+
 
 """
 def querycat_gaia(ralist=None, declist=None, cone_search=False,
@@ -54,7 +74,6 @@ def querycat_gaia(ralist=None, declist=None, cone_search=False,
         width = u.Quantity(30.0, u.arcsec)
         height = u.Quantity(30.0, u.arcsec)
         radius = u.Quantity(15.0, u.arcsec)
-
 
     result_nrows = 0
     for isource, (ra, dec) in enumerate(zip(ralist, declist)):

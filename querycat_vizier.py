@@ -12,6 +12,7 @@ CDS Vizier:
 PS1: II/349/ps1
 SDSSDR9: V/139/sdss9
 GaiaDR1: I/337/gaia
+GaiaDR2: I/345/gaia2
 ALLWISE: II/328/allwise
 
 could store these in a dict
@@ -57,6 +58,7 @@ def querycat_vizier(ralist=None,
     vizier_catalogs = {"PS1": 'II/349/ps1',
                        "SDSSDR9": 'V/139/sdss9',
                        "GaiaDR1": 'I/337/gaia',
+                       "GaiaDR2": 'I/345/gaia2',
                        "ALLWISE": 'II/328/allwise'}
 
     if debug:
