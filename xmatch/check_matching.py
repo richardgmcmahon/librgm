@@ -117,10 +117,28 @@ def check_matches(files, cols, neighbor,
     # matches to self
     idx, d2d, d3d = match_coordinates_sky(skycoord_object, skycoord_object,
                                           nthneighbor=neighbor)
+
     idx2 = np.asarray([i for i in range(len(idx))])
+
+
 
     #set limits
     separations = np.asarray(d2d)*3600.0
+
+    itest =  (separations < 2.0)
+    result = data[itest]
+    result_separations = separations[itest]
+    print(result_separations)
+    for row in result:
+        print(row['SDSS'], row['DR7'],
+              row['RAJ2000'],
+              row['DEJ2000'],
+              row['imag'],
+              row['z'],
+              row['d_arcsec'])
+
+    sys.exit()
+
     upperlimit = upperlimits[0]
     upperlimit2 = upperlimits[1]
     separations_reduced = separations[(separations<=upperlimit)]
@@ -299,10 +317,13 @@ def match_to_dr7_or_dr9(ra_dec_pairs,file_to_match, **keyword_parameter):
 
     fig = plt.figure(1, figsize=(7,5))
     ax1=fig.add_subplot(1,2,1)
-    ax1.hist(separations_reduced,bins=upperlimit/0.5)
+    ndata = len(separations_reduced)
+    ax1.hist(separations_reduced,bins=upperlimit/0.5, label=str(ndata))
     ax1.set_title("MATCH TO DR7")
     ax1.set_xlabel('Separation (arcseconds)')
     ax1.set_ylabel('Frequency')
+    ax1.legend(loc='upper right')
+
 
     ax2 = fig.add_subplot(1,2,2)
     ax2.plot(difference_ra,difference_dec,'oc',markersize=5.0,alpha=0.3)
@@ -311,7 +332,6 @@ def match_to_dr7_or_dr9(ra_dec_pairs,file_to_match, **keyword_parameter):
     ax2.set_xlabel('DELTA RA')
     ax2.set_ylabel('DELTA DEC')
     plt.tight_layout(pad=0.4, w_pad=0.5)
-
 
     if ('save' in keyword_parameter):
         path_to_save = str(keyword_parameter['save'])
