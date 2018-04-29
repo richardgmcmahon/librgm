@@ -40,9 +40,9 @@ def mad_med(data, axis = None):
     return np.median(np.absolute(data - np.median(data, axis)), axis)
 
 
-
 def check_matches(files, cols, neighbor,
-                  upperlimits=[7.5, 30.0],
+                  upperlimits=[4, 10.0],
+                  printlist=False,
                    **keyword_parameter):
 
     """
@@ -76,6 +76,8 @@ def check_matches(files, cols, neighbor,
 
     """
     from astropy.table import Table
+
+    figsize=(8,6)
 
     median_and_mean = [[],[]]
 
@@ -117,27 +119,28 @@ def check_matches(files, cols, neighbor,
     # matches to self
     idx, d2d, d3d = match_coordinates_sky(skycoord_object, skycoord_object,
                                           nthneighbor=neighbor)
-
     idx2 = np.asarray([i for i in range(len(idx))])
-
-
 
     #set limits
     separations = np.asarray(d2d)*3600.0
 
-    itest =  (separations < 2.0)
+    itest =  (separations < upperlimits[0])
     result = data[itest]
     result_separations = separations[itest]
+    print(upperlimits[0])
     print(result_separations)
-    for row in result:
-        print(row['SDSS'], row['DR7'],
-              row['RAJ2000'],
-              row['DEJ2000'],
-              row['imag'],
-              row['z'],
-              row['d_arcsec'])
+    if printlist:
+        for irow, row in enumerate(result):
+            print(irow,
+                  row['SDSS'], row['DR7'],
+                  row['RAJ2000'],
+                  row['DEJ2000'],
+                  row['d_arcsec'],
+                  result_separations[irow],
+                  row['phot_g_mean_mag'],
+                  row['imag'],
+                  row['z'])
 
-    sys.exit()
 
     upperlimit = upperlimits[0]
     upperlimit2 = upperlimits[1]
@@ -182,7 +185,7 @@ def check_matches(files, cols, neighbor,
     med = np.median(separations)
     med_red = np.median(separations_reduced)
 
-    fig = plt.figure(1, figsize=(7,5))
+    fig = plt.figure(1, figsize=(8,6))
     print('files:', files, len(files))
     print("file: %s" % files)
     plt.suptitle("file: %s"% files, size=10)
@@ -315,7 +318,7 @@ def match_to_dr7_or_dr9(ra_dec_pairs,file_to_match, **keyword_parameter):
     difference_ra = ((masked_list_ra_cat-masked_list_ra)*np.cos(np.radians(masked_list_dec_cat)))*3600.0
     difference_dec = (masked_list_dec_cat-masked_list_dec)*3600.0
 
-    fig = plt.figure(1, figsize=(7,5))
+    fig = plt.figure(1, figsize=(8,6))
     ax1=fig.add_subplot(1,2,1)
     ndata = len(separations_reduced)
     ax1.hist(separations_reduced,bins=upperlimit/0.5, label=str(ndata))

@@ -17,6 +17,7 @@ from astropy import units as units
 from librgm.plotid import plotid
 
 def plot_radec(table=None,
+               colnames_radec=(None, None),
                xcolname='ra',
                ycolname='dec',
                ra=None,
@@ -44,6 +45,7 @@ def plot_radec(table=None,
                savefig=True,
                plotfile=None,
                plotfile_prefix=None,
+               outpath=None,
                verbose=False,
                debug=False):
     """
@@ -154,6 +156,8 @@ def plot_radec(table=None,
         plotfile_prefix = 'plot'
 
     plotfile = plotfile_prefix + '_' + projection + '_radec.png'
+    if outpath is not None:
+        plotfile = outpath + plotfile
     print('Saving:', plotfile)
     plt.savefig(plotfile)
 
