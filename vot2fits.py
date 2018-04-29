@@ -19,8 +19,8 @@ from astropy.table import Table
 from astropy.io.votable import from_table, writeto
 
 # import private functions
-sys.path.append("/home/rgm/soft/python/lib/")
-from librgm.fix_votable_object import fix_votable_object
+# sys.path.append("/home/rgm/soft/python/lib/")
+from .fix_votable_object import fix_votable_object
 
 def getargs(verbose=False):
     """
