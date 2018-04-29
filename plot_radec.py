@@ -41,11 +41,11 @@ def plot_radec(table=None,
                markeredgecolor='b',
                alpha=1.0,
                linestyle=None,
-               showplot=False,
                savefig=True,
                plotfile=None,
                plotfile_prefix=None,
                outpath=None,
+               showplot=False,
                verbose=False,
                debug=False):
     """
