@@ -14,7 +14,7 @@ from astropy import units as units
 
 # import private functions
 # sys.path.append("/home/rgm/soft/python/lib/")
-from librgm.plotid import plotid
+from .plotid import plotid
 
 def plot_radec(table=None,
                colnames_radec=(None, None),

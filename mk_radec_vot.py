@@ -7,7 +7,9 @@ def mk_radec_vot(table=None, label='source',
 
     """
 
+    from astropy.table import Table
     from astropy.io.votable import from_table, writeto
+    from .table_rowid import table_rowid
 
     nrows = len(table)
     print('nrows:', nrows)
@@ -24,7 +26,6 @@ def mk_radec_vot(table=None, label='source',
 
     print('Convert table to votable')
     votable = from_table(table_out)
-    print('Elapsed time(secs):', time.time() - t0)
     print()
 
     outfile = label + "_radec.vot"
