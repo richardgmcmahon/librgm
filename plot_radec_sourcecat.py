@@ -119,15 +119,15 @@ def plot_radec_sourcecat(data=None,
     for i, (x, y) in enumerate(zip(xdata, ydata)):
         print(x, y, radius)
         circle = plt.Circle((x, y), radius, fill=fill,
-                            color=color, alpha=alpha,
-                            edgecolor=color,
+                            alpha=alpha,
+                            edgecolor=color, facecolor=color,
                             linestyle='dashed', linewidth=1.0)
         ax.add_artist(circle)
 
         # draw line around edge with alpha = 1.0
-        circle = plt.Circle((x, y), radius, fill=fill,
+        circle = plt.Circle((x, y), radius, fill=False,
                             color=color, alpha=1.0,
-                            edgecolor=color,
+                            edgecolor=color, facecolor=color,
                             linestyle='dashed', linewidth=1.0)
         ax.add_artist(circle)
 

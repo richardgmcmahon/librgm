@@ -132,14 +132,11 @@ def check_matches(files, cols, neighbor,
     if printlist:
         for irow, row in enumerate(result):
             print(irow,
-                  row['SDSS'], row['DR7'],
-                  row['RAJ2000'],
-                  row['DEJ2000'],
-                  row['d_arcsec'],
+                  row['ra'],
+                  row['dec'],
+                  row['dist'] * 3600.0,
                   result_separations[irow],
-                  row['phot_g_mean_mag'],
-                  row['imag'],
-                  row['z'])
+                  row['phot_g_mean_mag'])
 
 
     upperlimit = upperlimits[0]
