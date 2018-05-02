@@ -143,7 +143,6 @@ def plot_radec_sourcecat(data=None,
     plt.plot(xdata, ydata, '+', color=color, label=label + ':' + str(ndata))
     plt.xlim(xrange)
     plt.ylim(yrange)
-    plt.grid()
 
     plt.suptitle(sourceName)
     plt.xlabel('Delta RA (arc seconds)')
