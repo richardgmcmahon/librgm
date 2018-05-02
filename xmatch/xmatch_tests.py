@@ -169,6 +169,12 @@ def getargs():
     parser.add_argument("--n2", type=int, default=0,
                         help="Number of data points in table 2")
 
+    parser.add_argument("--nth_nn", type=int, default=1,
+                        help="analyze nth nearest neighbour")
+
+    parser.add_argument("--selfxmatch", action="store_true",
+                        help="selfxmatch on table")
+
     parser.add_argument(
         "--rarange", default=[0.0, 360.0], type=float, nargs=2,
         help="RA range in hours in form Degree Degree")
@@ -276,8 +282,8 @@ if __name__ == '__main__':
     dr_mad_std = mad_std(dr)
     numpoints = len(dr)
 
-    plt.figure(figsize=(12, 6))
-    plt.subplot(1, 2, 1)
+    plt.figure(figsize=(12, 4))
+    plt.subplot(1, 3, 1)
 
     """Default is taken from the rcParam hist.bins."""
     prefix = os.path.basename(__file__)
@@ -307,7 +313,7 @@ if __name__ == '__main__':
     #plt.grid()
     #plotid()
 
-    plt.subplot(1, 2, 2)
+    plt.subplot(1, 3, 2)
 
     data = dr
     index = np.argsort(data, axis=None)
