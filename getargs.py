@@ -47,6 +47,10 @@ def getargs(verbose=False):
     parser.add_argument("--infile",
                         help="Input file name")
 
+    parser.add_argument("--configfile",
+                        default=None,
+                        help="configuration file")
+
     parser.add_argument("--debug",
                         action='store_true',
                         help="debug option")
