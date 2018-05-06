@@ -83,4 +83,4 @@ def getargs(verbose=False):
 
 if __name__=='__main__':
 
-    args = getargs()
+    args = getargs(verbose=True)
