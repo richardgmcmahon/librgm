@@ -1,6 +1,14 @@
 """
 
-TODO: catch exception
+TODO: catch exceptions
+
+Support for lists:
+
+see:
+
+https://stackoverflow.com/questions/335695/lists-in-configparser
+
+https://github.com/cacois/python-configparser-examples
 
 
 """

@@ -67,10 +67,18 @@ def getargs(verbose=False):
 
 
     if args.debug or args.verbose:
+        print()
         print('Number of arguments:', len(sys.argv),
               'arguments: ', sys.argv[0])
 
     if args.debug or args.verbose:
+       print()
+       for arg in vars(args):
+          print(arg, getattr(args, arg))
+
+
+    if args.debug or args.verbose:
+        print()
         pprint.pprint(args)
 
     if args.version:

@@ -36,13 +36,16 @@ from matplotlib.ticker import NullFormatter
 
 from librgm.plotid import plotid
 
+# could be superseded by astropy.stats.mad_std
 def mad_med(data, axis = None):
     return np.median(np.absolute(data - np.median(data, axis)), axis)
 
 
-def check_matches(files, cols, neighbor,
+def check_matches(files, cols,
+                  neighbor,
                   upperlimits=[4, 10.0],
                   printlist=False,
+                  debug=False,
                    **keyword_parameter):
 
     """
@@ -85,7 +88,10 @@ def check_matches(files, cols, neighbor,
     match_object = files
     columns_object = cols
 
+    # read in the data file
     data = Table.read(files)
+    data.info('stats')
+
     #to_match_RA = fitsio.read(match_object, columns=columns_object[0])
     #to_match_DEC = fitsio.read(match_object, columns=columns_object[1])
     #psfmag=fitsio.read(match_object, columns=columns_object[2])
@@ -100,7 +106,7 @@ def check_matches(files, cols, neighbor,
     print(columns_object[0])
     to_match_RA = data[columns_object[0]]
     to_match_DEC = data[columns_object[1]]
-    psfmag = data[columns_object[2]]
+    psfmag = data[columns_object[3]]
     # help(to_match_RA)
     print(to_match_RA.unit)
     print(to_match_RA.shape)

@@ -1,4 +1,4 @@
-def table_rowid(nrows=1, colname='rowid'):
+def table_add_rowid(nrows=1, colname='rowid'):
     """
 
     add an an integer rowid column starting at 1 to an astropy table
