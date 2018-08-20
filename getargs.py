@@ -1,25 +1,23 @@
-"""
-
-Template getargs function
-
-Usage
-
-python getargs.py --help
-
-
-def getargs():
-
-....
-
-if __name__=='__main__':
-
-    args = getargs()
-    debug = args.debug()
-
-"""
-
 def getargs(verbose=False):
     """
+
+    Template getargs function
+
+    Usage
+
+    python getargs.py --help
+
+
+    def getargs():
+
+    ....
+
+    if __name__=='__main__':
+
+        args = getargs()
+        debug = args.debug()
+
+
 
     parse command line arguements
 
