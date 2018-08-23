@@ -1,28 +1,23 @@
-"""
-
-TODO: catch exceptions
-
-Support for lists:
-
-see:
-
-https://stackoverflow.com/questions/335695/lists-in-configparser
-
-https://github.com/cacois/python-configparser-examples
-
-
-"""
 def getconfig(configfile=None, debug=False, silent=False):
     """
     read config file
 
     Note the ConfigParser module has been renamed to configparser in Python 3
 
+
+    TODO: catch exceptions
+
+    Support for lists:
+
+    see:
+
+    https://stackoverflow.com/questions/335695/lists-in-configparser
+
+    https://github.com/cacois/python-configparser-examples
+
     look in cwd, home and home/.config
 
     home/.config not implemented yet
-
-
 
 
     """
