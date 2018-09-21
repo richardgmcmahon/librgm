@@ -24,8 +24,11 @@ def getconfig(configfile=None, debug=False, silent=False):
     import os
     import configparser
 
-    from configparser import SafeConfigParser
-    # parser = SafeConfigParser()
+
+    # read the configuration file
+    #config = configparser.RawConfigParser()
+    config = configparser.SafeConfigParser()
+
 
     print('__file__', __file__)
     if configfile is None:
@@ -39,8 +42,6 @@ def getconfig(configfile=None, debug=False, silent=False):
     if debug:
         print('Open configfile:', configfile)
 
-    # read the configuration file
-    config = configparser.RawConfigParser()
 
     try:
         if not silent:
@@ -67,7 +68,24 @@ def getconfig(configfile=None, debug=False, silent=False):
             print('Options:', config.options(section_name))
             for name, value in config.items(section_name):
                 print('  %s = %s' % (name, value))
+
+        print()
         print()
 
 
+        for section_name in config.sections():
+            print()
+            print('Section:', section_name)
+            for name, value in config.items(section_name):
+                print('  %s = %s' % (name, value))
+                print(section_name, ':',
+                      name, config.get(section_name, name))
+
+
     return config
+
+
+if __name__=='__main__':
+
+    configfile = 'getconfig.cfg'
+    config = getconfig(configfile=configfile, debug=True)
