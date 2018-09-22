@@ -2,8 +2,11 @@ def getconfig(configfile=None, debug=False, silent=False):
     """
     read config file
 
-    Note the ConfigParser module has been renamed to configparser in Python 3
+    Note the Python 2 ConfigParser module has been renamed to configparser
+    in Python 3 so it better to use import configparser in Python 2 for
+    future proofing
 
+    see also getconfig.cfg
 
     TODO: catch exceptions
 
