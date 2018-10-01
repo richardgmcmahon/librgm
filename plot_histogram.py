@@ -123,6 +123,11 @@ def plot_histogram(data,
             plotfile = 'histogram.png'
         if plotfile is None and plotfile_suffix is not None:
             plotfile = 'histogram_' + plotfile_suffix + '.png'
+
+        if outpath is None:
+            outpath = './'
+        print('plotfile:', plotfile)
+        print('outpath:', outpath)
         plotfile = outpath + plotfile
         print('Saving:', plotfile)
         plt.savefig(plotfile)
