@@ -2,4 +2,4 @@
 __all__ = ['MulMultipartPostHandler']
 
 from .mk_jname import *
-from stats_rms_pct50 import *
+from .stats_rms_pct50 import *

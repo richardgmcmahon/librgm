@@ -15,7 +15,6 @@ from astropy import units as units
 # import private functions
 # sys.path.append("/home/rgm/soft/python/lib/")
 from .plotid import plotid
-
 def plot_radec(table=None,
                colnames_radec=(None, None),
                xcolname='ra',
@@ -152,9 +151,11 @@ def plot_radec(table=None,
 
     plotid()
 
-    if plotfile is None and plotfile_prefix is None:
-        plotfile_prefix = 'plot'
+    if plotfile is not None and plotfile_prefix is None:
+        plotfile_prefix = 'plot_radec'
 
+    print('projection:', projection)
+    print('plotfile_prefix:', plotfile_prefix)
     plotfile = plotfile_prefix + '_' + projection + '_radec.png'
     if outpath is not None:
         plotfile = outpath + plotfile

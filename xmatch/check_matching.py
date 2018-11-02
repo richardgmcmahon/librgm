@@ -17,7 +17,14 @@ import inspect
 import os
 import sys
 import time
-from itertools import izip
+
+try:
+    # Python 2
+    from itertools import izip
+except ImportError:
+     # Python 3
+     izip = zip
+
 
 # 3rd party libraries
 import numpy as np
