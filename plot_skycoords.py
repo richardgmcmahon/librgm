@@ -1,13 +1,32 @@
+# plot ra, dec on various frames/systems
+
 def plot_skycoords(system='Galactic', axis='latitude',
+                   aitoff=False,
                    units='degree', wrap_ra24hr=False,
                    overplot=False, label=True):
     """
+
+    plot galactic limits and ecliptic limits on an radec plot
+    values are currently hardwired in
     could be generalised for ecliptic and lat/long
 
     based on IDL plot_galcoords.pro
     handles 24hr wrap
 
     """
+
+    import time
+    from time import strftime
+    from time import gmtime
+
+
+    from matplotlib import pyplot as plt
+    import numpy as np
+
+    from astropy.coordinates import SkyCoord
+    import astropy.units as u
+
+    #global appname
 
     print('Plotting ' + system + ' Coordinates')
     print('plot_skycoords; label:', label)
@@ -104,6 +123,7 @@ def plot_skycoords(system='Galactic', axis='latitude',
             xdata = ra
             ydata = dec
 
+            # commented out on 20181102
             ilabel = plot_skycoords_plot(
                 xdata, ydata, linestyle=linestyle,
                 label=label, ilabel=ilabel, color=color,
@@ -121,14 +141,17 @@ def plot_skycoords(system='Galactic', axis='latitude',
             xdata = ra[0:wrap[iwrap]]
             ydata = dec[0:wrap[iwrap]]
 
+            # commented out on 20181102
             ilabel = plot_skycoords_plot(
-                xdata, ydata, linestyle=linestyle,
-                label=label, ilabel=ilabel, color=color,
-                wrap_ra24hr=wrap_ra24hr, units=units)
+                     xdata, ydata, linestyle=linestyle,
+                     label=label, ilabel=ilabel, color=color,
+                     wrap_ra24hr=wrap_ra24hr, units=units)
 
             xdata = ra[wrap[iwrap] + 1:-1]
             ydata = dec[wrap[iwrap] + 1:-1]
 
+
+            # commented out on 20181102
             ilabel = plot_skycoords_plot(
                 xdata, ydata, linestyle=linestyle,
                 label=label, ilabel=ilabel, color=color,
@@ -160,11 +183,12 @@ def plot_skycoords(system='Galactic', axis='latitude',
                     xdata = ra[0:wrap[iwrap]]
                     ydata = dec[0:wrap[iwrap]]
 
-                    ilabel = plot_skycoords_plot(
-                        xdata, ydata,
-                        linestyle=linestyle, color=color,
-                        label=label, ilabel=ilabel,
-                        wrap_ra24hr=wrap_ra24hr, units=units)
+                    #commented out on 20181102
+                    #ilabel = plot_skycoords_plot(
+                    #    xdata, ydata,
+                    #    linestyle=linestyle, color=color,
+                    #    label=label, ilabel=ilabel,
+                    #    wrap_ra24hr=wrap_ra24hr, units=units)
 
                 if iwrap != 0:
                     isegment = isegment + 1
@@ -179,11 +203,12 @@ def plot_skycoords(system='Galactic', axis='latitude',
                     xdata = ra[wrap[iwrap - 1] + 1:wrap[iwrap]]
                     ydata = dec[wrap[iwrap - 1] + 1:wrap[iwrap]]
 
-                    ilabel = plot_skycoords_plot(
-                        xdata, ydata,
-                        linestyle=linestyle, color=color,
-                        label=label, ilabel=ilabel,
-                        wrap_ra24hr=wrap_ra24hr, units=units)
+                    #commented out on 20181102
+                    #ilabel = plot_skycoords_plot(
+                    #    xdata, ydata,
+                    #    linestyle=linestyle, color=color,
+                    #    label=label, ilabel=ilabel,
+                    #    wrap_ra24hr=wrap_ra24hr, units=units)
 
                 if iwrap == nwrap - 1:
                     isegment = isegment + 1
@@ -196,16 +221,64 @@ def plot_skycoords(system='Galactic', axis='latitude',
                     xdata = ra[wrap[iwrap] + 1:-1]
                     ydata = dec[wrap[iwrap] + 1:-1]
 
-                    ilabel = plot_skycoords_plot(
-                        xdata, ydata,
-                        linestyle=linestyle, color=color,
-                        label=label, ilabel=ilabel,
-                        wrap_ra24hr=wrap_ra24hr, units=units)
+                    #commented out on 20181102
+                    #ilabel = plot_skycoords_plot(
+                    #    xdata, ydata,
+                    #    linestyle=linestyle, color=color,
+                    #    label=label, ilabel=ilabel,
+                    #    wrap_ra24hr=wrap_ra24hr, units=units)
 
     plt.legend(fontsize='small')
     plt.grid()
+    appname = 'ob_progress'
+    datestamp = time.strftime("%Y%m%d", time.gmtime())
     figname = appname + '_galactic_' + datestamp + '.png'
     print('Saving:' + figname)
     plt.savefig('./' + figname)
 
     return
+
+
+
+def plot_skycoords_plot(xdata, ydata,
+                        label=None, ilabel=0,
+                        aitoff=False,
+                        color='red', linestyle=None,
+                        wrap_ra24hr=False, units='degrees'):
+    """
+
+
+    """
+    from matplotlib import pyplot as plt
+
+
+    print('plot_skycoords_plot; label:', label, ilabel)
+
+    # add plot legend label to first segment in series
+    if ilabel == 0:
+        plt.plot(xdata, ydata,
+                 linestyle=linestyle,
+                 color=color, label=label)
+        ilabel = 1
+
+    if ilabel != 0:
+        plt.plot(xdata, ydata,
+                 linestyle=linestyle,
+                 color=color)
+
+    if units == 'degree':
+        if wrap_ra24hr:
+            plt.xlim([-180.0, 180.0])
+        else:
+            plt.xlim([0.0, 360.0])
+
+    if not aitoff and units == 'hour':
+        if wrap_ra24hr:
+            plt.xlim([-12.0, 12.0])
+        else:
+            plt.xlim([0.0, 24.0])
+
+    if not aitoff:
+        plt.ylim([-90.0, +90.0])
+
+    return ilabel
