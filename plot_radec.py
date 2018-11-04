@@ -49,6 +49,10 @@ def plot_radec(table=None,
                debug=False):
     """
 
+    high level plotting function to plot celestial RA, Dec positions with
+    support for different projections (e.g. cartesian) and for
+    different frames (e.g. equatorial, galactic, ecliptic)
+
     assumes units are degree
 
     subplot projections need angles to be in radians so conversion from
