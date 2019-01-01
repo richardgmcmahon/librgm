@@ -42,6 +42,13 @@ def getargs(verbose=False):
     # the destination defaults to the option parameter
     # defaul=False might not be needed
 
+    # default type is string
+    parser.add_argument("--string",
+                        help="string input")
+
+    parser.add_argument("--float", type=float,
+                        help="float input")
+
     parser.add_argument("--infile",
                         help="Input file name")
 

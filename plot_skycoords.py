@@ -2,8 +2,10 @@
 
 def plot_skycoords(system='Galactic', axis='latitude',
                    aitoff=False,
-                   units='degree', wrap_ra24hr=False,
-                   overplot=False, label=True):
+                   units='degree',
+                   wrap_ra24hr=False,
+                   overplot=False,
+                   label=True):
     """
 
     plot galactic limits and ecliptic limits on an radec plot
