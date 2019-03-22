@@ -5,6 +5,7 @@ def plot_skycoords(system='Galactic', axis='latitude',
                    units='degree',
                    wrap_ra24hr=False,
                    overplot=False,
+                   showplot=False,
                    label=True):
     """
 
