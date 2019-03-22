@@ -39,7 +39,7 @@ def table_stats(data, ext=1, verbose=True, debug=False):
 
 
     # import pyfits
-
+    import astropy.io.fits as pyfits
     from astropy.table import Table
 
     import numpy as np
