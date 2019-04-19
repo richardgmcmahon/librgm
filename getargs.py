@@ -34,10 +34,9 @@ def getargs(verbose=False):
     description = 'This is a template using getargs'
     epilog = """WARNING: Not all options may be supported
              """
-    parser =  argparse.ArgumentParser(
+    parser = argparse.ArgumentParser(
         description=description, epilog=epilog,
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-
 
     # the destination defaults to the option parameter
     # defaul=False might not be needed
@@ -49,27 +48,29 @@ def getargs(verbose=False):
     parser.add_argument("--float", type=float,
                         help="float input")
 
-    parser.add_argument("--infile",
-                        help="Input file name")
-
     parser.add_argument("--configfile",
                         default=None,
                         help="configuration file")
+
+    parser.add_argument("--infile",
+                        help="Input file name")
 
     parser.add_argument("--debug",
                         action='store_true',
                         help="debug option")
 
+    parser.add_argument("--pause",
+                        action='store_true',
+                        help="Pausing option")
+
     parser.add_argument("--verbose", default=verbose,
                         action='store_true',
-                        help="verbose option")
+                        help="Verbose option")
 
-    parser.add_argument("--version", action='store_true',
+    parser.add_argument("--Version", action='store_true',
                         help="verbose option")
-
 
     args = parser.parse_args()
-
 
     if args.debug or args.verbose:
         print()
@@ -77,10 +78,9 @@ def getargs(verbose=False):
               'arguments: ', sys.argv[0])
 
     if args.debug or args.verbose:
-       print()
-       for arg in vars(args):
-          print(arg, getattr(args, arg))
-
+        print()
+        for arg in vars(args):
+            print(arg, getattr(args, arg))
 
     if args.debug or args.verbose:
         print()
@@ -90,10 +90,9 @@ def getargs(verbose=False):
         print('version:', __version__)
         sys.exit(0)
 
-
     return args
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
 
     args = getargs(verbose=True)
