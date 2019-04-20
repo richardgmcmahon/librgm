@@ -67,8 +67,6 @@ def getconfig(configfile=None, debug=False, silent=False):
             print('Options:', config.options(section_name))
             for name, value in config.items(section_name):
                 print('  %s = %s' % (name, value))
-
-        print()
         print()
 
         for section_name in config.sections():
@@ -78,6 +76,7 @@ def getconfig(configfile=None, debug=False, silent=False):
                 print('  %s = %s' % (name, value))
                 print(section_name, ':',
                       name, config.get(section_name, name))
+        print()
 
     return config
 
