@@ -67,7 +67,8 @@ def getargs(verbose=False):
                         action='store_true',
                         help="Verbose option")
 
-    parser.add_argument("--Version", action='store_true',
+    parser.add_argument("--version",
+                        action='store_true',
                         help="verbose option")
 
     args = parser.parse_args()
@@ -81,10 +82,12 @@ def getargs(verbose=False):
         print()
         for arg in vars(args):
             print(arg, getattr(args, arg))
+        print()
 
     if args.debug or args.verbose:
         print()
         pprint.pprint(args)
+        print()
 
     if args.version:
         print('version:', __version__)
