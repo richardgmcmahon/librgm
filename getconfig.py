@@ -2,6 +2,9 @@ def getconfig(configfile=None, debug=False, silent=False):
     """
     read config file
 
+    config = getconfig()
+    parameter_value = config.get('INPUTS', 'parameter')
+
     Note the Python 2 ConfigParser module has been renamed to configparser
     in Python 3 so it better to use import configparser in Python 2 for
     future proofing
@@ -32,12 +35,14 @@ def getconfig(configfile=None, debug=False, silent=False):
     config = configparser.SafeConfigParser()
 
     print('__file__', __file__)
+    configfile_default = os.path.splitext(__file__)[0] + '.cfg'
+    print('configfile_default:', configfile_default)
     if configfile is None:
-        if debug:
-            print('__file__', __file__)
         configfile_default = os.path.splitext(__file__)[0] + '.cfg'
-    if configfile is not None:
-        configfile_default = configfile
+        configfile = configfile_default
+        if debug:
+           print('__file__', __file__)
+           print('configfile_default:', configfile_default)
 
     print('Open configfile:', configfile)
     if debug:
