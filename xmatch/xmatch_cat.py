@@ -32,6 +32,14 @@ def xmatch_cat(table1=None, table2=None,
     Self match notes:
 
 
+    Known issues:
+    Some table will have wrong units e.g. None or radians instead of radian
+
+    To change try something like:
+    table[colname_RA].unit = 'radian'
+    table[colname_Dec].unit = 'radian'
+
+
     """
 
     import numpy as np
@@ -81,8 +89,10 @@ def xmatch_cat(table1=None, table2=None,
     ra1 = table1[colnames_radec1[0]]
     dec1 = table1[colnames_radec1[1]]
     if verbose or debug:
-        print('table1: ', colnames_radec1[0], table1[colnames_radec1[0]].unit)
-        print('table1: ', colnames_radec1[1], table1[colnames_radec1[1]].unit)
+        print('table1: ra; column name, units:',
+              colnames_radec1[0], table1[colnames_radec1[0]].unit)
+        print('table1: dec: column name, units:',
+              colnames_radec1[1], table1[colnames_radec1[1]].unit)
 
     ra2 = table2[colnames_radec2[0]]
     dec2 = table2[colnames_radec2[1]]
@@ -94,10 +104,11 @@ def xmatch_cat(table1=None, table2=None,
         print('RA1 range:', np.min(ra1), np.max(ra1))
         print('Dec1 range:', np.min(dec1), np.max(dec1))
 
-        print('RA1 range:', np.min(ra2), np.max(ra2))
-        print('Dec1 range:', np.min(dec2), np.max(dec2))
+        print('RA2 range:', np.min(ra2), np.max(ra2))
+        print('Dec2 range:', np.min(dec2), np.max(dec2))
 
-
+    print('units_radec1:', units_radec1)
+    print('units_radec2:', units_radec2)
     skycoord1 = SkyCoord(ra1, dec1, unit=units_radec1, frame='icrs')
     skycoord2 = SkyCoord(ra2, dec2, unit=units_radec2, frame='icrs')
 
