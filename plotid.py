@@ -7,7 +7,7 @@ def plotid(timestamp=True, user=True, hostname=False,
            progname=True, label=None, fontsize='small',
            top=False, right=False, verbose=False,
            debug=False, traceback=True,
-           githash=True):
+           githash=True, figtext=True):
     """
     Adds timestamp and other provenance information to a plot.
 
@@ -151,7 +151,6 @@ def plotid(timestamp=True, user=True, hostname=False,
     # axes are drawn
     # plt.setp(plt.gca(), xticks=(), yticks=())#, frame_on=False
 
-    figtext = True
     xtext = 0.98
     dxtext = 0.030
     if figtext:
