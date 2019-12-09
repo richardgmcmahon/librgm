@@ -141,6 +141,14 @@ def xmatch_cat(table1=None, table2=None,
                 skycoord1.search_around_sky(skycoord2,
                                             seplimit * u.arcsec)
 
+    # apply seplimit nearest match case
+    #if not multimatch:
+    #    itest = d2d < seplimit * u.arcsec
+    #    print('Number of matchs within seplimit:',
+    #          len(d2d[itest]), len(d2d), seplimit)
+    #    idx2 = idx2[itest]
+    #    d2d = d2d[itest]
+    #    d3d = d3d[itest]
 
     # compute the separations and
     if not multimatch:

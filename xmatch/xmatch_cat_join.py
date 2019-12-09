@@ -2,8 +2,11 @@ from __future__ import print_function, unicode_literals
 
 def xmatch_cat_join(table1=None, table2=None,
                     idxmatch=None,
+                    jointype='left',
                     dr=None, radius_arcsec=2.0):
     """
+
+    looks like just a nearest neighbour match is supported
 
 
     """
@@ -19,7 +22,8 @@ def xmatch_cat_join(table1=None, table2=None,
 
     # create table with sources that match with in radius of 10"
     itest = dr < radius_arcsec
-    print('Number of matched sources within 10" arcsec:', len(table1[itest]))
+    print('Number of matched sources within ', radius_arcsec, 'arcsec',
+          len(table1[itest]))
     result = result[itest]
 
     return result

@@ -44,6 +44,9 @@ def plotid(timestamp=True, user=True, hostname=False,
 
     import matplotlib.pyplot as plt
 
+    if debug:
+        import matplotlib
+        print('matplotlib.__version__', matplotlib.__version__)
 
     hostname_str = ''
     if hostname:
