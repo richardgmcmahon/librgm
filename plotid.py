@@ -11,6 +11,11 @@ def plotid(timestamp=True, user=True, hostname=False,
     """
     Adds timestamp and other provenance information to a plot.
 
+    there are at least 3 functions:
+    pyplot.text()
+    pyplot.figtext()
+    pyplot.annotate()
+
 
     Options:
     include date, username, hostname, program filename
@@ -27,8 +32,8 @@ def plotid(timestamp=True, user=True, hostname=False,
 
     see also https://github.com/matplotlib/matplotlib/issues/289
 
-    options are not implemented yet
-    text is placed on middle right in axis cords.
+    some options are not implemented yet
+    text is placed on middle right in axis coords.
 
     """
 
@@ -132,7 +137,7 @@ def plotid(timestamp=True, user=True, hostname=False,
     # if host: text = text + '@'+hostname+']'
 
     if debug or verbose:
-        print('text:', text)
+        print('pyplot.text:', text)
 
     # cf plt.text
     # see http://matplotlib.org/users/text_props.html
@@ -144,17 +149,27 @@ def plotid(timestamp=True, user=True, hostname=False,
 
     # get current axis (gca)
     # ax=plt.gca()
+
+    # gca().transAxes works for both Python 2 and 3
     transform = plt.gca().transAxes
+    # gca().transAxes works for Python 2
     # transform=plt.gcf().transFigure
+    if debug:
+        # help(transform)
+        print('transform:', transform)
+
 
     # this is needed to allow the text to be added before the first
     # axes are drawn
     # plt.setp(plt.gca(), xticks=(), yticks=())#, frame_on=False
 
     xtext = 0.98
+    ytext = 0.5
     dxtext = 0.030
     if figtext:
-        plt.figtext(xtext, 0.5,
+        if debug:
+            print('pyplot.figtext:', xtext, ytext, text)
+        plt.figtext(xtext, ytext,
                     text,
                     transform=transform,
                     rotation=90,
@@ -170,7 +185,9 @@ def plotid(timestamp=True, user=True, hostname=False,
         text = '{} {}'.format(cwd, hostname_str)
 
         xtext = xtext - dxtext
-        plt.figtext(xtext, 0.5,
+        if debug:
+            print('pyplot.figtext:', xtext, ytext, text)
+        plt.figtext(xtext, ytext,
                     text,
                     transform=transform,
                     rotation=90,
@@ -192,7 +209,10 @@ def plotid(timestamp=True, user=True, hostname=False,
                                     hostname_str)
 
         xtext = xtext - dxtext
-        plt.figtext(xtext, 0.5,
+        ytext = 0.5
+        if debug:
+            print('pyplot.figtext:', xtext, ytext, text)
+        plt.figtext(xtext, ytext,
                     text,
                     transform=transform,
                     rotation=90,
@@ -204,7 +224,11 @@ def plotid(timestamp=True, user=True, hostname=False,
                     verticalalignment='center')
 
     if not figtext:
-        plt.text(0.97, 0.5,
+        xtext = 0.97
+        ytext = 0.50
+        if debug:
+            print('pyplot.text:', xtext, ytext, text)
+        plt.text(xtext, ytext,
                  text,
                  transform=transform,
                  rotation=90,
@@ -217,9 +241,13 @@ def plotid(timestamp=True, user=True, hostname=False,
 
 
     if githash:
+        text = provenance
         xtext = 0.02
-        plt.figtext(xtext, 0.5,
-                    provenance,
+        ytext = 0.5
+        if debug:
+            print('pyplot.text:', xtext, ytext, text)
+        plt.figtext(xtext, ytext,
+                    text,
                     transform=transform,
                     rotation=90,
                     size=fontsize, color=color,
@@ -233,9 +261,15 @@ def plotid(timestamp=True, user=True, hostname=False,
 
 if __name__ == '__main__':
 
+    import sys
+
     import matplotlib.pyplot as plt
 
-    plt.plot(range(10), label='label')
+    print(sys.version)
+    print(sys.version_info)
+
+    print(range(10))
+    plt.plot(range(10), range(10), label='label')
 
     plt.grid()
 
@@ -246,5 +280,68 @@ if __name__ == '__main__':
     plt.legend()
 
     plotid(debug=True, progname=True)
+
+    plt.show()
+
+    # subplots example
+    import numpy as np
+
+    # Some example data to display
+    x = np.linspace(0, 2 * np.pi, 400)
+    y = np.sin(x ** 2)
+
+    fig, axs = plt.subplots(2, 2)
+    axs[0, 0].plot(x, y)
+    axs[0, 0].set_title('Axis [0,0]')
+    axs[0, 1].plot(x, y, 'tab:orange')
+    axs[0, 1].set_title('Axis [0,1]')
+    axs[1, 0].plot(x, -y, 'tab:green')
+    axs[1, 0].set_title('Axis [1,0]')
+    axs[1, 1].plot(x, -y, 'tab:red')
+    axs[1, 1].set_title('Axis [1,1]')
+
+    for ax in axs.flat:
+       ax.set(xlabel='x-label', ylabel='y-label')
+
+    # Hide x labels and tick labels for top plots and y ticks for right plots.
+    for ax in axs.flat:
+        ax.label_outer()
+
+    fig.suptitle('subplot example')
+    plotid(debug=True, progname=True)
+
+    plt.show()
+
+    # subplot example
+    # Fixing random state for reproducibility
+    np.random.seed(19680801)
+
+
+    x = np.random.rand(10)
+    y = np.random.rand(10)
+    z = np.sqrt(x**2 + y**2)
+
+    plt.subplot(321)
+    plt.scatter(x, y, s=80, c=z, marker=">")
+
+    plt.subplot(322)
+    plt.scatter(x, y, s=80, c=z, marker=(5, 0))
+
+    verts = np.array([[-1, -1], [1, -1], [1, 1], [-1, -1]])
+    plt.subplot(323)
+    plt.scatter(x, y, s=80, c=z, marker=verts)
+
+    plt.subplot(324)
+    plt.scatter(x, y, s=80, c=z, marker=(5, 1))
+
+    plt.subplot(325)
+    plt.scatter(x, y, s=80, c=z, marker='+')
+
+    plt.subplot(326)
+    plt.scatter(x, y, s=80, c=z, marker=(5, 2))
+
+
+    plt.suptitle('subplot example')
+    plotid()
 
     plt.show()
