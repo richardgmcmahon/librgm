@@ -8,10 +8,13 @@ def plotid(timestamp=True, user=True, hostname=False,
            top=False, right=False, verbose=False,
            debug=False, traceback=True,
            githash=True, figtext=True):
-    """
-    Adds timestamp and other provenance information to a plot.
+    """Adds timestamp and other provenance information to a plot
 
-    there are at least 3 functions:
+    test:
+    python plotid.py makes some demo plots based on Matplotlib examples
+
+
+    there are at least 3 functions that add text; we use figtext here
     pyplot.text()
     pyplot.figtext()
     pyplot.annotate()
@@ -29,6 +32,9 @@ def plotid(timestamp=True, user=True, hostname=False,
 
     should the text location be in units of the current figure (gcf)
     or the current axis (gca)
+
+    gcf().transFigure worked for Python 2 but breaks in Python 3
+    gca().transAxes works for both Python 2 and 3
 
     see also https://github.com/matplotlib/matplotlib/issues/289
 
