@@ -8,7 +8,7 @@ def plot_histogram(data,
                    max_data=None,
                    range=None,
                    bins='knuth',
-                   figsize=(6,6),
+                   figsize=(8,6),
                    xlabel=None,
                    ylabel=None,
                    label=None,
@@ -63,7 +63,7 @@ def plot_histogram(data,
     'blocks' : use bayesian blocks for dynamic bin widths
     'knuth' : use Knuth's rule to determine bins
     'scott' : use Scott's rule to determine bins
-    'freedman' : use the Freedman-diaconis rule to determine bins
+    'freedman' : use the Freedman-Diaconis rule to determine bins
 
     This is a histogram function that enables the use of more sophisticated
     algorithms for determining bins. Aside from the bins argument allowing
@@ -86,6 +86,8 @@ def plot_histogram(data,
 
     ax = plt.axes()
     ndata_all = len(data)
+    data_min = np.min(data)
+    data_max = np.max(data)
     if range is None:
         range = [np.min(data), np.max(data)]
     if range is not None:
@@ -98,7 +100,8 @@ def plot_histogram(data,
         data = data[idata]
     ndata = len(data)
     print('bins:', bins)
-    label = str(ndata) + '/' + str(ndata_all)
+    label = str(ndata) + '/' + str(ndata_all) + '\n' + \
+            str(data_min) + '/' + str(data_max)
     hist(data, bins=bins, range=range,
          ax=ax, label=label,
          histtype='stepfilled',
