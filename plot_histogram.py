@@ -9,7 +9,8 @@ def plot_histogram(data,
                    range=None,
                    bins='knuth',
                    figsize=(6,6),
-                   xlabel=None, ylabel=None,
+                   xlabel=None,
+                   ylabel=None,
                    label=None,
                    suptitle=None,
                    plotfile_prefix=None,
@@ -84,7 +85,7 @@ def plot_histogram(data,
     # fig.set_size_inches(10,10)
 
     ax = plt.axes()
-    ndata = len(data)
+    ndata_all = len(data)
     if range is None:
         range = [np.min(data), np.max(data)]
     if range is not None:
@@ -97,8 +98,9 @@ def plot_histogram(data,
         data = data[idata]
     ndata = len(data)
     print('bins:', bins)
+    label = str(ndata) + '/' + str(ndata_all)
     hist(data, bins=bins, range=range,
-         ax=ax, label=str(ndata),
+         ax=ax, label=label,
          histtype='stepfilled',
          ec='k', fc='#AAAAAA')
 
