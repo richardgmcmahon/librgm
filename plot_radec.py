@@ -16,9 +16,9 @@ from astropy import units as units
 # sys.path.append("/home/rgm/soft/python/lib/")
 from .plotid import plotid
 def plot_radec(table=None,
-               colnames_radec=(None, None),
-               xcolname='ra',
-               ycolname='dec',
+               colnames_radec=('RAJ2000', 'DEJ2000'),
+               xcolname='RAJ2000',
+               ycolname='DEJ2000',
                ra=None,
                dec=None,
                rarange=None,
@@ -53,12 +53,16 @@ def plot_radec(table=None,
     support for different projections (e.g. cartesian) and for
     different frames (e.g. equatorial, galactic, ecliptic)
 
+    defaults to the standard RA, Dec column names used by CDS Vizier
+
     assumes units are degree
 
     subplot projections need angles to be in radians so conversion from
     degrees to radians is needed
 
     ra, dec can be as lists or table columns
+    :param colnames_radec:
+    :type xcolname: str
 
     """
     import time
