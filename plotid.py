@@ -44,6 +44,7 @@ def plotid(timestamp=True, user=True, hostname=False,
     """
 
     import os
+    import sys
     import time
     import datetime
     import traceback
@@ -53,6 +54,7 @@ def plotid(timestamp=True, user=True, hostname=False,
 
     import subprocess
 
+    import matplotlib
     import matplotlib.pyplot as plt
 
     if debug:
@@ -157,9 +159,9 @@ def plotid(timestamp=True, user=True, hostname=False,
     # ax=plt.gca()
 
     # gca().transAxes works for both Python 2 and 3
-    transform = plt.gca().transAxes
+    # transform = plt.gca().transAxes
     # gca().transAxes works for Python 2
-    # transform=plt.gcf().transFigure
+    transform = plt.gcf().transFigure
     if debug:
         # help(transform)
         print('transform:', transform)
@@ -246,6 +248,15 @@ def plotid(timestamp=True, user=True, hostname=False,
                  verticalalignment='center')
 
 
+    # add the Matplotlib and Python version to provenance string
+    pythonVersion = 'Python ' + \
+                     str(sys.version_info[0]) + '.' + \
+                     str(sys.version_info[1]) + '.' + \
+                     str(sys.version_info[2]) + '.' + \
+                     str(sys.version_info[3])
+    matplotlibVersion = 'Matplotlib ' + str(matplotlib.__version__)
+    provenance = pythonVersion + '  ' + matplotlibVersion + \
+                 '  gitHash: ' + provenance
     if githash:
         text = provenance
         xtext = 0.02

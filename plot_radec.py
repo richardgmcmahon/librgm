@@ -75,6 +75,13 @@ def plot_radec(table=None,
     if projection != "cartesian":
         plt.subplot(111, projection=projection)
 
+    print('colnames_radec:', colnames_radec)
+    print('xcolname:', xcolname)
+    print('ycolname:', ycolname)
+    xcolname = colnames_radec[0]
+    ycolname = colnames_radec[1]
+    print('xcolname:', xcolname)
+    print('ycolname:', ycolname)
     if table is not None:
         ra = table[xcolname]
         dec = table[ycolname]
