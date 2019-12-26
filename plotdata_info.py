@@ -145,7 +145,11 @@ def plotdata_info(xdata=None, ydata=None,
          str(info['xdata_range_notnan'][1]) + '\n' + \
          'y range (full); ' + \
          str(info['ydata_range_notnan'][0]) + ': ' + \
-         str(ydata_max_notnan) + '\n' + \
+         str(info['ydata_range_notnan'][1]) + '\n' + \
+         'x, y, xy (out of range): ' + \
+         str(info['ndata_all'] - info['nxdata']) + ', ' + \
+         str(info['ndata_all'] - info['nydata']) + ', ' + \
+         str(info['ndata_all'] - info['ndata']) + '\n' + \
          'x, y, xy (nan); ' + \
          str(info['ndata_xnan']) + ': ' + str(info['ndata_ynan']) + ': ' + \
          str(info['ndata_xynan']) + '\n' + \

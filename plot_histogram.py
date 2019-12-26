@@ -3,8 +3,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from librgm.plotid import plotid
+from librgm.plotdata_info import plotdata_info
 
-def plot_histogram(data,
+def plot_histogram(data, info=False,
                    max_data=None,
                    range=None,
                    bins='knuth',
@@ -75,6 +76,9 @@ def plot_histogram(data,
     """
     # from astroML.plotting import hist
     from astropy.visualization import hist
+
+    info, legend = plotdata_info(data, xrange=range,
+                                 verbose=True)
 
     if max_data != None:
         max_data = np.max(dist)
