@@ -1,3 +1,14 @@
+# Python 2/3 compatability
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
+# add support for raw_input to Python 3
+from builtins import input
+try:
+   input = raw_input
+except NameError:
+   pass
+
 def plotdata_info(xdata=None, ydata=None,
                   xrange=None, yrange=None,
                   verbose=True):
@@ -7,6 +18,7 @@ def plotdata_info(xdata=None, ydata=None,
     xdata and ydata are required for bivariate analysis like a scatter plot
 
     """
+    import numpy as np
 
     if xdata is None:
        print('Returning since xdata=None')

@@ -63,7 +63,14 @@ def plotid(timestamp=True, user=True, hostname=False,
 
     hostname_str = ''
     if hostname:
-        hostname_str = socket.gethostname()
+        try:
+            hostname_str = socket.gethostname()
+            host_ip = socket.gethostbyname(hostname_str)
+            print("Hostname :  ",hostname_str)
+            print("IP : ",host_ip)
+        except:
+            print("Unable to get Hostname and IP")
+
 
     now = time.localtime(time.time())
     timestamp = time.strftime("%Y-%m-%dT%H:%M:%S", now)
