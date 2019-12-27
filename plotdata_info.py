@@ -136,25 +136,31 @@ def plotdata_info(xdata=None, ydata=None,
        print(xlabel + ' (nan):', info['ndata_ynan'])
        print(xlabel + ' (inf):', info['ndata_yinf'])
 
-    label = 'xy in range; ' + str(info['ndata']) + ' out of: ' + \
-         str(info['ndata_all']) + '\n' + \
-         'x, y in range; ' + str(info['nxdata']) + ': ' + \
-         str(info['nydata']) + '\n' + \
-         'x range (full); ' + \
-         str(info['xdata_range_notnan'][0]) + ': ' + \
-         str(info['xdata_range_notnan'][1]) + '\n' + \
-         'y range (full); ' + \
-         str(info['ydata_range_notnan'][0]) + ': ' + \
-         str(info['ydata_range_notnan'][1]) + '\n' + \
-         'x, y, xy (out of range): ' + \
-         str(info['ndata_all'] - info['nxdata']) + ', ' + \
-         str(info['ndata_all'] - info['nydata']) + ', ' + \
-         str(info['ndata_all'] - info['ndata']) + '\n' + \
-         'x, y, xy (nan); ' + \
-         str(info['ndata_xnan']) + ': ' + str(info['ndata_ynan']) + ': ' + \
-         str(info['ndata_xynan']) + '\n' + \
-         'x, y (inf); ' + \
-         str(info['ndata_xinf']) + ': ' + str(info['ndata_yinf']) + ': ' + \
-         str(info['ndata_xyinf'])
+    if xdata is not None and ydata is None:
+        label = 'label'
+
+    if xdata is not None and ydata is not None:
+        label = 'xy in range; ' + str(info['ndata']) + ' out of: ' + \
+            str(info['ndata_all']) + '\n' + \
+            'x, y in range; ' + str(info['nxdata']) + ': ' + \
+            str(info['nydata']) + '\n' + \
+            'x range (full); ' + \
+            str(info['xdata_range_notnan'][0]) + ': ' + \
+            str(info['xdata_range_notnan'][1]) + '\n' + \
+            'y range (full); ' + \
+            str(info['ydata_range_notnan'][0]) + ': ' + \
+            str(info['ydata_range_notnan'][1]) + '\n' + \
+            'x, y, xy (out of range): ' + \
+            str(info['ndata_all'] - info['nxdata']) + ', ' + \
+            str(info['ndata_all'] - info['nydata']) + ', ' + \
+            str(info['ndata_all'] - info['ndata']) + '\n' + \
+            'x, y, xy (nan); ' + \
+            str(info['ndata_xnan']) + ': ' + \
+            str(info['ndata_ynan']) + ': ' + \
+            str(info['ndata_xynan']) + '\n' + \
+            'x, y (inf); ' + \
+            str(info['ndata_xinf']) + ': ' + \
+            str(info['ndata_yinf']) + ': ' + \
+            str(info['ndata_xyinf'])
 
     return info, label
