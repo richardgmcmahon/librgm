@@ -166,16 +166,17 @@ def plot_radec(table=None,
 
     plotid()
 
-    if plotfile is not None and plotfile_prefix is None:
-        plotfile_prefix = 'plot_radec'
+    if savefig:
+        if plotfile is not None and plotfile_prefix is None:
+            plotfile_prefix = 'plot_radec'
 
-    print('projection:', projection)
-    print('plotfile_prefix:', plotfile_prefix)
-    plotfile = plotfile_prefix + '_' + projection + '_radec.png'
-    if outpath is not None:
-        plotfile = outpath + plotfile
-    print('Saving:', plotfile)
-    plt.savefig(plotfile)
+        print('projection:', projection)
+        print('plotfile_prefix:', plotfile_prefix)
+        plotfile = plotfile_prefix + '_' + projection + '_radec.png'
+        if outpath is not None:
+            plotfile = outpath + plotfile
+        print('Saving:', plotfile)
+        plt.savefig(plotfile)
 
     if showplot:
         plt.show()
