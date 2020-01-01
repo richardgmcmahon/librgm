@@ -42,26 +42,28 @@ def getargs(verbose=False):
     # defaul=False might not be needed
 
     # default type is string
-    parser.add_argument("--string",
-                        help="string input")
-
-    parser.add_argument("--float", type=float,
-                        help="float input")
 
     parser.add_argument("--configfile",
                         default=None,
                         help="configuration file")
 
-    parser.add_argument("--infile",
-                        help="Input file name")
-
     parser.add_argument("--debug",
                         action='store_true',
                         help="debug option")
 
+    parser.add_argument("--float",
+                        type=float,
+                        help="float input")
+
+    parser.add_argument("--infile",
+                        help="Input file name")
+
     parser.add_argument("--pause",
                         action='store_true',
                         help="Pausing option")
+
+    parser.add_argument("--string",
+                        help="string input")
 
     parser.add_argument("--verbose", default=verbose,
                         action='store_true',
