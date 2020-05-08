@@ -9,6 +9,29 @@ import time
 
 import numpy as np
 
+
+def fix_votable_object(table, verbose=False):
+    """
+    convert the columns with dtype = object which is not
+    supported by FITs to bool
+    """
+
+    from astropy.table import Table, Column
+
+    for (icol, column) in enumerate(table.columns):
+        if verbose:
+            print(icol, table.columns[icol].name,
+                table.columns[icol].format,
+                table.columns[icol].dtype)
+
+        if table.columns[icol].dtype == 'object':
+            colname = table.columns[icol].name
+            NewColumn = Table.Column(table[colname].data, dtype='bool')
+            table.replace_column(colname, NewColumn)
+
+    return table
+
+
 t0 = time.time()
 import astropy
 print('Elapsed time(secs):', time.time() - t0)
@@ -20,7 +43,7 @@ from astropy.io.votable import from_table, writeto
 
 # import private functions
 # sys.path.append("/home/rgm/soft/python/lib/")
-from .fix_votable_object import fix_votable_object
+#from .fix_votable_object import fix_votable_object
 
 def getargs(verbose=False):
     """
@@ -96,13 +119,17 @@ def getargs(verbose=False):
 
 if __name__=='__main__':
 
-    args = getargs()
+    args = getargs(verbose=True)
 
     fixvot = args.fixvot
-
     infile = args.infile
 
     print('Reading:', infile)
+    if infile is None:
+        print('Exiting...')
+        sys.exit()
+
+
     table = Table.read(infile)
 
     if args.info:
