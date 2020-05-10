@@ -373,7 +373,7 @@ if __name__ == '__main__':
     plt.suptitle('subplot example')
     plotid()
 
-    plotfile = 'plotid_demo_fig2.png'
+    plotfile = 'plotid_demo_fig3.png'
     print('Saving', plotfile)
     plt.savefig(plotfile)
     plt.show()
