@@ -305,7 +305,11 @@ if __name__ == '__main__':
 
     plotid(debug=True, progname=True)
 
+    plotfile = 'plotid_demo_fig1.png'
+    print('Saving', plotfile)
+    plt.savefig(plotfile)
     plt.show()
+
 
     # subplots example
     import numpy as np
