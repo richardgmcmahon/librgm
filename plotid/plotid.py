@@ -302,7 +302,6 @@ if __name__ == '__main__':
     plt.title('Title')
     plt.suptitle('Suptitle')
     plt.legend()
-
     plotid(debug=True, progname=True)
 
     plotfile = 'plotid_demo_fig1.png'
@@ -338,12 +337,14 @@ if __name__ == '__main__':
     fig.suptitle('subplot example')
     plotid(debug=True, progname=True)
 
+    plotfile = 'plotid_demo_fig2.png'
+    print('Saving', plotfile)
+    plt.savefig(plotfile)
     plt.show()
 
     # subplot example
     # Fixing random state for reproducibility
     np.random.seed(19680801)
-
 
     x = np.random.rand(10)
     y = np.random.rand(10)
@@ -372,4 +373,7 @@ if __name__ == '__main__':
     plt.suptitle('subplot example')
     plotid()
 
+    plotfile = 'plotid_demo_fig2.png'
+    print('Saving', plotfile)
+    plt.savefig(plotfile)
     plt.show()
