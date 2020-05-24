@@ -33,6 +33,8 @@ def plotid(timestamp=True, user=True, hostname=False,
     should the text location be in units of the current figure (gcf)
     or the current axis (gca)
 
+    gcf should like the best
+
     gcf().transFigure worked for Python 2 but breaks in Python 3
     gca().transAxes works for both Python 2 and 3
 
@@ -266,20 +268,20 @@ def plotid(timestamp=True, user=True, hostname=False,
                  '  gitHash: ' + provenance
     if githash:
         text = provenance
-        xtext = 0.02
-        ytext = 0.5
+        xtext = 0.5
+        ytext = 0.97
         if debug:
             print('pyplot.text:', xtext, ytext, text)
         plt.figtext(xtext, ytext,
                     text,
                     transform=transform,
-                    rotation=90,
+                    rotation=0,
                     size=fontsize, color=color,
                     backgroundcolor='w',
                     fontsize=fontsize,
                     weight='ultralight',
-                    horizontalalignment='left',
-                    verticalalignment='center')
+                    horizontalalignment='center',
+                    verticalalignment='bottom')
 
     return
 
@@ -374,6 +376,23 @@ if __name__ == '__main__':
     plotid()
 
     plotfile = 'plotid_demo_fig3.png'
+    print('Saving', plotfile)
+    plt.savefig(plotfile)
+    plt.show()
+
+
+    fig, ax = plt.subplots()
+
+    ax.plot(range(10), range(10), label='label')
+    ax.grid()
+    ax.set_xlabel('xlabel')
+    ax.set_ylabel('ylabel')
+    ax.set_title('Title')
+    plt.suptitle('Suptitle')
+    ax.legend()
+    plotid(debug=True, progname=True)
+
+    plotfile = 'plotid_demo_fig4.png'
     print('Saving', plotfile)
     plt.savefig(plotfile)
     plt.show()
