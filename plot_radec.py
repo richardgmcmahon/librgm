@@ -167,7 +167,7 @@ def plot_radec(table=None,
     plotid()
 
     if savefig:
-        if plotfile is not None and plotfile_prefix is None:
+        if plotfile_prefix is None:
             plotfile_prefix = 'plot_radec'
 
         print('projection:', projection)
