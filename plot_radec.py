@@ -172,7 +172,8 @@ def plot_radec(table=None,
 
         print('projection:', projection)
         print('plotfile_prefix:', plotfile_prefix)
-        plotfile = plotfile_prefix + '_' + projection + '_radec.png'
+        if plotfile is None:
+            plotfile = plotfile_prefix + '_' + projection + '_radec.png'
         if outpath is not None:
             plotfile = outpath + plotfile
         print('Saving:', plotfile)
