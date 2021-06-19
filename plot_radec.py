@@ -14,7 +14,7 @@ from astropy import units as units
 
 # import private functions
 # sys.path.append("/home/rgm/soft/python/lib/")
-from plotid import plotid
+from librgm.plotid import plotid
 def plot_radec(table=None,
                colnames_radec=('RAJ2000', 'DEJ2000'),
                xcolname='RAJ2000',
@@ -164,7 +164,7 @@ def plot_radec(table=None,
         plt.xlabel('Ecliptic Longitude [degree]')
         plt.ylabel('Ecliptic Latitute [degree]')
 
-    plotid()
+    plotid.plotid()
 
     if savefig:
         if plotfile_prefix is None:

@@ -166,7 +166,7 @@ def xmatch_selfcheck(data=None,
 
     # make room for the plotid on right edge
     fig.subplots_adjust(right=0.95)
-    plotid()
+    # plotid()
 
     if plotfile is None:
         plotfile = 'xmatch_selfcheck.png'

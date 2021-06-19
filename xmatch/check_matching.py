@@ -29,7 +29,7 @@ except ImportError:
 # 3rd party libraries
 import numpy as np
 
-import fitsio
+#import fitsio
 
 from astropy.coordinates import (search_around_sky, SkyCoord,
                                  match_coordinates_sky)

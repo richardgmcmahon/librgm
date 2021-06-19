@@ -90,12 +90,20 @@ def plotid(timestamp=True, user=True, hostname=False,
                                                "--short", "HEAD"]).strip()
         except subprocess.CalledProcessError as e:
             print("You need to be in a git repository in order to put " +
-                  "provenance information on the plots. Please clone the " +
+                  "provenance information on the plots." +
+                  "Please create a git repo or clone the " +
                   "repository instead of downloading the source files " +
                   "directly, and ensure that your local git repo hasn't " +
                   "been corrupted")
 
-        gitHash = gitHash.decode("utf-8")
+        try:
+            gitHash = gitHash.decode("utf-8")
+        except:
+            print("You have not set the git user.name property, which " +
+                  "is needed to add provenance information on the plots. " +
+                  "You can set this property globally using the command " +
+                  "git config --global user.name '<my name>'")
+
         try:
             producer = subprocess.check_output(["git", "config",
                                                 "user.name"]).strip()
@@ -302,7 +310,6 @@ if __name__ == '__main__':
     plt.xlabel('xlabel')
     plt.ylabel('ylabel')
     plt.title('Title')
-    plt.suptitle('Suptitle')
     plt.legend()
     plotid(debug=True, progname=True)
 
