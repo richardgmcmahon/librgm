@@ -10,9 +10,9 @@ idxmatch1, idxmatch2, dr = xmatch_groups()
 
 """
 from .match_lists import *
-
 from .xmatch_cat import *
 from .xmatch_checkplots import *
+from .xmatch_cat_checkplots import *
 from .xmatch_groups import *
 from .xmatch_cat_join import *
 from .xmatch_checkplot import *

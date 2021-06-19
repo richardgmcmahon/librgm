@@ -22,7 +22,7 @@ def xmatch_checkplot0(ra1, dec1,
     from astropy.coordinates import SkyCoord
     from astropy import units as u
 
-    from librgm.plotid import plotid
+    #from librgm.plotid import plotid
 
     if suptitle is None:
         suptitle=''
@@ -111,7 +111,7 @@ def xmatch_checkplot0(ra1, dec1,
 
     # make room for the plotid on right edge
     fig.subplots_adjust(right=0.95)
-    plotid()
+    #plotid()
 
     if plotfile != None:
         print('Saving plotfile:', plotfile)
@@ -122,3 +122,5 @@ def xmatch_checkplot0(ra1, dec1,
         plt.savefig(path_to_save, dpi=150)
     else:
         plt.show()
+
+    return

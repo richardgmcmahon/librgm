@@ -2,6 +2,8 @@ from __future__ import (division, print_function)
 #  Forked from Sophie Reed's version on 20160319
 import time
 
+from astropy import units as u
+from astropy.coordinates import SkyCoord
 from astropy.stats import mad_std
 
 #sys.path.append("/home/rgm/soft/python/lib/")
@@ -13,9 +15,11 @@ from librgm.mk_timestamp import mk_timestamp
 
 
 def xmatch_checkplot(ra1, dec1, ra2, dec2,
-                     figsize = (6.0, 6.0),
+                     figsize = (7.0, 7.0),
                      width=10.0,
-                     gtype="all", add_plotid=True, prefix=None,
+                     gtype="all",
+                     add_plotid=True,
+                     prefix=None,
                      saveplot=True,
                      plotfile="", plotfile_prefix=None,
                      title="",
@@ -57,69 +61,51 @@ def xmatch_checkplot(ra1, dec1, ra2, dec2,
     print(function_name + '.saveplot:', saveplot)
     print(function_name + '.plotfile:', plotfile)
     print(function_name + '.prefix:  ', plotfile_prefix)
+    print(len(ra1), len(ra2))
 
     ndata = len(ra1)
 
+    # compute Delta RA and Delta Dec in arcsecs
+    # ra, dec assumed in have astropy units of degrees
+    skycoord1 = SkyCoord(ra1, dec1)
+    skycoord2 = SkyCoord(ra2, dec2)
+    print(skycoord1[0])
+    print(skycoord2[0])
+    dra, ddec = skycoord1.spherical_offsets_to(skycoord2)
+    print(len(dra))
+    print(dra[0])
+    print(ddec[0])
 
-    # this could probably be simplified and speeded up
-    n = 0
-    xs = []
-    ys = []
-    while n < len(ra1):
-        x = (ra1[n] - ra2[n]) * \
-             math.cos((ra1[n] + ra2[n]) * math.pi / 360.0) * 3600.0
-        y = (dec1[n] - dec2[n]) * 3600.0
+    dra = dra.arcsecond
+    ddec = ddec.arcsecond
 
-        if not np.isnan(x) and not np.isnan(y):
-            xs.append(x)
-            ys.append(y)
-        n += 1
+    RA_med = np.median(dra)
+    DEC_med = np.median(ddec)
+    RA_mad_std = mad_std(dra)
+    DEC_mad_std = mad_std(ddec)
 
-    n = 0
-    xs_s = []
-    ys_s = []
+    print("Number of points", len(dra))
+    print("RA median offset", RA_med)
+    print("Dec median offset", DEC_mad_std)
+    print("RA Sigma(MAD)", RA_mad_std)
+    print("Dec Sigma(MAD)", DEC_mad_std)
 
-    if gtype == "square":
-        w = width / math.sqrt(2.0)
-        while n < len(xs):
-            x = xs[n]
-            y = ys[n]
-            if x <= w and x >= -w and y <= w and y >= -w:
-                xs_s.append(xs[n])
-                ys_s.append(ys[n])
-            n += 1
+    print("RA median error", RA_mad_std / math.sqrt(len(ra1)),
+          "Dec median error", DEC_mad_std / math.sqrt(len(ra1)))
 
-        xs = xs_s
-        ys = ys_s
+    print("dRA range:", np.min(dra), np.max(dra))
+    print("dDec range:", np.min(ddec), np.max(ddec))
 
-    xs1 = list(xs) + []
-    ys1 = list(ys) + []
 
-    RA_med = np.median(xs1)
-    DEC_med = np.median(ys1)
-    RA_mad_std = mad_std(xs1)
-    DEC_mad_std = mad_std(ys1)
 
-    print("Number of points", len(xs))
-    print("RA median offset", RA_med, "Dec median offset", DEC_mad_std)
-    print("RA Sigma(MAD)", RA_mad_std, "Dec Sigma(MAD)", DEC_mad_std)
-    print("RA median error", RA_mad_std / math.sqrt(len(xs)),
-          "Dec median error", DEC_mad_std / math.sqrt(len(ys)))
-    print("dRA range:", np.min(xs1), np.max(xs1))
-    print("dDec range:", np.min(ys1), np.max(ys1))
-    print()
-    if len(xs) == 0:
-        print("No matches")
-        return RA_med, DEC_med
 
-    xs = np.asarray(xs)
-    ys = np.asarray(ys)
+
     xlimits = np.asarray([-1.0*width, width])
     ylimits = np.asarray([-1.0*width, width])
     limits = np.asarray([xlimits, ylimits])
     print(xlimits[0], xlimits[1])
-    print(xs.dtype)
-    print(xs.shape)
+    print(dra.dtype)
+    print(dra.shape)
     print(xlimits.dtype)
     print(xlimits.shape)
     # itest = (xs > xlimits[0] & xs < xlimits[1])
@@ -131,20 +117,20 @@ def xmatch_checkplot(ra1, dec1, ra2, dec2,
     gs = gridspec.GridSpec(2, 2, width_ratios=[2, 1], height_ratios=[1, 2])
     fig = plt.figure(figsize=figsize)
     ax1 = plt.subplot(gs[0])
-    ax1.hist(xs, bins=100, color="r", range=xlimits)
+    ax1.hist(dra, bins=100, color="r", range=xlimits)
     ax1.set_xlim(xlimits)
     ax1.axes.get_xaxis().set_visible(False)
     ax1.set_ylabel("Number")
 
     ax2 = plt.subplot(gs[2])
     # ax2.plot(xs, ys, "k+")
-    if len(xs) > 100:
-        plt.hist2d(xs, ys, bins=100,
+    if len(dra) > 100:
+        plt.hist2d(dra, ddec, bins=100,
                    cmap="binary",
                    norm=LogNorm(),
                    range=limits)
     else:
-        plt.plot(xs, ys, "k.", ms=2)
+        plt.plot(dra, ddec, "k.", ms=2)
 
     ax2.set_ylim(-1*width, width)
     ax2.set_xlim(-1*width, width)
@@ -162,7 +148,7 @@ def xmatch_checkplot(ra1, dec1, ra2, dec2,
 
     ax3 = plt.subplot(gs[3])
     print('limits:', limits)
-    ax3.hist(ys, bins=100, orientation="horizontal", color="r",
+    ax3.hist(ddec, bins=100, orientation="horizontal", color="r",
         range=ylimits)
 
     ax3.set_ylim(ylimits)
@@ -171,30 +157,32 @@ def xmatch_checkplot(ra1, dec1, ra2, dec2,
     labels2 = ax3.get_xticks()
     ax3.set_xticklabels(labels2, rotation=270)
 
+
     ax4 = plt.subplot(gs[1])
+    x0 = 0.0
+    fontsize = 'small'
+    fontsize = 'medium'
     ax4.annotate("Number of points: " +
-                 str(len(xs)), xy=(0.01, 0.1), size="small")
-    ax4.annotate("RA offset: {0:.4f}".format(RA_med) +
-                 '"', xy=(0.01, 0.90), size="small")
-    ax4.annotate("DEC offset: {0:.4f}".format(DEC_med) +
-                 '"', xy=(0.01, 0.8), size="small")
+                 str(len(dra)), xy=(x0, 0.1), size=fontsize)
+    ax4.annotate("Median RA offset: {0:.4f}".format(RA_med) +
+                 '"', xy=(x0, 0.90), size=fontsize)
+    ax4.annotate("Median DEC offset: {0:.4f}".format(DEC_med) +
+                 '"', xy=(x0, 0.8), size=fontsize)
     ax4.annotate("RA sigma MAD: {0:.4f}".format(RA_mad_std) +
-                 '"', xy=(0.01, 0.7), size="small")
+                 '"', xy=(x0, 0.7), size=fontsize)
     ax4.annotate("DEC sigma MAD: {0:.4f}".format(DEC_mad_std) +
-                 '"', xy=(0.01, 0.6), size="small")
+                 '"', xy=(x0, 0.6), size=fontsize)
     ax4.annotate("RA median error: {0:.4f}".
-                 format(RA_mad_std / math.sqrt(len(xs))) + '"',
-                 xy=(0.01, 0.5), size="small")
+                 format(RA_mad_std / math.sqrt(len(ra1))) + '"',
+                 xy=(x0, 0.5), size=fontsize)
     ax4.annotate("DEC median error: {0:.4f}".
-                 format(DEC_mad_std / math.sqrt(len(ys))) + '"',
-                 xy=(0.01, 0.4), size="small")
-    ax4.annotate("RA sigma MAD: {0:.4f}".format(RA_mad_std) +
-                 '"', xy=(0.01, 0.3), size="small")
-    ax4.annotate("DEC sigma MAD: {0:.4f}".format(DEC_mad_std) +
-                 '"', xy=(0.01, 0.2), size="small")
+                 format(DEC_mad_std / math.sqrt(len(dec1))) + '"',
+                 xy=(x0, 0.4), size=fontsize)
 
     ax4.axes.get_xaxis().set_visible(False)
     ax4.axes.get_yaxis().set_visible(False)
+    ax4.axis('off')
+    ax4.set_axis_off()
 
     if saveplot:
         lineno = str(inspect.stack()[0][2])
@@ -204,7 +192,7 @@ def xmatch_checkplot(ra1, dec1, ra2, dec2,
         if add_plotid:
             # make room for the plotid on right edge
             fig.subplots_adjust(right=0.95)
-            plotid()
+            # plotid()
 
         if plotfile is None:
             plotfile = 'match'
