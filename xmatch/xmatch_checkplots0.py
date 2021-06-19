@@ -9,8 +9,10 @@ def xmatch_checkplots0(ra1, dec1, ra2, dec2,
 
     """
     Based on code by Chris Desira
-
     """
+
+    import time
+    import inspect
 
     import numpy as np
 
@@ -20,8 +22,19 @@ def xmatch_checkplots0(ra1, dec1, ra2, dec2,
     from astropy.coordinates import SkyCoord
     from astropy import units as u
 
-
     from librgm.plotid import plotid
+
+
+    now = time.localtime(time.time())
+    datestamp = time.strftime("%Y%m%d", now)
+    function_name = inspect.stack()[0][3]
+
+    lineno = str(inspect.stack()[0][2])
+    print(mk_timestamp(), function_name, lineno + ':')
+    print(function_name + '.saveplot:', saveplot)
+    print(function_name + '.plotfile:', plotfile)
+    print(function_name + '.prefix:  ', plotfile_prefix)
+    print(len(ra1), len(ra2))
 
     rmax = width
 
@@ -30,14 +43,27 @@ def xmatch_checkplots0(ra1, dec1, ra2, dec2,
     print('RA2 range:', np.min(ra2), np.max(ra2))
     print('Dec2 range:', np.min(dec2), np.max(dec2))
 
-    # offsets in arc seconds
-    difference_ra = (ra1 - ra2) * np.cos(np.radians(dec1)) * 3600.0
-    difference_dec = (dec1 - dec2) * 3600.0
 
-    itest = (np.abs(difference_ra) < rmax) & (np.abs(difference_dec) < rmax)
+    # compute Delta RA and Delta Dec in arcsecs
+    # ra, dec assumed in have astropy units of degrees
+    skycoord1 = SkyCoord(ra1, dec1)
+    skycoord2 = SkyCoord(ra2, dec2)
+    print(skycoord1[0])
+    print(skycoord2[0])
+    dra, ddec = skycoord1.spherical_offsets_to(skycoord2)
+    dr = skycoord1.separation(skycoord2)
+    print(len(dra))
+    print(dra[0])
+    print(ddec[0])
 
-    difference_ra = difference_ra[itest]
-    difference_dec = difference_dec[itest]
+    dra = dra.arcsecond
+    ddec = ddec.arcsecond
+    dr = dr.arcsecond
+
+    itest = (np.abs(dra) < rmax) & (np.abs(ddec) < rmax)
+
+    dra = dra[itest]
+    ddec = ddec[itest]
 
     skycoord_object1 = SkyCoord(ra1, dec1, unit=('degree', 'degree'),
         frame='icrs')

@@ -5,6 +5,7 @@ def xmatch_checkplot0(ra1, dec1,
                       saveplot=True,
                       markersize=1.0,
                       plotfile='',
+                      plotfile_prefix=None,
                       suptitle=None,
                       **kwargs):
 
@@ -14,6 +15,9 @@ def xmatch_checkplot0(ra1, dec1,
 
     """
 
+    import time
+    import inspect
+
     import numpy as np
 
     import matplotlib.pyplot as plt
@@ -22,12 +26,25 @@ def xmatch_checkplot0(ra1, dec1,
     from astropy.coordinates import SkyCoord
     from astropy import units as u
 
+    from librgm.mk_timestamp import mk_timestamp
     #from librgm.plotid import plotid
+
+
+    now = time.localtime(time.time())
+    datestamp = time.strftime("%Y%m%d", now)
+    function_name = inspect.stack()[0][3]
+
+    lineno = str(inspect.stack()[0][2])
+    print(mk_timestamp(), function_name, lineno + ':')
+    print(function_name + '.saveplot:', saveplot)
+    print(function_name + '.plotfile:', plotfile)
+    print(function_name + '.prefix:  ', plotfile_prefix)
+    print(len(ra1), len(ra2))
+
+    rmax = width
 
     if suptitle is None:
         suptitle=''
-
-    rmax = width
 
     ndata_all = len(ra1)
 
@@ -36,22 +53,31 @@ def xmatch_checkplot0(ra1, dec1,
     print('RA2 range:', np.min(ra2), np.max(ra2))
     print('Dec2 range:', np.min(dec2), np.max(dec2))
 
-    skycoord_object1 = SkyCoord(ra1, dec1, unit=('degree', 'degree'),
-        frame='icrs')
-    skycoord_object2 = SkyCoord(ra2, dec2, unit=('degree', 'degree'),
-        frame='icrs')
+    # compute Delta RA and Delta Dec in arcsecs
+    # ra, dec assumed in have astropy units of degrees
+    skycoord1 = SkyCoord(ra1, dec1)
+    skycoord2 = SkyCoord(ra2, dec2)
 
-    separations = skycoord_object1.separation(skycoord_object2)
+    dra, ddec = skycoord1.spherical_offsets_to(skycoord2)
+    dr = skycoord1.separation(skycoord2)
+    print(len(dra))
+    print(dra[0])
+    print(ddec[0])
 
-    # offsets in arc seconds
-    difference_ra = (ra1 - ra2) * np.cos(np.radians(dec1)) * 3600.0
-    difference_dec = (dec1 - dec2) * 3600.0
+    dra = dra.arcsecond
+    ddec = ddec.arcsecond
+    dr = dr.arcsecond
 
+    itest = (np.abs(dra) < rmax) & (np.abs(ddec) < rmax)
 
-    med = np.median(separations.arcsec)
-    ndata = len(separations)
-    mad = stats.median_absolute_deviation(separations.arcsec)
-    mad_std = stats.mad_std(separations.arcsec)
+    dra = dra[itest]
+    ddec = ddec[itest]
+    dr = dr[itest]
+
+    med = np.median(dr)
+    ndata = len(dr)
+    mad = stats.median_absolute_deviation(dr)
+    mad_std = stats.mad_std(dr)
 
     fig = plt.figure(1, figsize=(10, 5))
 
@@ -59,9 +85,7 @@ def xmatch_checkplot0(ra1, dec1,
 
     ax1=fig.add_subplot(1,2,1)
 
-    xdata = separations.arcsec
-    itest = xdata < rmax
-    xdata = xdata[itest]
+    xdata = dr
     ndata = len(xdata)
     bins = int(rmax/binsize)
     n, b, patches = ax1.hist(xdata, bins=bins,
@@ -75,7 +99,7 @@ def xmatch_checkplot0(ra1, dec1,
     s04 = '# = %i'% ndata
     ax1.annotate(s04,(0.28,0.90) , xycoords = 'axes fraction',size=8)
 
-    s01 = 'Median = %.2f' % med
+    s01 = 'Median separation = %.4f' % med
     ax1.annotate(s01,(0.28,0.85) , xycoords = 'axes fraction',size=8)
 
     ax1.set_xlabel('Pairwise separation (arcseconds)')
@@ -84,8 +108,8 @@ def xmatch_checkplot0(ra1, dec1,
     ax2 = fig.add_subplot(1,2,2, aspect='equal')
 
     alpha = 1.0
-    ndata = len(difference_ra)
-    ax2.plot(difference_ra,difference_dec,'oc',
+    ndata = len(dra)
+    ax2.plot(dra,ddec,'oc',
              markersize=markersize,
              markeredgewidth=0.0,
              alpha=alpha) #0.5 smallest size
@@ -98,9 +122,9 @@ def xmatch_checkplot0(ra1, dec1,
     ax2.annotate(s11,(0.45,0.95) , xycoords = 'axes fraction',size=8)
     s1 = '# = %i' % ndata
     ax2.annotate(s1,(0.45,0.90) , xycoords = 'axes fraction',size=8)
-    s7 = 'MAD = %.2f' % mad
+    s7 = 'MAD = %.4f' % mad
     ax2.annotate(s7,(0.45,0.85) , xycoords = 'axes fraction',size=8)
-    s3 = 'sigma_MAD = %.2f' % mad_std
+    s3 = 'sigma_MAD = %.4f' % mad_std
     ax2.annotate(s3,(0.45,0.80) , xycoords = 'axes fraction',size=8)
 
     fig.tight_layout()
