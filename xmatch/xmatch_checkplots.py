@@ -1,5 +1,6 @@
 from __future__ import (division, print_function)
 
+
 def xmatch_checkplots(table1=None, idxmatch1=None,
                       table2=None, idxmatch2=None,
                           colnames_radec1=['ra', 'dec'],
@@ -21,6 +22,7 @@ def xmatch_checkplots(table1=None, idxmatch1=None,
 
     from librgm.xmatch import xmatch_checkplot
     from librgm.xmatch import xmatch_checkplot0
+
 
     if suptitle is None:
         suptitle = ''
@@ -57,7 +59,7 @@ def xmatch_checkplots(table1=None, idxmatch1=None,
     ra2_xmatch = ra2[idxmatch2]
     dec2_xmatch = dec2[idxmatch2]
 
-    xmatch_checkplot.xmatch_checkplot(
+    xmatch_checkplot(
         ra1_xmatch, dec1_xmatch,
         ra2_xmatch, dec2_xmatch,
         width=rmax,
@@ -67,7 +69,7 @@ def xmatch_checkplots(table1=None, idxmatch1=None,
         suptitle=suptitle)
 
     plotfile = 'xmatch_cat' + plotfile_label + '_b_checkplot0.png'
-    xmatch_checkplot0.xmatch_checkplot0(
+    xmatch_checkplot0(
                   ra1, dec1, ra2_xmatch, dec2_xmatch,
                   width=10.0,
                   gtype='square',

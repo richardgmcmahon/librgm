@@ -1,11 +1,12 @@
-def xmatch_checkplots0(ra1, dec1, ra2, dec2,
-                      width=10.0,
-                      binsize=1.0,
-                      saveplot=True,
-                      markersize=1.0,
-                      plotfile='',
-                      suptitle='',
-                      **kwargs):
+def xmatch_checkplots0(ra1, dec1,
+                       ra2, dec2,
+                       width=10.0,
+                       binsize=1.0,
+                       saveplot=True,
+                       markersize=1.0,
+                       plotfile='',
+                       suptitle='',
+                       **kwargs):
 
     """
     Based on code by Chris Desira
@@ -24,7 +25,6 @@ def xmatch_checkplots0(ra1, dec1, ra2, dec2,
 
     from librgm.plotid import plotid
 
-
     now = time.localtime(time.time())
     datestamp = time.strftime("%Y%m%d", now)
     function_name = inspect.stack()[0][3]
@@ -42,7 +42,6 @@ def xmatch_checkplots0(ra1, dec1, ra2, dec2,
     print('Dec1 range:', np.min(dec1), np.max(dec1))
     print('RA2 range:', np.min(ra2), np.max(ra2))
     print('Dec2 range:', np.min(dec2), np.max(dec2))
-
 
     # compute Delta RA and Delta Dec in arcsecs
     # ra, dec assumed in have astropy units of degrees
